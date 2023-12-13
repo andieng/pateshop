@@ -1,0 +1,13 @@
+﻿<UserControl x:Class="MyShop.Views.CustomersView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:viewModels="clr-namespace:MyShop.ViewModels"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        MinHeight="564.04" MinWidth="730">
+    <UserControl.Resources>
+        <viewModels:CustomersViewModel x:Key="customersViewModel" />
+    </UserControl.Resources>
+    <Grid DataContext="{StaticResource customersViewModel}" Background="#f5fcff">
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="48">Customers</TextBlock>
+    </Grid>
+</UserControl>
