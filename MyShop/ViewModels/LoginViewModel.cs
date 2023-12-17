@@ -1,10 +1,12 @@
 ﻿using MyShop.Commands;
+using MyShop.Models;
 using MyShop.Services;
 using System;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Net.Http;
 using System.Security;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -52,11 +54,10 @@ namespace MyShop.ViewModels
             LoginCommand = new LoginCommand(this);
         }
 
-        public async void Login()
+        public async Task<User?> Login()
         {
             var user = await ShopService.LoginAsync(_username, _password);
-            MessageBox.Show(user?.ToString());
-            //MessageBox.Show(user?.Name);
+            return user;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using MyShop.ViewModels;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace MyShop.Views
 {
@@ -15,4 +16,5 @@ namespace MyShop.Views
             DataContext = settingsViewModel;
         }
     }
+
 }

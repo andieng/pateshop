@@ -33,7 +33,6 @@
     <Resource Include="Resources\cart-64.png" />
     <Resource Include="Resources\cart-no-fill-128x128.png" />
     <Resource Include="Resources\cart-no-fill-64x64.png" />
-    <Resource Include="Resources\example-user.jpg" />
     <Resource Include="Resources\login-img.png" />
     <Resource Include="Resources\search.png" />
     <Resource Include="Resources\smile.png" />

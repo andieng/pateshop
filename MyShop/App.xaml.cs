@@ -19,7 +19,7 @@ namespace MyShop
     {
         public App()
         {
-            //ShopService.InitializeClient();
+            ShopService.InitializeClient();
         }
     }
 }

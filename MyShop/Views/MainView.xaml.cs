@@ -12,7 +12,6 @@ namespace MyShop.Views
     {
         public MainView()
         {
-            DataContext = new MainViewModel();
             InitializeComponent();
         }
     }

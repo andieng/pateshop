@@ -25,8 +25,7 @@ namespace MyShop.Views
         public LoginView()
         {
             InitializeComponent();
-            var loginViewModel = new LoginViewModel();
-            DataContext = loginViewModel;
+            DataContext = new LoginViewModel();
         }
 
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)

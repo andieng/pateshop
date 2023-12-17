@@ -1,4 +1,5 @@
 ﻿<Window x:Class="MyShop.Views.MainView"
+        x:Name="MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -16,10 +17,7 @@
         TextOptions.TextRenderingMode="Auto"
         SnapsToDevicePixels="True"
         FontFamily="{DynamicResource MaterialDesignFont}">
-    <Window.Resources>
-        <viewModels:MainViewModel x:Key="mainViewModel" />
-    </Window.Resources>
-    <Grid DataContext="{StaticResource mainViewModel}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="80" />
             <RowDefinition Height="*" />
@@ -58,7 +56,7 @@
                 <!--Username-->
                 <TextBlock
                     DockPanel.Dock="Right"
-                    Text="user1"
+                    Text="{Binding User.Username}"
                     FontSize="16" 
                     VerticalAlignment="Center"/>
                 
@@ -70,7 +68,7 @@
                     CornerRadius="1000" 
                     Margin="0,0,10,0">
                     <Border.Background>
-                        <ImageBrush ImageSource="../Resources/example-user.jpg" />
+                        <ImageBrush ImageSource="{Binding User.Avatar}" />
                     </Border.Background>
                 </Border>
 
@@ -277,7 +275,9 @@
                     Foreground="#fff"
                     Padding="0"
                     Height="38"
-                    Width="200">
+                    Width="200"
+                    Command="{Binding LogoutCommand}"
+                    CommandParameter="{Binding ElementName=MainWindow}">
                 <DockPanel Width="160" Margin="10,0,10,0">
                     <materialDesign:PackIcon 
                             DockPanel.Dock="Left" 

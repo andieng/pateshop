@@ -1,51 +1,140 @@
 ﻿using MyShop.Models;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Security;
 using System.Threading.Tasks;
 using System.Windows;
-using Windows.Media.Protection.PlayReady;
 
 namespace MyShop.Services
 {
     public class ShopService
     {
         public static HttpClient ApiClient { get; private set; }
+        public static bool IsConnected { get; private set; }
 
-        public static void InitializeClient()
+        public static async void InitializeClient()
         {
+            var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var settings = configFile.AppSettings.Settings;
+
             ApiClient = new HttpClient();
-            MessageBox.Show(ConfigurationManager.AppSettings["PateShopApiBaseUrl"]);
-            ApiClient.BaseAddress = new Uri(ConfigurationManager.AppSettings["PateShopApiBaseUrl"]);
+            ApiClient.BaseAddress = new Uri(settings["PateShopApiBaseUrl"].Value);
             ApiClient.DefaultRequestHeaders.Accept.Clear();
             ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public static async Task<object?> LoginAsync(string username, string password)
+        public static async Task<bool> ConnectAsync()
         {
-            var credentials = new
+            var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var settings = configFile.AppSettings.Settings;
+
+            var connectionInputs = new
             {
-                username = username,
-                password = password
+                pgServer = settings["PGServer"].Value,
+                pgDatabase = settings["PGDatabase"].Value,
+                pgUsername = settings["PGUsername"].Value,
+                pgPassword = settings["PGPassword"].Value
             };
 
             try
             {
-                var url = "/auth/login";
-                var response = await ApiClient.PostAsJsonAsync(url, credentials);
-                //User user = await response.Content.ReadAsAsync<User>();
-                var user = await response.Content.ReadAsStringAsync();
-                MessageBox.Show(user);
+                var response = await ApiClient.PostAsJsonAsync("connect", connectionInputs);
+                response.EnsureSuccessStatusCode();
+                IsConnected = true;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                IsConnected = false;
+                return false;
+            }
+        }
+
+        public static void ShowFailedConnection()
+        {
+            string messageBoxText = "Can not create connection, please check your settings.";
+            string caption = "Failed connection";
+            MessageBoxButton button = MessageBoxButton.OK;
+            MessageBoxImage icon = MessageBoxImage.Error;
+            MessageBox.Show(messageBoxText, caption, button, icon);
+        }
+
+        public static void ShowLogoutFailed()
+        {
+            string messageBoxText = "Something went wrong, please try again later.";
+            string caption = "Log out failed";
+            MessageBoxButton button = MessageBoxButton.OK;
+            MessageBoxImage icon = MessageBoxImage.Error;
+            MessageBox.Show(messageBoxText, caption, button, icon);
+        }
+
+        public static void ShowLoginFailed()
+        {
+            string messageBoxText = "You have entered wrong username or password.";
+            string caption = "Login failed";
+            MessageBoxButton button = MessageBoxButton.OK;
+            MessageBoxImage icon = MessageBoxImage.Error;
+            MessageBox.Show(messageBoxText, caption, button, icon);
+        }
+
+        public static async Task<User?> LoginAsync(string username, string password)
+        {
+            var loginInputs = new
+            {
+                username = username,
+                password = password,
+            };
+
+            try
+            {
+                var response = await ApiClient.PostAsJsonAsync("auth/login", loginInputs);
+                response.EnsureSuccessStatusCode();
+                User? user = await response.Content.ReadFromJsonAsync<User?>();
                 return user;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-                MessageBox.Show(ex.ToString());
+                return null;
+            }
+        }
+
+        public static async Task<bool> LogoutAsync()
+        {
+            try
+            {
+                var response = await ApiClient.PostAsync("auth/logout", null);
+                response.EnsureSuccessStatusCode();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+        }
+
+        public static async Task<(List<Customer>, Paging)?> GetCustomersAsync(int limit = 100, int offset = 0)
+        {        
+            try
+            {
+                var response = await ApiClient.GetAsync($"customers?limit={limit}&offset={offset}");
+                response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseData<Customer>?>();
+                if (responseData != null)
+                {
+                    return (responseData.Data, responseData.Paging);
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
                 return null;
             }
         }

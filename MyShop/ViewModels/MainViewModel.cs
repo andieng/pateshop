@@ -1,25 +1,34 @@
 ﻿using MyShop.Commands;
+using MyShop.Models;
+using MyShop.Services;
 using System;
 using System.Collections.ObjectModel;
 using System.Configuration;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace MyShop.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
+        public User User { get; private set; }
 
-        public MainViewModel()
+        public MainViewModel(User user)
         {
-            
-            //_tabs.Add(new ViewModel());
-
+            User = user;
             initCommands();
         }
 
         public BaseCommand OpenSettingsCommand { get; set; }
+        public BaseCommand LogoutCommand { get; set; }
         public void initCommands()
         {
-            //OpenSettingsCommand = new OpenSettingsLoginCommand(this);
+            LogoutCommand = new LogoutCommand(this);
+        }
+
+        public async Task<bool> Logout()
+        {
+            return await ShopService.LogoutAsync();
         }
 
         public void OpenSettings()

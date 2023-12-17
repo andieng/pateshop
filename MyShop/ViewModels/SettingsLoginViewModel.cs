@@ -1,4 +1,5 @@
 ﻿using MyShop.Commands;
+using MyShop.Services;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -14,6 +15,8 @@ namespace MyShop.ViewModels
     {
         private string _server;
         private string _database;
+        private string _username;
+        private string _password;
 
         public string Server
         {
@@ -39,24 +42,50 @@ namespace MyShop.ViewModels
             }
         }
 
+        public string Username
+        {
+            get => _username;
+            set
+            {
+                if (_username != value)
+                {
+                    _username = value;
+                }
+            }
+        }
+
+        public string Password
+        {
+            get => _password;
+            set
+            {
+                if (_password != value)
+                {
+                    _password = value;
+                }
+            }
+        }
+
         public SettingsLoginViewModel()
         {
             var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             var settings = configFile.AppSettings.Settings;
 
-            _server = settings["Server"]?.Value;
-            _database = settings["Database"]?.Value;
+            _server = settings["PGServer"].Value;
+            _database = settings["PGDatabase"].Value;
+            _username = settings["PGUsername"].Value;
+            _password = settings["PGPassword"].Value;
 
             InitCommands();
         }
 
         public void InitCommands()
         {
-            SaveSettingsCommand = new SaveSettingsCommand(this);
+            ConnectCommand = new ConnectCommand(this);
             CancelCommand = new CancelCommand(this);
         }
 
-        public BaseCommand SaveSettingsCommand { get; set; }
+        public BaseCommand ConnectCommand { get; set; }
         public BaseCommand CancelCommand { get; set; }
 
         public void UpsertSettings(string key, string value)
@@ -80,15 +109,18 @@ namespace MyShop.ViewModels
             }
             catch (ConfigurationErrorsException)
             {
-                Console.WriteLine("Error writing app settings");
+                Console.WriteLine("Error while modified app settings");
             }
         }
 
-        public bool SaveSettings()
+        public async Task<bool> SaveSettings()
         {
-            UpsertSettings("Server", _server);
-            UpsertSettings("Database", _database);
-            return true;
+            UpsertSettings("PGServer", _server);
+            UpsertSettings("PGDatabase", _database);
+            UpsertSettings("PGUsername", _username);
+            UpsertSettings("PGPassword", _password);
+
+            return await ShopService.ConnectAsync();
         }
     }
 }

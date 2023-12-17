@@ -12,8 +12,10 @@ namespace MyShop.Commands
 
         public override void Execute(object parameter)
         {
-            Window settings = new SettingsLoginView();
-            settings.DataContext = new SettingsLoginViewModel();
+            Window settings = new SettingsLoginView
+            {
+                DataContext = new SettingsLoginViewModel()
+            };
             settings.ShowDialog();
         }
     }

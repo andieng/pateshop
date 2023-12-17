@@ -1,4 +1,5 @@
-﻿using MyShop.ViewModels;
+﻿using MyShop.Services;
+using MyShop.ViewModels;
 using MyShop.Views;
 using System;
 using System.Configuration;
@@ -15,9 +16,26 @@ namespace MyShop.Commands
             _loginViewModel = loginViewModel;
         }
 
-        public override void Execute(object parameter)
+        public override async void Execute(object parameter)
         {
-            _loginViewModel.Login();
+            if (!ShopService.IsConnected)
+            {
+                ShopService.ShowFailedConnection();
+                return;
+            }
+            var user = await _loginViewModel.Login();
+            var data = await ShopService.GetCustomersAsync(3, 0);
+
+            if (user != null)
+            {
+                Window mainView = new MainView();
+                ((Window)parameter).Close();
+                mainView.ShowDialog();
+                return;
+            } 
+
+
+            ShopService.ShowLoginFailed();
         }
     }
 }
