@@ -24,16 +24,16 @@ namespace MyShop.Commands
                 return;
             }
             var user = await _loginViewModel.Login();
-            var data = await ShopService.GetCustomersAsync(3, 0);
-
             if (user != null)
             {
-                Window mainView = new MainView();
+                Window mainView = new MainView
+                {
+                    DataContext = new MainViewModel(user)
+                };
                 ((Window)parameter).Close();
                 mainView.ShowDialog();
                 return;
             } 
-
 
             ShopService.ShowLoginFailed();
         }
