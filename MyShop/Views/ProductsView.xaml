@@ -64,12 +64,12 @@
 
         <!-- Categories List-->
         <Grid Grid.RowSpan="2">
-            <ListView  ItemsSource="{Binding CategoriesList}" Margin="40,60,50,0" HorizontalContentAlignment="Center">
+            <ListView  ItemsSource="{Binding CategoriesList}" Margin="40,60,50,0">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem" BasedOn="{StaticResource MaterialDesignGridViewItem}">
                         <Setter 
                             Property="HorizontalContentAlignment" 
-                            Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType=ListView}}" 
+                            Value="Stretch" 
                         />
                     </Style>
                 </ListView.ItemContainerStyle>
@@ -78,7 +78,7 @@
                         <GridViewColumn Header="ID">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Label VerticalAlignment="Center" Content="{Binding CategoryId}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                                    <TextBlock TextAlignment="Center" Text="{Binding CategoryId}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -87,7 +87,7 @@
                             Header="Category Name" >
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock TextAlignment="Right" VerticalAlignment="Center" Text="{Binding CategoryName}" HorizontalAlignment="Center"/>
+                                    <TextBlock TextAlignment="Left" Text="{Binding CategoryName}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -100,47 +100,41 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <!-- Action -->
-                        <GridViewColumn Width="200" Header="Actions">
+                        <GridViewColumn Width="Auto" Header="Actions">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                        <!-- Nút Delete -->
-                                        <Button Style="{StaticResource MaterialDesignFlatDarkButton}" 
-                                                BorderThickness="0"
-                                                materialDesign:ButtonAssist.CornerRadius="20" Foreground="#273659"
-                                                Padding="0" 
-                                                Command="{Binding DeleteCommand}" 
-                                                CommandParameter="{Binding}">
-                                            <DockPanel Width="100">
-                                                <materialDesign:PackIcon 
-                                                    DockPanel.Dock="Left" 
-                                                    Kind="Delete" 
-                                                    Width="23" 
-                                                    Height="23"
-                                                    VerticalAlignment="Center" />
-                                                <TextBlock Text="Delete" FontWeight="Light" Margin="5,0,0,0"
-                                               VerticalAlignment="Center" />
-                                            </DockPanel>
-                                        </Button>
-
                                         <!-- Nút Update -->
                                         <Button 
-                                            Style="{StaticResource MaterialDesignFlatDarkButton}" 
+                                            Style="{StaticResource MaterialDesignIconButton}"
                                             BorderThickness="0"
-                                            materialDesign:ButtonAssist.CornerRadius="20" Foreground="#273659"
+                                            materialDesign:ButtonAssist.CornerRadius="20"
                                             Padding="0" 
+                                            ToolTip="Update"
                                             Command="{Binding UpdateCommand}" 
                                             CommandParameter="{Binding}">
-                                            <DockPanel Width="100">
-                                                <materialDesign:PackIcon 
-                                                    DockPanel.Dock="Left" 
-                                                    Kind="SquareEditOutline" 
-                                                    Width="23"
-                                                    Height="23" 
-                                                    VerticalAlignment="Center" />
-                                                <TextBlock Text="Update" FontWeight="Light" Margin="5,0,0,0"
-                                               VerticalAlignment="Center" />
-                                            </DockPanel>
+                                            <materialDesign:PackIcon 
+                                                DockPanel.Dock="Left" 
+                                                Kind="SquareEditOutline" 
+                                                Width="20"
+                                                Height="20" 
+                                                VerticalAlignment="Center" />
+                                        </Button>
+
+                                        <!-- Nút Delete -->
+                                        <Button Style="{StaticResource MaterialDesignIconButton}" 
+                                                BorderThickness="0"
+                                                materialDesign:ButtonAssist.CornerRadius="20" Foreground="#dc3545"
+                                                Padding="0" 
+                                                ToolTip="Delete"
+                                                Command="{Binding DeleteCommand}" 
+                                                CommandParameter="{Binding}">
+                                            <materialDesign:PackIcon 
+                                                DockPanel.Dock="Left" 
+                                                Kind="Delete" 
+                                                Width="20" 
+                                                Height="20"
+                                                VerticalAlignment="Center" />
                                         </Button>
                                     </StackPanel>
                                 </DataTemplate>
