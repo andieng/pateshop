@@ -3,24 +3,26 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:viewModels="clr-namespace:MyShop.ViewModels"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        MinHeight="564.04" MinWidth="730">
+        MinHeight="564.04" MinWidth="730"
+        Background="#f5fcff">
     <UserControl.Resources>
         <viewModels:ProductsViewModel x:Key="productsViewModel" />
     </UserControl.Resources>
-    <Grid DataContext="{StaticResource productsViewModel}" Background="#f5fcff">
+    
+    <Grid DataContext="{StaticResource productsViewModel}" Margin="30 20 30 0">
         <Grid.RowDefinitions>
-            <RowDefinition Height="50" />
+            <RowDefinition Height="70" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <!--Search-->
         <Grid 
-            DockPanel.Dock="Right" 
-            Width="360"
-            Margin="40,0,40,0">
+                Grid.Row="0" 
+                Width="360"
+                Margin="0,0,0,0">
 
             <!--Search wrapper-->
-            <Border CornerRadius="20" BorderThickness="1" BorderBrush="#a9a9a9" Height="38">
+            <Border CornerRadius="20" BorderThickness="1" BorderBrush="#a1a1a1" Height="38" Background="#fff">
                 <DockPanel>
                     <!--Search icon-->
                     <Image 
@@ -32,11 +34,12 @@
 
                     <!--Search textbox-->
                     <TextBox
-                        x:Name="searchTextBox" 
-                        Style="{x:Null}"
-                        BorderThickness="0"
-                        Margin="6,5,18,5" 
-                        VerticalAlignment="Center" />
+                            x:Name="searchTextBox" 
+                            Style="{x:Null}"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Margin="6,5,18,5" 
+                            VerticalAlignment="Center" />
                 </DockPanel>
             </Border>
 
@@ -63,86 +66,82 @@
         </Grid>
 
         <!-- Categories List-->
-        <Grid Grid.RowSpan="2">
-            <ListView  ItemsSource="{Binding CategoriesList}" Margin="40,60,50,0">
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem" BasedOn="{StaticResource MaterialDesignGridViewItem}">
-                        <Setter 
-                            Property="HorizontalContentAlignment" 
-                            Value="Stretch" 
-                        />
-                    </Style>
-                </ListView.ItemContainerStyle>
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="ID">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock TextAlignment="Center" Text="{Binding CategoryId}"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn
-                            Width="Auto"
-                            Header="Category Name" >
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock TextAlignment="Left" Text="{Binding CategoryName}"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn
-                            Header="Total Product" >
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center">1</TextBlock>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <!-- Action -->
-                        <GridViewColumn Width="Auto" Header="Actions">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                        <!-- Nút Update -->
-                                        <Button 
+        <Grid Grid.Row="1" Background="#fff" Margin="0 10 0 0">
+            <DataGrid
+                materialDesign:DataGridAssist.CellPadding="16 10 16 2"
+                materialDesign:DataGridAssist.EnableEditBoxAssist="False"
+                Padding="30 20 30 20"
+                ItemsSource="{Binding CategoriesList}"
+                SelectionMode="Extended"
+                CanUserAddRows="False"
+                IsReadOnly="True"
+                AutoGenerateColumns="False"
+                Background="#fff"
+                SelectionUnit="FullRow"
+                VerticalContentAlignment="Center">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                            Binding="{Binding CategoryId}"
+                            Header="ID" />
+                    <DataGridTextColumn
+                            Binding="{Binding CategoryName}"
+                            Header="Category name" />
+                    <DataGridTextColumn
+                            Binding="{Binding CreatedDateTime, StringFormat='{}{0:dd/MM/yyyy}'}"
+                            Header="Created date" />
+                    <DataGridTextColumn
+                            Binding="{Binding UpdatedDateTime, StringFormat='{}{0:dd/MM/yyyy}'}"
+                            Header="Updated date" />
+                    <DataGridTemplateColumn Header="Actions">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Margin="0 -9 0 0">
+
+                                    <!--Update button-->
+                                    <Button 
                                             Style="{StaticResource MaterialDesignIconButton}"
                                             BorderThickness="0"
                                             materialDesign:ButtonAssist.CornerRadius="20"
                                             Padding="0" 
+                                            Width="35"
+                                            Height="35"
                                             ToolTip="Update"
                                             Command="{Binding UpdateCommand}" 
                                             CommandParameter="{Binding}">
-                                            <materialDesign:PackIcon 
+                                        <materialDesign:PackIcon 
                                                 DockPanel.Dock="Left" 
                                                 Kind="SquareEditOutline" 
                                                 Width="20"
                                                 Height="20" 
                                                 VerticalAlignment="Center" />
-                                        </Button>
+                                    </Button>
 
-                                        <!-- Nút Delete -->
-                                        <Button Style="{StaticResource MaterialDesignIconButton}" 
+
+                                    <!-- Delete button -->
+                                    <Button Style="{StaticResource MaterialDesignIconButton}" 
                                                 BorderThickness="0"
                                                 materialDesign:ButtonAssist.CornerRadius="20" Foreground="#dc3545"
-                                                Padding="0" 
+                                                Padding="0"
+                                                Margin="10 0 0 0"
+                                                Width="35"
+                                                Height="35"
                                                 ToolTip="Delete"
                                                 Command="{Binding DeleteCommand}" 
                                                 CommandParameter="{Binding}">
-                                            <materialDesign:PackIcon 
+                                        <materialDesign:PackIcon 
                                                 DockPanel.Dock="Left" 
                                                 Kind="Delete" 
                                                 Width="20" 
                                                 Height="20"
                                                 VerticalAlignment="Center" />
-                                        </Button>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
         </Grid>
     </Grid>
 </UserControl>

@@ -13,6 +13,8 @@ namespace MyShop.Models
         private string _categoryName;
         private string _createdAt;
         private string _updatedAt;
+        private DateTime _createdDateTime;
+        private DateTime _updatedDateTime;
 
         public Category(int categoryId, string categoryName, string createdAt, string updatedAt)
         {
@@ -20,6 +22,8 @@ namespace MyShop.Models
             _categoryName = categoryName;
             _createdAt = createdAt;
             _updatedAt = updatedAt;
+            _createdDateTime = DateTime.Parse(createdAt);
+            _updatedDateTime = DateTime.Parse(updatedAt);
         }
 
         public int CategoryId
@@ -59,6 +63,26 @@ namespace MyShop.Models
             {
                 _updatedAt = value;
                 OnPropertyChanged("UpdatedAt");
+            }
+        }
+
+        public DateTime CreatedDateTime
+        {
+            get => _createdDateTime;
+            set
+            {
+                _createdDateTime = value;
+                OnPropertyChanged("CreatedDateTime");
+            }
+        }
+
+        public DateTime UpdatedDateTime
+        {
+            get => _updatedDateTime;
+            set
+            {
+                _updatedDateTime = value;
+                OnPropertyChanged("UpdatedDateTime");
             }
         }
     }
