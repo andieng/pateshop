@@ -8,6 +8,139 @@
         <viewModels:ProductsViewModel x:Key="productsViewModel" />
     </UserControl.Resources>
     <Grid DataContext="{StaticResource productsViewModel}" Background="#f5fcff">
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="48">Products</TextBlock>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!--Search-->
+        <Grid 
+            DockPanel.Dock="Right" 
+            Width="360"
+            Margin="40,0,40,0">
+
+            <!--Search wrapper-->
+            <Border CornerRadius="20" BorderThickness="1" BorderBrush="#a9a9a9" Height="38">
+                <DockPanel>
+                    <!--Search icon-->
+                    <Image 
+                        Margin="12,0,0,0" 
+                        Source="../Resources/search.png" 
+                        Width="20" 
+                        Height="20"
+                        HorizontalAlignment="Left"/>
+
+                    <!--Search textbox-->
+                    <TextBox
+                        x:Name="searchTextBox" 
+                        Style="{x:Null}"
+                        BorderThickness="0"
+                        Margin="6,5,18,5" 
+                        VerticalAlignment="Center" />
+                </DockPanel>
+            </Border>
+
+            <!--Search placeholder-->
+            <TextBlock 
+                IsHitTestVisible="False" 
+                Text="Search anything" 
+                VerticalAlignment="Center" 
+                HorizontalAlignment="Left" 
+                Margin="41,0,0,0" 
+                Foreground="DarkGray"
+                FontWeight="Light">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=searchTextBox}" Value="">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Grid>
+
+        <!-- Categories List-->
+        <Grid Grid.RowSpan="2">
+            <ListView  ItemsSource="{Binding CategoriesList}" Margin="40,60,50,0">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="ID">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding CategoryId}" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn
+                            Width="Auto"
+                            Header="Category Name" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding CategoryName}" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn
+                            Header="Total Product" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">1</TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <!-- Action -->
+                        <GridViewColumn Width="200" Header="Actions">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                        <!-- Nút Delete -->
+                                        <Button Style="{StaticResource MaterialDesignFlatDarkButton}" 
+                                                BorderThickness="0"
+                                                materialDesign:ButtonAssist.CornerRadius="20" Foreground="#273659"
+                                                Padding="0" 
+                                                Command="{Binding DeleteCommand}" 
+                                                CommandParameter="{Binding}">
+                                            <DockPanel Width="100">
+                                                <materialDesign:PackIcon 
+                                                    DockPanel.Dock="Left" 
+                                                    Kind="Delete" 
+                                                    Width="23" 
+                                                    Height="23"
+                                                    VerticalAlignment="Center" />
+                                                <TextBlock Text="Delete" FontWeight="Light" Margin="5,0,0,0"
+                                               VerticalAlignment="Center" />
+                                            </DockPanel>
+                                        </Button>
+
+                                        <!-- Nút Update -->
+                                        <Button 
+                                            Style="{StaticResource MaterialDesignFlatDarkButton}" 
+                                            BorderThickness="0"
+                                            materialDesign:ButtonAssist.CornerRadius="20" Foreground="#273659"
+                                            Padding="0" 
+                                            Command="{Binding UpdateCommand}" 
+                                            CommandParameter="{Binding}">
+                                            <DockPanel Width="100">
+                                                <materialDesign:PackIcon 
+                                                    DockPanel.Dock="Left" 
+                                                    Kind="SquareEditOutline" 
+                                                    Width="23"
+                                                    Height="23" 
+                                                    VerticalAlignment="Center" />
+                                                <TextBlock Text="Update" FontWeight="Light" Margin="5,0,0,0"
+                                               VerticalAlignment="Center" />
+                                            </DockPanel>
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
     </Grid>
 </UserControl>

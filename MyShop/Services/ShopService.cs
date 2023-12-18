@@ -138,5 +138,25 @@ namespace MyShop.Services
                 return null;
             }
         }
+
+        public static async Task<(List<Category>, Paging)?> GetAllCategories(int limit = 100, int offset = 0)
+        {
+            try
+            {
+                var response = await ApiClient.GetAsync($"categories?limit={limit}&offset={offset}");
+                response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseData<Category>?>();
+                if (responseData != null)
+                {
+                    return (responseData.Data, responseData.Paging);
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
     }
 }

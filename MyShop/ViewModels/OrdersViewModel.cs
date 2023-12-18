@@ -5,9 +5,9 @@ using System.Configuration;
 
 namespace MyShop.ViewModels
 {
-    public class ProductsViewModel : BaseViewModel
+    public class OrdersViewModel : BaseViewModel
     {
-        public ProductsViewModel()
+        public OrdersViewModel()
         {
             initCommands();
         }
