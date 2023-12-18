@@ -64,13 +64,21 @@
 
         <!-- Categories List-->
         <Grid Grid.RowSpan="2">
-            <ListView  ItemsSource="{Binding CategoriesList}" Margin="40,60,50,0">
+            <ListView  ItemsSource="{Binding CategoriesList}" Margin="40,60,50,0" HorizontalContentAlignment="Center">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem" BasedOn="{StaticResource MaterialDesignGridViewItem}">
+                        <Setter 
+                            Property="HorizontalContentAlignment" 
+                            Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType=ListView}}" 
+                        />
+                    </Style>
+                </ListView.ItemContainerStyle>
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="ID">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock VerticalAlignment="Center" Text="{Binding CategoryId}" HorizontalAlignment="Center"/>
+                                    <Label VerticalAlignment="Center" Content="{Binding CategoryId}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -79,7 +87,7 @@
                             Header="Category Name" >
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock VerticalAlignment="Center" Text="{Binding CategoryName}" HorizontalAlignment="Center"/>
+                                    <TextBlock TextAlignment="Right" VerticalAlignment="Center" Text="{Binding CategoryName}" HorizontalAlignment="Center"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -87,7 +95,7 @@
                             Header="Total Product" >
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">1</TextBlock>
+                                    <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center">1</TextBlock>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
