@@ -25,6 +25,7 @@ namespace MyShop.Services
             ApiClient.BaseAddress = new Uri(settings["PateShopApiBaseUrl"].Value);
             ApiClient.DefaultRequestHeaders.Accept.Clear();
             ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            await ConnectAsync();
         }
 
         public static async Task<bool> ConnectAsync()
