@@ -23,6 +23,7 @@ namespace MyShop.Commands
             {
                 _productsViewModel.CategoryListVisibility = System.Windows.Visibility.Visible;
                 _productsViewModel.CategoryDetailVisibility = System.Windows.Visibility.Collapsed;
+                _productsViewModel.ProductDetailVisibility = System.Windows.Visibility.Collapsed;
                 _productsViewModel.BackBtnVisibility = System.Windows.Visibility.Hidden;
             }
             else
@@ -33,7 +34,13 @@ namespace MyShop.Commands
                     case 0:
                         _productsViewModel.CategoryListVisibility = System.Windows.Visibility.Visible;
                         _productsViewModel.CategoryDetailVisibility = System.Windows.Visibility.Collapsed;
+                        _productsViewModel.ProductDetailVisibility = System.Windows.Visibility.Collapsed;
                         _productsViewModel.BackBtnVisibility = System.Windows.Visibility.Hidden;
+                        break;
+                    case 1:
+                        _productsViewModel.CategoryListVisibility = System.Windows.Visibility.Collapsed;
+                        _productsViewModel.CategoryDetailVisibility = System.Windows.Visibility.Visible;
+                        _productsViewModel.ProductDetailVisibility = System.Windows.Visibility.Collapsed;
                         break;
                 }
             }

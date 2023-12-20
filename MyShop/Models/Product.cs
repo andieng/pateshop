@@ -24,10 +24,32 @@ namespace MyShop.Models
         private DateTime _createdDateTime;
         private DateTime _updatedDateTime;
 
-        public Product(int productId, string productName, string createdAt, string updatedAt)
+        public Product(
+                int productId,
+                string productName,
+                string productSKU,
+                int categoryId,
+                string description,
+                int quantity,
+                float price,
+                float cost,
+                string image,
+                float size,
+                string color,
+                string createdAt,
+                string updatedAt)
         {
             _productId = productId;
             _productName = productName;
+            _productSKU = productSKU;
+            _categoryId = categoryId;
+            _description = description;
+            _quantity = quantity;
+            _price = price;
+            _cost = cost;
+            _image = image;
+            _size = size;
+            _color = color;
             _createdAt = createdAt;
             _updatedAt = updatedAt;
             _createdDateTime = DateTime.Parse(createdAt);

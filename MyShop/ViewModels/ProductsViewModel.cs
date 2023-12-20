@@ -16,10 +16,15 @@ namespace MyShop.ViewModels
     {
         private ObservableCollection<Category> _categoriesList;
         private ObservableCollection<Product> _productsList;
-        private Visibility _categoryDetailVisibility;
+        private ObservableCollection<Product> _productDetail;
         private Visibility _backBtnVisibility = Visibility.Hidden;
         private Visibility _categoryListVisibility = Visibility.Visible;
+        private Visibility _categoryDetailVisibility = Visibility.Collapsed;
+        private Visibility _productDetailVisibility = Visibility.Collapsed;
         private string _curCategory;
+        private string _curProduct;
+        private string _curProductDescription;
+        private string _curProductImg;
 
         public BaseCommand SelectCommand { get; set; }
         public BaseCommand BackCommand { get; set; }
@@ -41,6 +46,16 @@ namespace MyShop.ViewModels
             {
                 _productsList = value;
                 OnPropertyChanged("ProductsList");
+            }
+        }
+
+        public ObservableCollection<Product> ProductDetail
+        {
+            get => _productDetail;
+            set
+            {
+                _productDetail = value;
+                OnPropertyChanged("ProductDetail");
             }
         }
 
@@ -74,6 +89,16 @@ namespace MyShop.ViewModels
             }
         }
 
+        public Visibility ProductDetailVisibility
+        {
+            get => _productDetailVisibility;
+            set
+            {
+                _productDetailVisibility = value;
+                OnPropertyChanged("ProductDetailVisibility");
+            }
+        }
+
         public int CurView { get; set; }
 
         public string CurCategory {
@@ -83,7 +108,37 @@ namespace MyShop.ViewModels
                 _curCategory = value;
                 OnPropertyChanged("CurCategory");
             }
-        } 
+        }
+
+        public string CurProduct
+        {
+            get => _curProduct;
+            set
+            {
+                _curProduct = value;
+                OnPropertyChanged("CurProduct");
+            }
+        }
+
+        public string CurProductDescription
+        {
+            get => _curProductDescription;
+            set
+            {
+                _curProductDescription = value;
+                OnPropertyChanged("CurProductDescription");
+            }
+        }
+
+        public string CurProductImg
+        {
+            get => _curProductImg;
+            set
+            {
+                _curProductImg = value;
+                OnPropertyChanged("CurProductImg");
+            }
+        }
 
         public ProductsViewModel()
         {
@@ -120,6 +175,22 @@ namespace MyShop.ViewModels
                 BackBtnVisibility = Visibility.Visible;
                 CurView++;
                 return true; 
+            }
+            return false;
+        }
+
+        public async Task<bool> LoadProduct(int productId, int categoryId)
+        {
+            var product = await ShopService.GetProduct(productId, categoryId);
+            if (product != null)
+            {
+                ProductDetail = new ObservableCollection<Product>();
+                ProductDetail.Add(product);
+                CategoryDetailVisibility = Visibility.Collapsed;
+                ProductDetailVisibility = Visibility.Visible;
+                BackBtnVisibility = Visibility.Visible;
+                CurView++;
+                return true;
             }
             return false;
         }

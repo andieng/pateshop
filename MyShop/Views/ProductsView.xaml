@@ -222,6 +222,7 @@
 
 
             <DataGrid
+                x:Name="categoryDetailDataGrid"
                 Grid.Row="1"
                 materialDesign:DataGridAssist.CellPadding="16 10 16 2"
                 materialDesign:DataGridAssist.EnableEditBoxAssist="False"
@@ -234,6 +235,13 @@
                 Background="#fff"
                 SelectionUnit="FullRow"
                 VerticalContentAlignment="Center">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction 
+                            Command="{Binding SelectCommand}"
+                            CommandParameter="{Binding SelectedItem, ElementName=categoryDetailDataGrid}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
                 <DataGrid.Columns>
                     <DataGridTextColumn
                         Binding="{Binding ProductId}"
@@ -305,6 +313,79 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
+        </Grid>
+
+        <!-- Product Detail-->
+        <Grid Grid.Row="1" Background="#fff" Margin="0 -20 0 0"  Visibility="{Binding ProductDetailVisibility}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock 
+                Grid.Row="0"
+                Margin="30,10,0,0"
+                FontSize="24"
+                Foreground="#1b2333"
+                FontWeight="Medium"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                Text="{Binding CurProduct}"
+                />
+
+            <TextBlock 
+                Grid.Row="1"
+                Margin="30,10,0,0"
+                FontSize="15"
+                Foreground="#98a1ac"
+                Text="{Binding CurProductDescription}" />
+
+            <DataGrid
+                Grid.Row="2"
+                materialDesign:DataGridAssist.CellPadding="16 10 16 2"
+                materialDesign:DataGridAssist.EnableEditBoxAssist="False"
+                Padding="30 20 30 20"
+                ItemsSource="{Binding ProductDetail}"
+                SelectionMode="Extended"
+                CanUserAddRows="False"
+                IsReadOnly="True"
+                AutoGenerateColumns="False"
+                Background="#fff"
+                SelectionUnit="FullRow"
+                VerticalContentAlignment="Center">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Binding="{Binding ProductId}"
+                        Header="ID" />
+                    <DataGridTextColumn
+                        Binding="{Binding ProductSKU}"
+                        Header="Category ID" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Quantity}"
+                        Header="Quantity" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Price}"
+                        Header="Price" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Cost}"
+                        Header="Cost" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Cost}"
+                        Header="Size" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Cost}"
+                        Header="Color" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Image Grid.Row="3" Width="300" Height="300" Source="{Binding CurProductImg}" />
         </Grid>
     </Grid>
 </UserControl>

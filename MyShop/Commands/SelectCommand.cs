@@ -29,6 +29,14 @@ namespace MyShop.Commands
                 _productsViewModel.CurCategory = selectedCategory.CategoryName;
                 await _productsViewModel.LoadProductsOfCategory(selectedCategory.CategoryId);
             }
+
+            if (parameter is Product selectedProduct)
+            {
+                _productsViewModel.CurProduct = selectedProduct.ProductSKU + " - " + selectedProduct.ProductName;
+                _productsViewModel.CurProductDescription = selectedProduct.Description;
+                _productsViewModel.CurProductImg = selectedProduct.Image;
+                await _productsViewModel.LoadProduct(selectedProduct.ProductId, selectedProduct.CategoryId);
+            }
         }
     }
 }

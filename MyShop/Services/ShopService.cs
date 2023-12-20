@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -170,6 +171,26 @@ namespace MyShop.Services
                 if (responseData != null)
                 {
                     return (responseData.Data, responseData.Paging);
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
+        public static async Task<Product?> GetProduct(int productId, int categoryId)
+        {
+            try
+            {
+                var response = await ApiClient.GetAsync($"categories/{categoryId}/products/{productId}");
+                response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadFromJsonAsync<Product?>();
+                if (responseData != null)
+                {
+                    return responseData;
                 }
                 return null;
             }
