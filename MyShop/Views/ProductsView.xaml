@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:viewModels="clr-namespace:MyShop.ViewModels"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         MinHeight="564.04" MinWidth="730"
         Background="#f5fcff">
     <UserControl.Resources>
@@ -17,57 +18,88 @@
 
         <!--Search-->
         <Grid 
-                Grid.Row="0" 
-                Width="360"
-                Margin="0,0,0,0">
+            Grid.Row="0" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-            <!--Search wrapper-->
-            <Border CornerRadius="20" BorderThickness="1" BorderBrush="#a1a1a1" Height="38" Background="#fff">
-                <DockPanel>
-                    <!--Search icon-->
-                    <Image 
-                        Margin="12,0,0,0" 
-                        Source="../Resources/search.png" 
-                        Width="20" 
-                        Height="20"
-                        HorizontalAlignment="Left"/>
-
-                    <!--Search textbox-->
-                    <TextBox
-                            x:Name="searchTextBox" 
-                            Style="{x:Null}"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Margin="6,5,18,5" 
-                            VerticalAlignment="Center" />
+            <Button
+                Visibility="{Binding BackBtnVisibility}"
+                Margin="0,-50,0,0"
+                HorizontalAlignment="Left"
+                Grid.Column="0"
+                Style="{StaticResource MaterialDesignFlatDarkButton}" 
+                BorderThickness="0"
+                materialDesign:ButtonAssist.CornerRadius="17"
+                Foreground="#192030"
+                Padding="0"
+                Width="90"
+                Command="{Binding BackCommand}" >
+                <DockPanel Width="160" Margin="10,0,10,0">
+                    <materialDesign:PackIcon 
+                        DockPanel.Dock="Left" 
+                        Kind="ArrowLeft" 
+                        Width="23"
+                        Height="23"
+                        VerticalAlignment="Center" />
+                    <TextBlock Text="Back" FontWeight="Light" Margin="5,0,0,0" VerticalAlignment="Center"  />
                 </DockPanel>
-            </Border>
+            </Button>
 
-            <!--Search placeholder-->
-            <TextBlock 
-                IsHitTestVisible="False" 
-                Text="Search anything" 
-                VerticalAlignment="Center" 
-                HorizontalAlignment="Left" 
-                Margin="41,0,0,0" 
-                Foreground="DarkGray"
-                FontWeight="Light">
-                <TextBlock.Style>
-                    <Style TargetType="{x:Type TextBlock}">
-                        <Setter Property="Visibility" Value="Collapsed"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Text, ElementName=searchTextBox}" Value="">
-                                <Setter Property="Visibility" Value="Visible"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
+            <Grid 
+                Grid.Column="1" 
+                Width="360"
+                Margin="-40,-50,0,0">
+                <!--Search wrapper-->
+                <Border CornerRadius="20" BorderThickness="1" BorderBrush="#a1a1a1" Height="38" Background="#fff">
+                    <DockPanel>
+                        <!--Search icon-->
+                        <Image 
+                            Margin="12,0,0,0" 
+                            Source="../Resources/search.png" 
+                            Width="20" 
+                            Height="20"
+                            HorizontalAlignment="Left"/>
+
+                        <!--Search textbox-->
+                        <TextBox
+                                x:Name="searchTextBox" 
+                                Style="{x:Null}"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Margin="6,5,18,5" 
+                                VerticalAlignment="Center" />
+                    </DockPanel>
+                </Border>
+
+                <!--Search placeholder-->
+                <TextBlock 
+                    IsHitTestVisible="False" 
+                    Text="Search anything" 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Left" 
+                    Margin="41,0,0,0" 
+                    Foreground="DarkGray"
+                    FontWeight="Light">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=searchTextBox}" Value="">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
         </Grid>
 
         <!-- Categories List-->
-        <Grid Grid.Row="1" Background="#fff" Margin="0 10 0 0">
+        <Grid Grid.Row="1" Background="#fff" Margin="0 -20 0 0" Visibility="{Binding CategoryListVisibility}">
             <DataGrid
+                x:Name="categoryDataGrid"
                 materialDesign:DataGridAssist.CellPadding="16 10 16 2"
                 materialDesign:DataGridAssist.EnableEditBoxAssist="False"
                 Padding="30 20 30 20"
@@ -78,21 +110,46 @@
                 AutoGenerateColumns="False"
                 Background="#fff"
                 SelectionUnit="FullRow"
-                VerticalContentAlignment="Center">
+                VerticalContentAlignment="Center" >
+                
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction 
+                            Command="{Binding SelectCommand}"
+                            CommandParameter="{Binding SelectedItem, ElementName=categoryDataGrid}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                
                 <DataGrid.Columns>
                     <DataGridTextColumn
                             Binding="{Binding CategoryId}"
                             Header="ID" />
+
+                    <DataGridTemplateColumn Width="*" Header="Category name">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding CategoryName}" 
+                                         VerticalAlignment="Top" />
+
+                                    <TextBox Visibility="Collapsed" 
+                                         Text="{Binding CategoryName, UpdateSourceTrigger=PropertyChanged}" 
+                                         Width="150" 
+                                         VerticalAlignment="Top" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
                     <DataGridTextColumn
-                            Binding="{Binding CategoryName}"
-                            Header="Category name" />
-                    <DataGridTextColumn
+                            Width="120"
                             Binding="{Binding CreatedDateTime, StringFormat='{}{0:dd/MM/yyyy}'}"
                             Header="Created date" />
                     <DataGridTextColumn
+                            Width="120"
                             Binding="{Binding UpdatedDateTime, StringFormat='{}{0:dd/MM/yyyy}'}"
                             Header="Updated date" />
-                    <DataGridTemplateColumn Header="Actions">
+                    <DataGridTemplateColumn Header="Actions" Width="120">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Margin="0 -9 0 0">
@@ -134,6 +191,112 @@
                                                 Width="20" 
                                                 Height="20"
                                                 VerticalAlignment="Center" />
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+
+            </DataGrid>
+        </Grid>
+
+        <!-- Category Detail -->
+        <Grid Grid.Row="1" Background="#fff" Margin="0 -20 0 0" Visibility="{Binding CategoryDetailVisibility}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+           
+            <TextBlock 
+                Grid.Row="0"
+                Margin="50,10,0,0"
+                FontSize="24"
+                Foreground="#1b2333"
+                FontWeight="Medium"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                Text="{Binding CurCategory}"
+                />
+
+
+            <DataGrid
+                Grid.Row="1"
+                materialDesign:DataGridAssist.CellPadding="16 10 16 2"
+                materialDesign:DataGridAssist.EnableEditBoxAssist="False"
+                Padding="30 20 30 20"
+                ItemsSource="{Binding ProductsList}"
+                SelectionMode="Extended"
+                CanUserAddRows="False"
+                IsReadOnly="True"
+                AutoGenerateColumns="False"
+                Background="#fff"
+                SelectionUnit="FullRow"
+                VerticalContentAlignment="Center">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Binding="{Binding ProductId}"
+                        Header="ID" />
+                    <DataGridTextColumn
+                        Binding="{Binding ProductSKU}"
+                        Header="SKU" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding ProductName}"
+                        Header="Product Name" />
+                    <DataGridTextColumn
+                        Width="85"
+                        Binding="{Binding Quantity}"
+                        Header="Quantity" />
+                    <DataGridTextColumn
+                        Width="90"
+                        Binding="{Binding Price}"
+                        Header="Price" />
+                    <DataGridTextColumn
+                        Width="90"
+                        Binding="{Binding Cost}"
+                        Header="Cost" />
+                    <DataGridTemplateColumn Header="Actions" Width="115">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Margin="0 -9 0 0">
+                                    <!--Update button-->
+                                    <Button 
+                                        Style="{StaticResource MaterialDesignIconButton}"
+                                        BorderThickness="0"
+                                        materialDesign:ButtonAssist.CornerRadius="20"
+                                        Padding="0" 
+                                        Width="35"
+                                        Height="35"
+                                        ToolTip="Update"
+                                        Command="{Binding UpdateCommand}" 
+                                        CommandParameter="{Binding}">
+                                        <materialDesign:PackIcon 
+                                            DockPanel.Dock="Left" 
+                                            Kind="SquareEditOutline" 
+                                            Width="20"
+                                            Height="20" 
+                                            VerticalAlignment="Center" />
+                                    </Button>
+
+                                    <!-- Delete button -->
+                                    <Button Style="{StaticResource MaterialDesignIconButton}" 
+                                        BorderThickness="0"
+                                        materialDesign:ButtonAssist.CornerRadius="20" Foreground="#dc3545"
+                                        Padding="0"
+                                        Margin="10 0 0 0"
+                                        Width="35"
+                                        Height="35"
+                                        ToolTip="Delete"
+                                        Command="{Binding DeleteCommand}" 
+                                        CommandParameter="{Binding}">
+                                        <materialDesign:PackIcon 
+                                        DockPanel.Dock="Left" 
+                                        Kind="Delete" 
+                                        Width="20" 
+                                        Height="20"
+                                        VerticalAlignment="Center" />
                                     </Button>
                                 </StackPanel>
                             </DataTemplate>
