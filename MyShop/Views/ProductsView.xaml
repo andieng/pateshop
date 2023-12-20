@@ -18,7 +18,7 @@
 
         <!--Search-->
         <Grid 
-            Grid.Row="0" >
+            Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -48,9 +48,10 @@
             </Button>
 
             <Grid 
-                Grid.Column="1" 
-                Width="360"
-                Margin="-40,-50,0,0">
+                 Visibility="{Binding SearchBarVisibility}"
+                 Grid.Column="1" 
+                 Width="360"
+                 Margin="-40,-50,0,0">
                 <!--Search wrapper-->
                 <Border CornerRadius="20" BorderThickness="1" BorderBrush="#a1a1a1" Height="38" Background="#fff">
                     <DockPanel>
@@ -318,32 +319,65 @@
         <!-- Product Detail-->
         <Grid Grid.Row="1" Background="#fff" Margin="0 -20 0 0"  Visibility="{Binding ProductDetailVisibility}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="80" />
+                <RowDefinition Height="120" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-            <TextBlock 
-                Grid.Row="0"
-                Margin="30,10,0,0"
-                FontSize="24"
-                Foreground="#1b2333"
-                FontWeight="Medium"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Center"
-                Text="{Binding CurProduct}"
-                />
+            <Grid Grid.Row="0" Background="#c5ccd3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-            <TextBlock 
-                Grid.Row="1"
-                Margin="30,10,0,0"
-                FontSize="15"
-                Foreground="#98a1ac"
-                Text="{Binding CurProductDescription}" />
+                <StackPanel Grid.Column="0" Orientation="Vertical">
+                    <TextBlock 
+                        Margin="30,10,0,0"
+                        FontSize="24"
+                        Foreground="#1b2333"
+                        FontWeight="Medium"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        Text="{Binding CurProduct}" />
+
+                    <TextBlock 
+                        Margin="30,10,0,0"
+                        FontSize="15"
+                        Foreground="#475371"
+                        Text="{Binding CurProductDescription}" />
+                </StackPanel>
+
+                <Button
+                    Grid.Column="1"
+                    Margin="10"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource MaterialDesignFlatMidBgButton}" 
+                    BorderThickness="0"
+                    materialDesign:ButtonAssist.CornerRadius="17"
+                    Foreground="#fff"
+                    Background="#475371"
+                    Padding="0"
+                    Width="90">Edit</Button>
+
+                <Button
+                    Grid.Column="2"
+                    Margin="10"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource MaterialDesignFlatMidBgButton}" 
+                    BorderThickness="0"
+                    materialDesign:ButtonAssist.CornerRadius="17"
+                    Foreground="#fff"
+                    Background="#dc3545"
+                    Padding="0"
+                    Width="90">Delete</Button>
+            </Grid>
 
             <DataGrid
-                Grid.Row="2"
+                Grid.Row="1"
                 materialDesign:DataGridAssist.CellPadding="16 10 16 2"
                 materialDesign:DataGridAssist.EnableEditBoxAssist="False"
                 Padding="30 20 30 20"
@@ -385,7 +419,7 @@
                 </DataGrid.Columns>
             </DataGrid>
 
-            <Image Grid.Row="3" Width="300" Height="300" Source="{Binding CurProductImg}" />
+            <Image Grid.Row="2" Width="300" Height="300" Source="{Binding CurProductImg}" />
         </Grid>
     </Grid>
 </UserControl>

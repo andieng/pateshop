@@ -21,6 +21,7 @@ namespace MyShop.ViewModels
         private Visibility _categoryListVisibility = Visibility.Visible;
         private Visibility _categoryDetailVisibility = Visibility.Collapsed;
         private Visibility _productDetailVisibility = Visibility.Collapsed;
+        private Visibility _searchBarVisibility = Visibility.Visible;
         private string _curCategory;
         private string _curProduct;
         private string _curProductDescription;
@@ -96,6 +97,16 @@ namespace MyShop.ViewModels
             {
                 _productDetailVisibility = value;
                 OnPropertyChanged("ProductDetailVisibility");
+            }
+        }
+
+        public Visibility SearchBarVisibility
+        {
+            get => _searchBarVisibility;
+            set
+            {
+                _searchBarVisibility = value;
+                OnPropertyChanged("SearchBarVisibility");
             }
         }
 
@@ -189,6 +200,7 @@ namespace MyShop.ViewModels
                 CategoryDetailVisibility = Visibility.Collapsed;
                 ProductDetailVisibility = Visibility.Visible;
                 BackBtnVisibility = Visibility.Visible;
+                SearchBarVisibility = Visibility.Hidden;
                 CurView++;
                 return true;
             }
