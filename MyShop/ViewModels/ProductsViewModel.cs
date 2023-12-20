@@ -23,14 +23,19 @@ namespace MyShop.ViewModels
         private Visibility _productDetailVisibility = Visibility.Collapsed;
         private Visibility _searchBarVisibility = Visibility.Visible;
         private Visibility _editProductVisibility = Visibility.Collapsed;
-        private string _curCategory;
+        private Visibility _addProductVisibility = Visibility.Collapsed;
+        private Category _curCategory;
         private Product _curProduct;
         private Product _editedProduct;
+        private Product _newProduct = new Product();
 
         public BaseCommand SelectCommand { get; set; }
         public BaseCommand BackCommand { get; set; }
         public BaseCommand OpenEditCommand { get; set; }
         public BaseCommand UpdateCommand { get; set; }
+        public BaseCommand InlineUpdateCommand { get; set; }
+        public BaseCommand OpenAddCommand { get; set; }
+        public BaseCommand AddProductCommand { get; set; }
 
         public ObservableCollection<Category> CategoriesList
         {
@@ -116,10 +121,19 @@ namespace MyShop.ViewModels
                 OnPropertyChanged("SearchBarVisibility");
             }
         }
+        public Visibility AddProductVisibility
+        {
+            get => _addProductVisibility;
+            set
+            {
+                _addProductVisibility = value;
+                OnPropertyChanged("AddProductVisibility");
+            }
+        }
 
         public int CurView { get; set; }
 
-        public string CurCategory {
+        public Category CurCategory {
             get => _curCategory;
             set
             {
@@ -148,6 +162,16 @@ namespace MyShop.ViewModels
             }
         }
 
+        public Product NewProduct
+        {
+            get => _newProduct;
+            set
+            {
+                _newProduct = value;
+                OnPropertyChanged("NewProduct");
+            }
+        }
+
         public ProductsViewModel()
         {
             InitCommands();
@@ -160,6 +184,9 @@ namespace MyShop.ViewModels
             BackCommand = new BackCommand(this);
             OpenEditCommand = new OpenEditCommand(this);
             UpdateCommand = new UpdateCommand(this);
+            InlineUpdateCommand = new InlineUpdateCommand(this);
+            OpenAddCommand = new OpenAddCommand(this);
+            AddProductCommand = new AddProductCommand(this);
         }
 
         public async void LoadCategories()
@@ -183,6 +210,7 @@ namespace MyShop.ViewModels
                 ProductsList = new ObservableCollection<Product>(products);
                 CategoryDetailVisibility = Visibility.Visible;
                 BackBtnVisibility = Visibility.Visible;
+                NewProduct.CategoryId = categoryId;
                 CurView++;
                 return true; 
             }

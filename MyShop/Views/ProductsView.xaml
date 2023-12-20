@@ -99,7 +99,13 @@
 
         <!-- Categories List-->
         <Grid Grid.Row="1" Background="#fff" Margin="0 -20 0 0" Visibility="{Binding CategoryListVisibility}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
             <DataGrid
+                RowHeight="40"
+                Grid.Row="0"
                 x:Name="categoryDataGrid"
                 materialDesign:DataGridAssist.CellPadding="16 10 16 2"
                 materialDesign:DataGridAssist.EnableEditBoxAssist="False"
@@ -107,7 +113,7 @@
                 ItemsSource="{Binding CategoriesList}"
                 SelectionMode="Extended"
                 CanUserAddRows="False"
-                IsReadOnly="True"
+                IsReadOnly="False"
                 AutoGenerateColumns="False"
                 Background="#fff"
                 SelectionUnit="FullRow"
@@ -120,7 +126,7 @@
                             CommandParameter="{Binding SelectedItem, ElementName=categoryDataGrid}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-                
+
                 <DataGrid.Columns>
                     <DataGridTextColumn
                             Binding="{Binding CategoryId}"
@@ -130,13 +136,22 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding CategoryName}" 
-                                         VerticalAlignment="Top" />
-
-                                    <TextBox Visibility="Collapsed" 
-                                         Text="{Binding CategoryName, UpdateSourceTrigger=PropertyChanged}" 
-                                         Width="150" 
-                                         VerticalAlignment="Top" />
+                                    <TextBlock 
+                                        Text="{Binding CategoryName}" 
+                                        Visibility="{Binding CategoryNameVisibility}" 
+                                        VerticalAlignment="Top" />
+                                    <TextBox 
+                                        Visibility="Collapsed" 
+                                        Text="{Binding CategoryName, UpdateSourceTrigger=PropertyChanged}" 
+                                        Width="150" 
+                                        VerticalAlignment="Top" 
+                                        Tag="{Binding DataContext.SelectCommand, ElementName=categoryDataGrid, Mode=OneTime}">
+                                        <TextBox.InputBindings>
+                                            <KeyBinding Key="Enter" 
+                                                        Command="{Binding DataContext.InlineUpdateCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
+                                                        CommandParameter="{Binding}" />
+                                        </TextBox.InputBindings>
+                                    </TextBox>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -157,23 +172,22 @@
 
                                     <!--Update button-->
                                     <Button 
-                                            Style="{StaticResource MaterialDesignIconButton}"
-                                            BorderThickness="0"
-                                            materialDesign:ButtonAssist.CornerRadius="20"
-                                            Padding="0" 
-                                            Width="35"
-                                            Height="35"
-                                            ToolTip="Update"
-                                            Command="{Binding UpdateCommand}" 
-                                            CommandParameter="{Binding}">
+                                        Style="{StaticResource MaterialDesignIconButton}"
+                                        BorderThickness="0"
+                                        materialDesign:ButtonAssist.CornerRadius="20"
+                                        Padding="0" 
+                                        Width="35"
+                                        Height="35"
+                                        ToolTip="Update"
+                                        Command="{Binding DataContext.InlineUpdateCommand, ElementName=categoryDataGrid}"
+                                        Tag="{Binding DataContext.SelectCommand, ElementName=categoryDataGrid, Mode=OneTime}">
                                         <materialDesign:PackIcon 
-                                                DockPanel.Dock="Left" 
-                                                Kind="SquareEditOutline" 
-                                                Width="20"
-                                                Height="20" 
-                                                VerticalAlignment="Center" />
+                                            DockPanel.Dock="Left" 
+                                            Kind="SquareEditOutline" 
+                                            Width="20"
+                                            Height="20" 
+                                            VerticalAlignment="Center" />
                                     </Button>
-
 
                                     <!-- Delete button -->
                                     <Button Style="{StaticResource MaterialDesignIconButton}" 
@@ -199,8 +213,20 @@
 
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
-
             </DataGrid>
+
+            <Button
+                Grid.Row="1"
+                Margin="0 0 30 0"
+                HorizontalAlignment="Right"
+                Style="{StaticResource MaterialDesignFlatMidBgButton}" 
+                BorderThickness="0"
+                materialDesign:ButtonAssist.CornerRadius="17"
+                Foreground="#fff"
+                Background="#475371"
+                Padding="0"
+                Width="110"
+                Command="{Binding }">Add Category</Button>
         </Grid>
 
         <!-- Category Detail -->
@@ -209,7 +235,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-           
+
             <TextBlock 
                 Grid.Row="0"
                 Margin="50,10,0,0"
@@ -218,13 +244,26 @@
                 FontWeight="Medium"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
-                Text="{Binding CurCategory}"
+                Text="{Binding CurCategory.CategoryName}"
                 />
 
+            <Button
+                Grid.Row="0"
+                Margin="0 20 30 0"
+                HorizontalAlignment="Right"
+                Style="{StaticResource MaterialDesignFlatMidBgButton}" 
+                BorderThickness="0"
+                materialDesign:ButtonAssist.CornerRadius="17"
+                Foreground="#fff"
+                Background="#475371"
+                Padding="0"
+                Width="110"
+                Command="{Binding OpenAddCommand}">Add Product</Button>
 
             <DataGrid
                 x:Name="categoryDetailDataGrid"
                 Grid.Row="1"
+                RowHeight="40"
                 materialDesign:DataGridAssist.CellPadding="16 10 16 2"
                 materialDesign:DataGridAssist.EnableEditBoxAssist="False"
                 Padding="30 20 30 20"
@@ -266,52 +305,6 @@
                         Width="90"
                         Binding="{Binding Cost}"
                         Header="Cost" />
-                    <DataGridTemplateColumn Header="Actions" Width="115">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal" Margin="0 -9 0 0">
-                                    <!--Update button-->
-                                    <Button 
-                                        Style="{StaticResource MaterialDesignIconButton}"
-                                        BorderThickness="0"
-                                        materialDesign:ButtonAssist.CornerRadius="20"
-                                        Padding="0" 
-                                        Width="35"
-                                        Height="35"
-                                        ToolTip="Update"
-                                        Command="{Binding UpdateCommand}" 
-                                        CommandParameter="{Binding}">
-                                        <materialDesign:PackIcon 
-                                            DockPanel.Dock="Left" 
-                                            Kind="SquareEditOutline" 
-                                            Width="20"
-                                            Height="20" 
-                                            VerticalAlignment="Center" />
-                                    </Button>
-
-                                    <!-- Delete button -->
-                                    <Button Style="{StaticResource MaterialDesignIconButton}" 
-                                        BorderThickness="0"
-                                        materialDesign:ButtonAssist.CornerRadius="20" Foreground="#dc3545"
-                                        Padding="0"
-                                        Margin="10 0 0 0"
-                                        Width="35"
-                                        Height="35"
-                                        ToolTip="Delete"
-                                        Command="{Binding DeleteCommand}" 
-                                        CommandParameter="{Binding}">
-                                        <materialDesign:PackIcon 
-                                        DockPanel.Dock="Left" 
-                                        Kind="Delete" 
-                                        Width="20" 
-                                        Height="20"
-                                        VerticalAlignment="Center" />
-                                    </Button>
-                                </StackPanel>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-
-                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
@@ -378,6 +371,7 @@
             </Grid>
 
             <DataGrid
+                RowHeight="40"
                 Grid.Row="1"
                 materialDesign:DataGridAssist.CellPadding="16 10 16 2"
                 materialDesign:DataGridAssist.EnableEditBoxAssist="False"
@@ -422,8 +416,6 @@
                         Header="Color" />
                 </DataGrid.Columns>
             </DataGrid>
-
-            <Image Grid.Row="2" Width="300" Height="300" Source="{Binding CurProduct.Image}" />
         </Grid>
 
         <!-- Edit Product -->
@@ -762,6 +754,344 @@
                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
                     TextWrapping="Wrap"
                     VerticalScrollBarVisibility="Auto" />
+            </Grid>
+        </Grid>
+
+        <!-- Add Product -->
+        <Grid Grid.Row="1" Background="#fff" Margin="0 -20 0 0"  Visibility="{Binding AddProductVisibility}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Margin="0,10,0,20" FontSize="24" Foreground="#1b2333" FontWeight="Medium" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                    <Run Text="Add Product: " />
+                </TextBlock>
+
+                <Button
+                    Grid.Column="1"
+                    Margin="10"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource MaterialDesignFlatMidBgButton}" 
+                    BorderThickness="0"
+                    materialDesign:ButtonAssist.CornerRadius="17"
+                    Foreground="#fff"
+                    Background="#475371"
+                    Padding="0"
+                    Width="90"
+                    Command="{Binding AddProductCommand}">Add</Button>
+            </Grid>
+
+            <Grid Grid.Row="1" Margin="0 0 0 40" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock 
+                    Width="100"
+                    Grid.Column="0"
+                    FontSize="15"
+                    Padding="5"
+                    Foreground="#fff"
+                    Background="#98a1ac"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Text="Category ID" />
+
+                <TextBox
+                    Grid.Column="1"
+                    Text="{Binding NewProduct.CategoryId}"
+                    Margin="0 0 20 0"
+                    Padding="5"
+                    IsEnabled="False"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Stretch"
+                    AcceptsReturn="True"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Auto" />
+
+                <TextBlock 
+            Width="100"
+            Grid.Column="2"
+            FontSize="15"
+            Padding="5"
+            Foreground="#fff"
+            Background="#98a1ac"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
+            Text="Product SKU" />
+
+                <TextBox
+            Grid.Column="3"
+            Padding="5"
+            Text="{Binding NewProduct.ProductSKU}"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Stretch"
+            AcceptsReturn="True"
+            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+            TextWrapping="Wrap"
+            VerticalScrollBarVisibility="Auto" />
+            </Grid>
+
+            <Grid Grid.Row="2" Margin="0 0 0 10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock 
+            Width="100"
+            Grid.Column="0"
+            FontSize="15"
+            Padding="5"
+            Foreground="#fff"
+            Background="#98a1ac"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
+            Text="Name" />
+
+                <TextBox
+            Grid.Column="1"
+            Padding="5"
+            Text="{Binding NewProduct.ProductName}"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Stretch"
+            AcceptsReturn="True"
+            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+            TextWrapping="Wrap"
+            VerticalScrollBarVisibility="Auto" />
+            </Grid>
+
+            <Grid Grid.Row="3" Margin="0 0 0 10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock 
+            Width="100"
+            Grid.Column="0"
+            FontSize="15"
+            Padding="5"
+            Foreground="#fff"
+            Background="#98a1ac"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
+            Text="Description" />
+
+                <TextBox
+            Grid.Column="1"
+            Padding="5"
+            Text="{Binding NewProduct.Description}"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Stretch"
+            AcceptsReturn="True"
+            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+            TextWrapping="Wrap"
+            VerticalScrollBarVisibility="Auto" />
+            </Grid>
+
+            <Grid Grid.Row="4" Margin="0 0 0 40">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock 
+            Width="100"
+            Grid.Column="0"
+            FontSize="15"
+            Padding="5"
+            Foreground="#fff"
+            Background="#98a1ac"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
+            Text="Image" />
+
+                <TextBox
+            Grid.Column="1"
+            Padding="5"
+            Text="{Binding NewProduct.Image}"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Stretch"
+            AcceptsReturn="True"
+            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+            TextWrapping="Wrap"
+            VerticalScrollBarVisibility="Auto" />
+            </Grid>
+
+            <Grid Grid.Row="5" Margin="0 0 0 10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock 
+            Width="100"
+            Grid.Column="0"
+            FontSize="15"
+            Padding="5"
+            Foreground="#fff"
+            Background="#98a1ac"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
+            Text="Price" />
+
+                <TextBox
+            Grid.Column="1"
+            Margin="0 0 20 0"
+            Padding="5"
+            Text="{Binding NewProduct.Price}"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Stretch"
+            AcceptsReturn="True"
+            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+            TextWrapping="Wrap"
+            VerticalScrollBarVisibility="Auto" />
+
+                <TextBlock 
+            Width="100"
+            Grid.Column="2"
+            FontSize="15"
+            Padding="5"
+            Foreground="#fff"
+            Background="#98a1ac"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
+            Text="Cost" />
+
+                <TextBox
+            Grid.Column="3"
+            Padding="5"
+            Text="{Binding NewProduct.Cost}"
+            Margin="0 0 20 0"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Stretch"
+            AcceptsReturn="True"
+            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+            TextWrapping="Wrap"
+            VerticalScrollBarVisibility="Auto" />
+
+                <TextBlock 
+            Width="100"
+            Grid.Column="4"
+            FontSize="15"
+            Padding="5"
+            Foreground="#fff"
+            Background="#98a1ac"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
+            Text="Quantity" />
+
+                <TextBox
+            Grid.Column="5"
+            Padding="5"
+            Text="{Binding NewProduct.Quantity}"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Stretch"
+            AcceptsReturn="True"
+            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+            TextWrapping="Wrap"
+            VerticalScrollBarVisibility="Auto" />
+            </Grid>
+
+            <Grid Grid.Row="6" Margin="0 0 0 10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock 
+            Width="100"
+            Grid.Column="0"
+            FontSize="15"
+            Padding="5"
+            Foreground="#fff"
+            Background="#98a1ac"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
+            Text="Color" />
+
+                <TextBox
+            Grid.Column="1"
+            Margin="0 0 20 0"
+            Text="{Binding NewProduct.Color}"
+            Padding="5"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Stretch"
+            AcceptsReturn="True"
+            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+            TextWrapping="Wrap"
+            VerticalScrollBarVisibility="Auto" />
+
+                <TextBlock 
+            Width="100"
+            Grid.Column="2"
+            FontSize="15"
+            Padding="5"
+            Foreground="#fff"
+            Background="#98a1ac"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
+            Text="Size" />
+
+                <TextBox
+            Grid.Column="3"
+            Padding="5"
+            Text="{Binding NewProduct.Size}"
+            Margin="0 0 20 0"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Stretch"
+            AcceptsReturn="True"
+            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+            TextWrapping="Wrap"
+            VerticalScrollBarVisibility="Auto" />
+
+                <TextBlock 
+            Visibility="Hidden"
+            Width="100"
+            Grid.Column="4"
+            FontSize="15"
+            Padding="5"
+            Foreground="#fff"
+            Background="#98a1ac"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
+            Text="Quantity" />
+
+                <TextBox
+            Visibility="Hidden"
+            Grid.Column="5"
+            Padding="5"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Stretch"
+            AcceptsReturn="True"
+            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+            TextWrapping="Wrap"
+            VerticalScrollBarVisibility="Auto" />
             </Grid>
 
         </Grid>

@@ -26,7 +26,7 @@ namespace MyShop.Commands
         {
             if (parameter is Category selectedCategory)
             {
-                _productsViewModel.CurCategory = selectedCategory.CategoryName;
+                _productsViewModel.CurCategory = selectedCategory;
                 await _productsViewModel.LoadProductsOfCategory(selectedCategory.CategoryId);
             }
 

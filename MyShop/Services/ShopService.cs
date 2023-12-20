@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 using MyShop.Models;
+using MyShop.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -235,6 +236,71 @@ namespace MyShop.Services
                 else
                 {
                     MessageBox.Show("Update successful!");
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+        }
+
+        private static bool ValidateProductTypes(Product product)
+        {
+            return
+                product.ProductId is int &&
+                product.ProductName is string &&
+                product.ProductSKU is string &&
+                product.CategoryId is int &&
+                product.Description is string &&
+                product.Quantity is int &&
+                product.Price is float &&
+                product.Cost is float &&
+                product.Size is float &&
+                product.Color is string;
+        }
+
+        public static async Task<bool> AddProduct(Product newProduct)
+        {
+            var isValid = ValidateProductTypes(newProduct);
+
+            if (!isValid)
+            {
+                MessageBox.Show("Invalid data types for product properties!");
+                return false;
+            }
+
+            var product = new
+            {
+                productId = newProduct.ProductId,
+                productName = newProduct.ProductName,
+                productSku = newProduct.ProductSKU,
+                categoryId = newProduct.CategoryId,
+                description = newProduct.Description,
+                quantity = newProduct.Quantity,
+                price = newProduct.Price,
+                cost = newProduct.Cost,
+                image = newProduct.Image,
+                size = newProduct.Size,
+                color = newProduct.Color,
+            };
+
+            try
+            {
+                var response = await ApiClient.PostAsJsonAsync($"categories/{newProduct.CategoryId}/products", product);
+                response.EnsureSuccessStatusCode();
+
+                var responseData = await response.Content.ReadFromJsonAsync<UpdateResponseData>();
+
+                if (responseData != null && responseData.Error != null)
+                {
+                    MessageBox.Show($"Error: {responseData.Error}");
+                    return false;
+                }
+                else
+                {
+                    MessageBox.Show("Add successful!");
                     return true;
                 }
             }

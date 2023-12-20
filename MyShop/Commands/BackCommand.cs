@@ -42,6 +42,7 @@ namespace MyShop.Commands
                         _productsViewModel.CategoryDetailVisibility = Visibility.Visible;
                         _productsViewModel.ProductDetailVisibility = Visibility.Collapsed;
                         _productsViewModel.SearchBarVisibility = Visibility.Visible;
+                        _productsViewModel.AddProductVisibility = Visibility.Collapsed;
                         break;
                     case 2: // trang product detail
                         _productsViewModel.CategoryDetailVisibility = Visibility.Collapsed;

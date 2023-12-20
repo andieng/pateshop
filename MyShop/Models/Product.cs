@@ -24,6 +24,8 @@ namespace MyShop.Models
         private DateTime _createdDateTime;
         private DateTime _updatedDateTime;
 
+        public Product() { }
+
         public Product(
                 int productId,
                 string productName,
