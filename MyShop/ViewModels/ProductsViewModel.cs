@@ -22,13 +22,15 @@ namespace MyShop.ViewModels
         private Visibility _categoryDetailVisibility = Visibility.Collapsed;
         private Visibility _productDetailVisibility = Visibility.Collapsed;
         private Visibility _searchBarVisibility = Visibility.Visible;
+        private Visibility _editProductVisibility = Visibility.Collapsed;
         private string _curCategory;
-        private string _curProduct;
-        private string _curProductDescription;
-        private string _curProductImg;
+        private Product _curProduct;
+        private Product _editedProduct;
 
         public BaseCommand SelectCommand { get; set; }
         public BaseCommand BackCommand { get; set; }
+        public BaseCommand OpenEditCommand { get; set; }
+        public BaseCommand UpdateCommand { get; set; }
 
         public ObservableCollection<Category> CategoriesList
         {
@@ -69,7 +71,6 @@ namespace MyShop.ViewModels
                 OnPropertyChanged("CategoryDetailVisibility");
             }
         }
-
         public Visibility CategoryListVisibility
         {
             get => _categoryListVisibility;
@@ -79,7 +80,6 @@ namespace MyShop.ViewModels
                 OnPropertyChanged("CategoryListVisibility");
             }
         }
-
         public Visibility BackBtnVisibility
         {
             get => _backBtnVisibility;
@@ -89,7 +89,6 @@ namespace MyShop.ViewModels
                 OnPropertyChanged("BackBtnVisibility");
             }
         }
-
         public Visibility ProductDetailVisibility
         {
             get => _productDetailVisibility;
@@ -99,7 +98,15 @@ namespace MyShop.ViewModels
                 OnPropertyChanged("ProductDetailVisibility");
             }
         }
-
+        public Visibility EditProductVisibility
+        {
+            get => _editProductVisibility;
+            set
+            {
+                _editProductVisibility = value;
+                OnPropertyChanged("EditProductVisibility");
+            }
+        }
         public Visibility SearchBarVisibility
         {
             get => _searchBarVisibility;
@@ -121,7 +128,7 @@ namespace MyShop.ViewModels
             }
         }
 
-        public string CurProduct
+        public Product CurProduct
         {
             get => _curProduct;
             set
@@ -131,23 +138,13 @@ namespace MyShop.ViewModels
             }
         }
 
-        public string CurProductDescription
+        public Product EditedProduct
         {
-            get => _curProductDescription;
+            get => _editedProduct;
             set
             {
-                _curProductDescription = value;
-                OnPropertyChanged("CurProductDescription");
-            }
-        }
-
-        public string CurProductImg
-        {
-            get => _curProductImg;
-            set
-            {
-                _curProductImg = value;
-                OnPropertyChanged("CurProductImg");
+                _editedProduct = value;
+                OnPropertyChanged("EditedProduct");
             }
         }
 
@@ -161,6 +158,8 @@ namespace MyShop.ViewModels
         {
             SelectCommand = new SelectCommand(this);
             BackCommand = new BackCommand(this);
+            OpenEditCommand = new OpenEditCommand(this);
+            UpdateCommand = new UpdateCommand(this);
         }
 
         public async void LoadCategories()

@@ -1,7 +1,9 @@
-﻿using MyShop.Models;
+﻿using Microsoft.Extensions.Hosting;
+using MyShop.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -198,6 +200,48 @@ namespace MyShop.Services
             {
                 Console.WriteLine(ex.ToString());
                 return null;
+            }
+        }
+
+        public static async Task<bool> UpdateProduct(int categoryId, Product editedProduct)
+        {
+            var product = new
+            {
+                productId = editedProduct.ProductId,
+                productName = editedProduct.ProductName,
+                productSku = editedProduct.ProductSKU,
+                categoryId = categoryId,
+                description = editedProduct.Description,
+                quantity = editedProduct.Quantity,
+                price = editedProduct.Price,
+                cost = editedProduct.Cost,
+                image = editedProduct.Image,
+                size = editedProduct.Size,
+                color = editedProduct.Color,
+            };
+
+            try
+            {
+                var response = await ApiClient.PutAsJsonAsync($"categories/{categoryId}/products/{editedProduct.ProductId}", product);
+                response.EnsureSuccessStatusCode();
+
+                var responseData = await response.Content.ReadFromJsonAsync<UpdateResponseData>();
+
+                if (responseData != null && responseData.Error != null)
+                {
+                    MessageBox.Show($"Error: {responseData.Error}");
+                    return false;
+                }
+                else
+                {
+                    MessageBox.Show("Update successful!");
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
             }
         }
     }

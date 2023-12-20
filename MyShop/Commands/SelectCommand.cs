@@ -32,9 +32,8 @@ namespace MyShop.Commands
 
             if (parameter is Product selectedProduct)
             {
-                _productsViewModel.CurProduct = selectedProduct.ProductSKU + " - " + selectedProduct.ProductName;
-                _productsViewModel.CurProductDescription = selectedProduct.Description;
-                _productsViewModel.CurProductImg = selectedProduct.Image;
+                _productsViewModel.CurProduct = selectedProduct;
+                _productsViewModel.EditedProduct = selectedProduct;
                 await _productsViewModel.LoadProduct(selectedProduct.ProductId, selectedProduct.CategoryId);
             }
         }

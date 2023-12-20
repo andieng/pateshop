@@ -35,7 +35,6 @@ namespace MyShop.Commands
                     case 0: // trang list các category
                         _productsViewModel.CategoryListVisibility = Visibility.Visible;
                         _productsViewModel.CategoryDetailVisibility = Visibility.Collapsed;
-                        _productsViewModel.ProductDetailVisibility = Visibility.Collapsed;
                         _productsViewModel.BackBtnVisibility = Visibility.Hidden;
                         break;
                     case 1: // trang list các products của category 
@@ -43,6 +42,12 @@ namespace MyShop.Commands
                         _productsViewModel.CategoryDetailVisibility = Visibility.Visible;
                         _productsViewModel.ProductDetailVisibility = Visibility.Collapsed;
                         _productsViewModel.SearchBarVisibility = Visibility.Visible;
+                        break;
+                    case 2: // trang product detail
+                        _productsViewModel.CategoryDetailVisibility = Visibility.Collapsed;
+                        _productsViewModel.ProductDetailVisibility = Visibility.Visible;
+                        _productsViewModel.SearchBarVisibility = Visibility.Hidden;
+                        _productsViewModel.EditProductVisibility = Visibility.Collapsed;
                         break;
                 }
             }

@@ -342,13 +342,13 @@
                         FontWeight="Medium"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Center"
-                        Text="{Binding CurProduct}" />
+                        Text="{Binding CurProduct.ProductName}" />
 
                     <TextBlock 
                         Margin="30,10,0,0"
                         FontSize="15"
                         Foreground="#475371"
-                        Text="{Binding CurProductDescription}" />
+                        Text="{Binding CurProduct.Description}" />
                 </StackPanel>
 
                 <Button
@@ -361,6 +361,7 @@
                     Foreground="#fff"
                     Background="#475371"
                     Padding="0"
+                    Command="{Binding OpenEditCommand}"
                     Width="90">Edit</Button>
 
                 <Button
@@ -394,8 +395,11 @@
                         Binding="{Binding ProductId}"
                         Header="ID" />
                     <DataGridTextColumn
-                        Binding="{Binding ProductSKU}"
+                        Binding="{Binding CategoryId}"
                         Header="Category ID" />
+                    <DataGridTextColumn
+                        Binding="{Binding ProductSKU}"
+                        Header="SKU" />
                     <DataGridTextColumn
                         Width="*"
                         Binding="{Binding Quantity}"
@@ -410,16 +414,356 @@
                         Header="Cost" />
                     <DataGridTextColumn
                         Width="*"
-                        Binding="{Binding Cost}"
+                        Binding="{Binding Size}"
                         Header="Size" />
                     <DataGridTextColumn
                         Width="*"
-                        Binding="{Binding Cost}"
+                        Binding="{Binding Color}"
                         Header="Color" />
                 </DataGrid.Columns>
             </DataGrid>
 
-            <Image Grid.Row="2" Width="300" Height="300" Source="{Binding CurProductImg}" />
+            <Image Grid.Row="2" Width="300" Height="300" Source="{Binding CurProduct.Image}" />
+        </Grid>
+
+        <!-- Edit Product -->
+        <Grid Grid.Row="1" Background="#fff" Margin="0 -20 0 0"  Visibility="{Binding EditProductVisibility}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                
+
+                <TextBlock Grid.Column="0" Margin="0,10,0,20" FontSize="24" Foreground="#1b2333" FontWeight="Medium" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                    <Run Text="Product ID: " />
+                    <Run Text="{Binding EditedProduct.ProductId}" />
+                </TextBlock>
+
+                <Button
+                    Grid.Column="1"
+                    Margin="10"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource MaterialDesignFlatMidBgButton}" 
+                    BorderThickness="0"
+                    materialDesign:ButtonAssist.CornerRadius="17"
+                    Foreground="#fff"
+                    Background="#475371"
+                    Padding="0"
+                    Width="90"
+                    Command="{Binding UpdateCommand}">Update</Button>
+            </Grid>
+
+            <Grid Grid.Row="1" Margin="0 0 0 40" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock 
+                    Width="100"
+                    Grid.Column="0"
+                    FontSize="15"
+                    Padding="5"
+                    Foreground="#fff"
+                    Background="#98a1ac"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Text="Category ID" />
+
+                <TextBox
+                    Grid.Column="1"
+                    Text="{Binding EditedProduct.CategoryId}"
+                    Margin="0 0 20 0"
+                    Padding="5"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Stretch"
+                    AcceptsReturn="True"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Auto" />
+
+                <TextBlock 
+                    Width="100"
+                    Grid.Column="2"
+                    FontSize="15"
+                    Padding="5"
+                    Foreground="#fff"
+                    Background="#98a1ac"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Text="Product SKU" />
+
+                <TextBox
+                    Grid.Column="3"
+                    Padding="5"
+                    Text="{Binding EditedProduct.ProductSKU}"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Stretch"
+                    AcceptsReturn="True"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Auto" />
+            </Grid>
+
+            <Grid Grid.Row="2" Margin="0 0 0 10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock 
+                    Width="100"
+                    Grid.Column="0"
+                    FontSize="15"
+                    Padding="5"
+                    Foreground="#fff"
+                    Background="#98a1ac"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Text="Name" />
+
+                <TextBox
+                    Grid.Column="1"
+                    Padding="5"
+                    Text="{Binding EditedProduct.ProductName}"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Stretch"
+                    AcceptsReturn="True"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Auto" />
+            </Grid>
+
+            <Grid Grid.Row="3" Margin="0 0 0 10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock 
+                    Width="100"
+                    Grid.Column="0"
+                    FontSize="15"
+                    Padding="5"
+                    Foreground="#fff"
+                    Background="#98a1ac"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Text="Description" />
+
+                <TextBox
+                    Grid.Column="1"
+                    Padding="5"
+                    Text="{Binding EditedProduct.Description}"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Stretch"
+                    AcceptsReturn="True"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Auto" />
+            </Grid>
+
+            <Grid Grid.Row="4" Margin="0 0 0 40">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock 
+                    Width="100"
+                    Grid.Column="0"
+                    FontSize="15"
+                    Padding="5"
+                    Foreground="#fff"
+                    Background="#98a1ac"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Text="Image" />
+
+                <TextBox
+                    Grid.Column="1"
+                    Padding="5"
+                    Text="{Binding EditedProduct.Image}"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Stretch"
+                    AcceptsReturn="True"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Auto" />
+            </Grid>
+
+            <Grid Grid.Row="5" Margin="0 0 0 10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock 
+                    Width="100"
+                    Grid.Column="0"
+                    FontSize="15"
+                    Padding="5"
+                    Foreground="#fff"
+                    Background="#98a1ac"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Text="Price" />
+
+                <TextBox
+                    Grid.Column="1"
+                    Margin="0 0 20 0"
+                    Padding="5"
+                    Text="{Binding EditedProduct.Price}"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Stretch"
+                    AcceptsReturn="True"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Auto" />
+
+                <TextBlock 
+                    Width="100"
+                    Grid.Column="2"
+                    FontSize="15"
+                    Padding="5"
+                    Foreground="#fff"
+                    Background="#98a1ac"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Text="Cost" />
+
+                <TextBox
+                    Grid.Column="3"
+                    Padding="5"
+                    Text="{Binding EditedProduct.Cost}"
+                    Margin="0 0 20 0"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Stretch"
+                    AcceptsReturn="True"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Auto" />
+
+                <TextBlock 
+                    Width="100"
+                    Grid.Column="4"
+                    FontSize="15"
+                    Padding="5"
+                    Foreground="#fff"
+                    Background="#98a1ac"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Text="Quantity" />
+
+                <TextBox
+                    Grid.Column="5"
+                    Padding="5"
+                    Text="{Binding EditedProduct.Quantity}"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Stretch"
+                    AcceptsReturn="True"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Auto" />
+            </Grid>
+
+            <Grid Grid.Row="6" Margin="0 0 0 10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock 
+                    Width="100"
+                    Grid.Column="0"
+                    FontSize="15"
+                    Padding="5"
+                    Foreground="#fff"
+                    Background="#98a1ac"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Text="Color" />
+
+                <TextBox
+                    Grid.Column="1"
+                    Margin="0 0 20 0"
+                    Text="{Binding EditedProduct.Color}"
+                    Padding="5"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Stretch"
+                    AcceptsReturn="True"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Auto" />
+
+                <TextBlock 
+                    Width="100"
+                    Grid.Column="2"
+                    FontSize="15"
+                    Padding="5"
+                    Foreground="#fff"
+                    Background="#98a1ac"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Text="Size" />
+
+                <TextBox
+                    Grid.Column="3"
+                    Padding="5"
+                    Text="{Binding EditedProduct.Size}"
+                    Margin="0 0 20 0"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Stretch"
+                    AcceptsReturn="True"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Auto" />
+
+                <TextBlock 
+                    Visibility="Hidden"
+                    Width="100"
+                    Grid.Column="4"
+                    FontSize="15"
+                    Padding="5"
+                    Foreground="#fff"
+                    Background="#98a1ac"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Text="Quantity" />
+
+                <TextBox
+                    Visibility="Hidden"
+                    Grid.Column="5"
+                    Padding="5"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Stretch"
+                    AcceptsReturn="True"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Auto" />
+            </Grid>
+
         </Grid>
     </Grid>
 </UserControl>
