@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyShop.Models
 {
-    class UpdateResponseData : BaseModel
+    class ActionResponseData : BaseModel
     {
         [JsonProperty("message")]
         public string Message { get; set; }

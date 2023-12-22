@@ -36,6 +36,7 @@ namespace MyShop.ViewModels
         public BaseCommand InlineUpdateCommand { get; set; }
         public BaseCommand OpenAddCommand { get; set; }
         public BaseCommand AddProductCommand { get; set; }
+        public BaseCommand DeleteProductCommand { get; set; }
 
         public ObservableCollection<Category> CategoriesList
         {
@@ -187,6 +188,7 @@ namespace MyShop.ViewModels
             InlineUpdateCommand = new InlineUpdateCommand(this);
             OpenAddCommand = new OpenAddCommand(this);
             AddProductCommand = new AddProductCommand(this);
+            DeleteProductCommand = new DeleteProductCommand(this);
         }
 
         public async void LoadCategories()

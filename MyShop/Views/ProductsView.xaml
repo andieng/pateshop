@@ -198,7 +198,7 @@
                                                 Width="35"
                                                 Height="35"
                                                 ToolTip="Delete"
-                                                Command="{Binding DeleteCommand}" 
+                                                Command="{Binding }" 
                                                 CommandParameter="{Binding}">
                                         <materialDesign:PackIcon 
                                                 DockPanel.Dock="Left" 
@@ -367,6 +367,7 @@
                     Foreground="#fff"
                     Background="#dc3545"
                     Padding="0"
+                    Command="{Binding DeleteProductCommand}"
                     Width="90">Delete</Button>
             </Grid>
 

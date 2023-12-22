@@ -226,7 +226,7 @@ namespace MyShop.Services
                 var response = await ApiClient.PutAsJsonAsync($"categories/{categoryId}/products/{editedProduct.ProductId}", product);
                 response.EnsureSuccessStatusCode();
 
-                var responseData = await response.Content.ReadFromJsonAsync<UpdateResponseData>();
+                var responseData = await response.Content.ReadFromJsonAsync<ActionResponseData>();
 
                 if (responseData != null && responseData.Error != null)
                 {
@@ -291,7 +291,7 @@ namespace MyShop.Services
                 var response = await ApiClient.PostAsJsonAsync($"categories/{newProduct.CategoryId}/products", product);
                 response.EnsureSuccessStatusCode();
 
-                var responseData = await response.Content.ReadFromJsonAsync<UpdateResponseData>();
+                var responseData = await response.Content.ReadFromJsonAsync<ActionResponseData>();
 
                 if (responseData != null && responseData.Error != null)
                 {
@@ -301,6 +301,33 @@ namespace MyShop.Services
                 else
                 {
                     MessageBox.Show("Add successful!");
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+        }
+
+        public static async Task<bool> DeleteProduct(int productId, int categoryId)
+        {
+            try
+            {
+                var response = await ApiClient.DeleteAsync($"categories/{categoryId}/products/{productId}");
+                response.EnsureSuccessStatusCode();
+
+                var responseData = await response.Content.ReadFromJsonAsync<ActionResponseData>();
+
+                if (responseData != null && responseData.Error != null)
+                {
+                    MessageBox.Show($"Error: {responseData.Error}");
+                    return false;
+                }
+                else
+                {
+                    MessageBox.Show("Delete successful!");
                     return true;
                 }
             }
