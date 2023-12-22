@@ -1,4 +1,5 @@
 ﻿using MyShop.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -6,6 +7,7 @@ using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -137,6 +139,112 @@ namespace MyShop.Services
             {
                 Console.WriteLine(ex.ToString());
                 return null;
+            }
+        }
+
+        public static async Task<(List<Product>, Paging)?> GetProductsAsync(int limit = 100, int offset = 0)
+        {
+            try
+            {
+                var response = await ApiClient.GetAsync($"products?limit={limit}&offset={offset}");
+                response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseData<Product>?>();
+                if (responseData != null)
+                {
+                    return (responseData.Data, responseData.Paging);
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
+        public static async Task<(List<Order>, Paging)?> GetOrdersAsync(int limit = 100, int offset = 0)
+        {
+            try
+            {
+                var response = await ApiClient.GetAsync($"orders?limit={limit}&offset={offset}");
+                response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseData<Order>?>();
+                if (responseData != null)
+                {
+                    return (responseData.Data, responseData.Paging);
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
+        public static async Task<OrderDetail?> GetOrderDetailAsync(int orderId)
+        {
+            try
+            {
+                var response = await ApiClient.GetAsync($"orders/{orderId}");
+                response.EnsureSuccessStatusCode();
+
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseObjectData<OrderDetail>>();
+
+                if (responseData != null)
+                {
+                    return responseData.Data;
+
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
+        public static async Task AddCustomer(Object customer)
+        {
+            try
+            {
+                var response = await ApiClient.PostAsync("customers", new StringContent(JsonConvert.SerializeObject(customer), Encoding.UTF8, "application/json"));
+                response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseData<Customer>?>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+        public static async Task<bool> DeleteCustomerAsync(int OrderId)
+        {
+            try
+            {
+                var response = await ApiClient.DeleteAsync($"customers/{OrderId}");
+                response.EnsureSuccessStatusCode();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+        }
+
+        public static async Task UpdateCustomer(Object customer,int CustomerId)
+        {
+            try
+            {
+                var response = await ApiClient.PutAsync($"customers/{CustomerId}", new StringContent(JsonConvert.SerializeObject(customer), Encoding.UTF8, "application/json"));
+                response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseData<Customer>?>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
             }
         }
     }

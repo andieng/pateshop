@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyShop.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,9 @@ namespace MyShop.Views
         public CustomersView()
         {
             InitializeComponent();
+
+            var addCustomerViewModel = new CustomersViewModel();
+            DataContext = addCustomerViewModel;
         }
     }
 }
