@@ -20,7 +20,8 @@ namespace MyShop.Commands
 
         public override void Execute(object parameter)
         {
-            MessageBox.Show("inline");
+            _productsViewModel.InputCategoryNameVisibility = Visibility.Visible;
+            _productsViewModel.CategoryNameVisibility = Visibility.Collapsed;
         }
     }
 }

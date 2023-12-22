@@ -138,18 +138,18 @@
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock 
                                         Text="{Binding CategoryName}" 
-                                        Visibility="{Binding CategoryNameVisibility}" 
+                                        Visibility="{Binding DataContext.CategoryNameVisibility, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Mode=TwoWay}" 
                                         VerticalAlignment="Top" />
                                     <TextBox 
-                                        Visibility="Collapsed" 
+                                        Visibility="{Binding DataContext.InputCategoryNameVisibility, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Mode=TwoWay}" 
                                         Text="{Binding CategoryName, UpdateSourceTrigger=PropertyChanged}" 
                                         Width="150" 
-                                        VerticalAlignment="Top" 
-                                        Tag="{Binding DataContext.SelectCommand, ElementName=categoryDataGrid, Mode=OneTime}">
+                                        VerticalAlignment="Top" >
                                         <TextBox.InputBindings>
-                                            <KeyBinding Key="Enter" 
-                                                        Command="{Binding DataContext.InlineUpdateCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
-                                                        CommandParameter="{Binding}" />
+                                            <KeyBinding 
+                                                Key="Enter" 
+                                                Command="{Binding DataContext.InlineUpdateCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
+                                                CommandParameter="{Binding}" />
                                         </TextBox.InputBindings>
                                     </TextBox>
                                 </StackPanel>
@@ -169,7 +169,6 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Margin="0 -9 0 0">
-
                                     <!--Update button-->
                                     <Button 
                                         Style="{StaticResource MaterialDesignIconButton}"
@@ -179,8 +178,8 @@
                                         Width="35"
                                         Height="35"
                                         ToolTip="Update"
-                                        Command="{Binding DataContext.InlineUpdateCommand, ElementName=categoryDataGrid}"
-                                        Tag="{Binding DataContext.SelectCommand, ElementName=categoryDataGrid, Mode=OneTime}">
+                                        PreviewMouseLeftButtonDown="UpdateCategory_MouseLeftBtnDown"
+                                        Tag="{Binding DataContext.InlineUpdateCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}">
                                         <materialDesign:PackIcon 
                                             DockPanel.Dock="Left" 
                                             Kind="SquareEditOutline" 

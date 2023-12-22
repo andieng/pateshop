@@ -24,10 +24,13 @@ namespace MyShop.ViewModels
         private Visibility _searchBarVisibility = Visibility.Visible;
         private Visibility _editProductVisibility = Visibility.Collapsed;
         private Visibility _addProductVisibility = Visibility.Collapsed;
+        private Visibility _inputCategoryNameVisibility = Visibility.Collapsed;
+        private Visibility _categoryNameVisibility = Visibility.Visible;
         private Category _curCategory;
         private Product _curProduct;
         private Product _editedProduct;
         private Product _newProduct = new Product();
+        public int CurView { get; set; }
 
         public BaseCommand SelectCommand { get; set; }
         public BaseCommand BackCommand { get; set; }
@@ -131,8 +134,24 @@ namespace MyShop.ViewModels
                 OnPropertyChanged("AddProductVisibility");
             }
         }
-
-        public int CurView { get; set; }
+        public Visibility CategoryNameVisibility
+        {
+            get => _categoryNameVisibility;
+            set
+            {
+                _categoryNameVisibility = value;
+                OnPropertyChanged("CategoryNameVisibility");
+            }
+        }
+        public Visibility InputCategoryNameVisibility
+        {
+            get => _inputCategoryNameVisibility;
+            set
+            {
+                _inputCategoryNameVisibility = value;
+                OnPropertyChanged("InputCategoryNameVisibility");
+            }
+        }
 
         public Category CurCategory {
             get => _curCategory;
@@ -205,6 +224,8 @@ namespace MyShop.ViewModels
 
         public async Task<bool> LoadProductsOfCategory(int categoryId)
         {
+            MessageBox.Show(CategoryNameVisibility.ToString());
+
             var results = await ShopService.GetProductsOfCategory(categoryId);
             if (results != null)
             {
