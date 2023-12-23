@@ -20,7 +20,7 @@ namespace MyShop.Views
             DataContext = new ProductsViewModel();
         }
 
-        private void UpdateCategory_MouseLeftBtnDown(object sender, MouseButtonEventArgs e)
+        private void PreviewMouseLeftBtnDown(object sender, MouseButtonEventArgs e)
         {
             e.Handled = true;
             var button = sender as Button;

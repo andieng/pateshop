@@ -183,7 +183,7 @@
                                         Width="35"
                                         Height="35"
                                         ToolTip="Update"
-                                        PreviewMouseLeftButtonDown="UpdateCategory_MouseLeftBtnDown"
+                                        PreviewMouseLeftButtonDown="PreviewMouseLeftBtnDown"
                                         Tag="{Binding DataContext.InlineUpdateCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}">
                                         <materialDesign:PackIcon 
                                             DockPanel.Dock="Left" 
@@ -194,22 +194,23 @@
                                     </Button>
 
                                     <!-- Delete button -->
-                                    <Button Style="{StaticResource MaterialDesignIconButton}" 
-                                                BorderThickness="0"
-                                                materialDesign:ButtonAssist.CornerRadius="20" Foreground="#dc3545"
-                                                Padding="0"
-                                                Margin="10 0 0 0"
-                                                Width="35"
-                                                Height="35"
-                                                ToolTip="Delete"
-                                                Command="{Binding }" 
-                                                CommandParameter="{Binding}">
+                                    <Button 
+                                        Style="{StaticResource MaterialDesignIconButton}" 
+                                        BorderThickness="0"
+                                        materialDesign:ButtonAssist.CornerRadius="20" Foreground="#dc3545"
+                                        Padding="0"
+                                        Margin="10 0 0 0"
+                                        Width="35"
+                                        Height="35"
+                                        ToolTip="Delete"
+                                        PreviewMouseLeftButtonDown="PreviewMouseLeftBtnDown"
+                                        Tag="{Binding DataContext.DeleteCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" >
                                         <materialDesign:PackIcon 
-                                                DockPanel.Dock="Left" 
-                                                Kind="Delete" 
-                                                Width="20" 
-                                                Height="20"
-                                                VerticalAlignment="Center" />
+                                            DockPanel.Dock="Left" 
+                                            Kind="Delete" 
+                                            Width="20" 
+                                            Height="20"
+                                            VerticalAlignment="Center" />
                                     </Button>
                                 </StackPanel>
                             </DataTemplate>

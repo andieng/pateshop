@@ -443,6 +443,33 @@ namespace MyShop.Services
             }
         }
 
+        public static async Task<bool> DeleteCategory(int categoryId)
+        {
+            try
+            {
+                var response = await ApiClient.DeleteAsync($"categories/{categoryId}");
+                response.EnsureSuccessStatusCode();
+
+                var responseData = await response.Content.ReadFromJsonAsync<ActionResponseData>();
+
+                if (responseData != null && responseData.Error != null)
+                {
+                    MessageBox.Show($"Error: {responseData.Error}");
+                    return false;
+                }
+                else
+                {
+                    MessageBox.Show("Delete successful!");
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+        }
+
         public static async Task UpdateCustomer(Object customer,int CustomerId)
         {
             try

@@ -40,6 +40,8 @@ namespace MyShop.ViewModels
         public BaseCommand DeleteProductCommand { get; set; }
         public BaseCommand EnterCommand { get; set; }
         public BaseCommand EscCommand { get; set; }
+        public BaseCommand DeleteCategoryCommand { get; set; }
+
 
 
         public ObservableCollection<Category> CategoriesList
@@ -193,6 +195,7 @@ namespace MyShop.ViewModels
             DeleteProductCommand = new DeleteProductCommand(this);
             EnterCommand = new EnterCommand();
             EscCommand = new EscCommand();
+            DeleteCategoryCommand = new DeleteCategoryCommand(this);
         }
 
         public async void LoadCategories()
