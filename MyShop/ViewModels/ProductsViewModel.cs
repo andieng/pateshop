@@ -24,8 +24,6 @@ namespace MyShop.ViewModels
         private Visibility _searchBarVisibility = Visibility.Visible;
         private Visibility _editProductVisibility = Visibility.Collapsed;
         private Visibility _addProductVisibility = Visibility.Collapsed;
-        private Visibility _inputCategoryNameVisibility = Visibility.Collapsed;
-        private Visibility _categoryNameVisibility = Visibility.Visible;
         private Category _curCategory;
         private Product _curProduct;
         private Product _editedProduct;
@@ -40,6 +38,9 @@ namespace MyShop.ViewModels
         public BaseCommand OpenAddCommand { get; set; }
         public BaseCommand AddProductCommand { get; set; }
         public BaseCommand DeleteProductCommand { get; set; }
+        public BaseCommand EnterCommand { get; set; }
+        public BaseCommand EscCommand { get; set; }
+
 
         public ObservableCollection<Category> CategoriesList
         {
@@ -134,24 +135,6 @@ namespace MyShop.ViewModels
                 OnPropertyChanged("AddProductVisibility");
             }
         }
-        public Visibility CategoryNameVisibility
-        {
-            get => _categoryNameVisibility;
-            set
-            {
-                _categoryNameVisibility = value;
-                OnPropertyChanged("CategoryNameVisibility");
-            }
-        }
-        public Visibility InputCategoryNameVisibility
-        {
-            get => _inputCategoryNameVisibility;
-            set
-            {
-                _inputCategoryNameVisibility = value;
-                OnPropertyChanged("InputCategoryNameVisibility");
-            }
-        }
 
         public Category CurCategory {
             get => _curCategory;
@@ -204,10 +187,12 @@ namespace MyShop.ViewModels
             BackCommand = new BackCommand(this);
             OpenEditCommand = new OpenEditCommand(this);
             UpdateCommand = new UpdateCommand(this);
-            InlineUpdateCommand = new InlineUpdateCommand(this);
+            InlineUpdateCommand = new InlineUpdateCommand();
             OpenAddCommand = new OpenAddCommand(this);
             AddProductCommand = new AddProductCommand(this);
             DeleteProductCommand = new DeleteProductCommand(this);
+            EnterCommand = new EnterCommand();
+            EscCommand = new EscCommand();
         }
 
         public async void LoadCategories()
@@ -224,8 +209,6 @@ namespace MyShop.ViewModels
 
         public async Task<bool> LoadProductsOfCategory(int categoryId)
         {
-            MessageBox.Show(CategoryNameVisibility.ToString());
-
             var results = await ShopService.GetProductsOfCategory(categoryId);
             if (results != null)
             {

@@ -412,6 +412,37 @@ namespace MyShop.Services
             }
         }
 
+        public static async Task<bool> UpdateCategoryName(int categoryId, string newName)
+        {
+            try
+            {
+                var name = new
+                {
+                    categoryName = newName,
+                };
+
+                var response = await ApiClient.PutAsJsonAsync($"categories/{categoryId}", name);
+                response.EnsureSuccessStatusCode();
+
+                var responseData = await response.Content.ReadFromJsonAsync<ActionResponseData>();
+
+                if (responseData != null && responseData.Error != null)
+                {
+                    MessageBox.Show($"Error: {responseData.Error}");
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+        }
+
         public static async Task UpdateCustomer(Object customer,int CustomerId)
         {
             try

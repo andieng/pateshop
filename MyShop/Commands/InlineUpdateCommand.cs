@@ -1,4 +1,5 @@
-﻿using MyShop.Services;
+﻿using MyShop.Models;
+using MyShop.Services;
 using MyShop.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -6,22 +7,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace MyShop.Commands
 {
-    class InlineUpdateCommand : BaseCommand
+    public class InlineUpdateCommand : BaseCommand
     {
-        private readonly ProductsViewModel _productsViewModel;
-
-        public InlineUpdateCommand(ProductsViewModel productsViewModel)
-        {
-            _productsViewModel = productsViewModel;
-        }
-
         public override void Execute(object parameter)
         {
-            _productsViewModel.InputCategoryNameVisibility = Visibility.Visible;
-            _productsViewModel.CategoryNameVisibility = Visibility.Collapsed;
+            if (parameter is Category category)
+            {
+                category.InputCategoryNameVisibility = Visibility.Visible;
+                category.CategoryNameVisibility = Visibility.Collapsed;
+            }
         }
     }
 }

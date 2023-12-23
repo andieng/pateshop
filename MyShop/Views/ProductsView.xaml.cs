@@ -34,5 +34,15 @@ namespace MyShop.Views
                 }
             }
         }
+
+        private void InputCategoryName_MouseLeftBtnDown(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled = true;
+            if (sender is TextBox textBox)
+            {
+                textBox.Focus();
+                textBox.SelectAll();
+            }
+        }
     }
 }

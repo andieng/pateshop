@@ -138,18 +138,23 @@
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock 
                                         Text="{Binding CategoryName}" 
-                                        Visibility="{Binding DataContext.CategoryNameVisibility, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Mode=TwoWay}" 
+                                        Visibility="{Binding CategoryNameVisibility}"
                                         VerticalAlignment="Top" />
                                     <TextBox 
-                                        Visibility="{Binding DataContext.InputCategoryNameVisibility, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Mode=TwoWay}" 
+                                        Visibility="{Binding InputCategoryNameVisibility}"
                                         Text="{Binding CategoryName, UpdateSourceTrigger=PropertyChanged}" 
                                         Width="150" 
-                                        VerticalAlignment="Top" >
+                                        VerticalAlignment="Top"
+                                        PreviewMouseLeftButtonDown="InputCategoryName_MouseLeftBtnDown">
                                         <TextBox.InputBindings>
                                             <KeyBinding 
                                                 Key="Enter" 
-                                                Command="{Binding DataContext.InlineUpdateCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
-                                                CommandParameter="{Binding}" />
+                                                Command="{Binding DataContext.EnterCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" 
+                                                CommandParameter="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type TextBox}}}" />
+                                            <KeyBinding 
+                                                Key="Esc" 
+                                                Command="{Binding DataContext.EscCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" 
+                                                CommandParameter="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type TextBox}}}" />
                                         </TextBox.InputBindings>
                                     </TextBox>
                                 </StackPanel>
