@@ -8,6 +8,7 @@ namespace MyShop.Models
         private int _offset;
         private int _limit;
         private int _totalPages;
+        private int _currentPage;
         private bool _isNext;
         private bool _isPre;
 
@@ -18,6 +19,7 @@ namespace MyShop.Models
             _totalPages = totalPages;
             _isNext = isNext;
             _isPre = isPre;
+            _currentPage = _limit == 0 ? 0 :(_offset + _limit) / _limit;
         }
 
         public int Offset
@@ -27,6 +29,16 @@ namespace MyShop.Models
             {
                 _offset = value;
                 OnPropertyChanged("Offset");
+            }
+        }
+
+        public int CurrentPage
+        {
+            get => _currentPage;
+            set
+            {
+                _currentPage = value;
+                OnPropertyChanged("CurrentPage");
             }
         }
 
