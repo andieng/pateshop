@@ -401,7 +401,6 @@ namespace MyShop.Services
                 }
                 else
                 {
-                    MessageBox.Show("Delete successful!");
                     return true;
                 }
             }
@@ -467,6 +466,37 @@ namespace MyShop.Services
             {
                 Console.WriteLine(ex.ToString());
                 return false;
+            }
+        }
+
+        public static async Task<int> AddCategory(string name)
+        {
+            try
+            {
+                var newCategory = new
+                {
+                    categoryName = name,
+                };
+
+                var response = await ApiClient.PostAsJsonAsync($"categories", newCategory);
+                response.EnsureSuccessStatusCode();
+
+                var responseData = await response.Content.ReadFromJsonAsync<ActionResponseData>();
+
+                if (responseData != null && responseData.Error != null)
+                {
+                    MessageBox.Show($"Error: {responseData.Error}");
+                    return 0;
+                }
+                else
+                {
+                    return responseData.CategoryId;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return 0;
             }
         }
 

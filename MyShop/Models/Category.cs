@@ -5,6 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Text.Json.Serialization;
 
 namespace MyShop.Models
 {
@@ -20,6 +21,7 @@ namespace MyShop.Models
         private Visibility _categoryNameVisibility = Visibility.Visible;
         private string _oldCategoryName;
 
+        [JsonConstructor]
         public Category(int categoryId, string categoryName, string createdAt, string updatedAt)
         {
             _categoryId = categoryId;
@@ -29,6 +31,11 @@ namespace MyShop.Models
             _createdDateTime = DateTime.Parse(createdAt);
             _updatedDateTime = DateTime.Parse(updatedAt);
             _oldCategoryName = categoryName;
+        }
+
+        public Category(string categoryName)
+        {
+            _categoryName = categoryName;
         }
 
         public int CategoryId

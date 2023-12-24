@@ -65,12 +65,20 @@
 
                         <!--Search textbox-->
                         <TextBox
-                                x:Name="searchTextBox" 
-                                Style="{x:Null}"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                Margin="6,5,18,5" 
-                                VerticalAlignment="Center" />
+                            x:Name="searchTextBox" 
+                            Style="{x:Null}"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Margin="6,5,18,5" 
+                            Text="{Binding SearchText, Mode=TwoWay}"
+                            VerticalAlignment="Center">
+                            <TextBox.InputBindings>
+                                <KeyBinding 
+                                    Key="Enter" 
+                                    Command="{Binding SearchProductsCommand}"
+                                    CommandParameter="{Binding SearchText}"  />
+                            </TextBox.InputBindings>
+                        </TextBox>
                     </DockPanel>
                 </Border>
 
@@ -231,7 +239,7 @@
                 Background="#475371"
                 Padding="0"
                 Width="110"
-                Command="{Binding }">Add Category</Button>
+                Click="AddCategoryButton_Click">Add Category</Button>
         </Grid>
 
         <!-- Category Detail -->
@@ -1100,6 +1108,75 @@
             VerticalScrollBarVisibility="Auto" />
             </Grid>
 
+        </Grid>
+
+        <!-- Search Results-->
+        <Grid Grid.Row="1" Background="#fff" Margin="0 -20 0 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Button
+                Grid.Row="0"
+                Margin="0 20 30 0"
+                HorizontalAlignment="Right"
+                Style="{StaticResource MaterialDesignFlatMidBgButton}" 
+                BorderThickness="0"
+                materialDesign:ButtonAssist.CornerRadius="17"
+                Foreground="#fff"
+                Background="#475371"
+                Padding="0"
+                Width="110"
+                Command="{Binding }">Add Product</Button>
+
+            <DataGrid
+                x:Name="searchResultDataGrid"
+                Grid.Row="1"
+                RowHeight="40"
+                materialDesign:DataGridAssist.CellPadding="16 10 16 2"
+                materialDesign:DataGridAssist.EnableEditBoxAssist="False"
+                Padding="30 20 30 20"
+                ItemsSource="{Binding ProductsList}"
+                SelectionMode="Extended"
+                CanUserAddRows="False"
+                IsReadOnly="True"
+                AutoGenerateColumns="False"
+                Background="#fff"
+                SelectionUnit="FullRow"
+                VerticalContentAlignment="Center">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction 
+                    Command="{Binding SelectCommand}"
+                    CommandParameter="{Binding SelectedItem, ElementName=searchResultDataGrid}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                Binding="{Binding ProductId}"
+                Header="ID" />
+                    <DataGridTextColumn
+                Binding="{Binding ProductSKU}"
+                Header="SKU" />
+                    <DataGridTextColumn
+                Width="*"
+                Binding="{Binding ProductName}"
+                Header="Product Name" />
+                    <DataGridTextColumn
+                Width="85"
+                Binding="{Binding Quantity}"
+                Header="Quantity" />
+                    <DataGridTextColumn
+                Width="90"
+                Binding="{Binding Price}"
+                Header="Price" />
+                    <DataGridTextColumn
+                Width="90"
+                Binding="{Binding Cost}"
+                Header="Cost" />
+                </DataGrid.Columns>
+            </DataGrid>
         </Grid>
     </Grid>
 </UserControl>

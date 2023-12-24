@@ -5,6 +5,7 @@ using MyShop.ViewModels;
 using MyShop.Views;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Configuration;
 using System.Threading.Tasks;
 using System.Windows;
@@ -28,6 +29,7 @@ namespace MyShop.ViewModels
         private Product _curProduct;
         private Product _editedProduct;
         private Product _newProduct = new Product();
+        private Category _newCategory = new Category("");
         public int CurView { get; set; }
 
         public BaseCommand SelectCommand { get; set; }
@@ -41,8 +43,9 @@ namespace MyShop.ViewModels
         public BaseCommand EnterCommand { get; set; }
         public BaseCommand EscCommand { get; set; }
         public BaseCommand DeleteCategoryCommand { get; set; }
-
-
+        public BaseCommand AddCategoryCommand { get; set; }
+        public BaseCommand SearchProductsCommand { get; set; }  
+        public string SearchText {  get; set; } 
 
         public ObservableCollection<Category> CategoriesList
         {
@@ -177,6 +180,16 @@ namespace MyShop.ViewModels
             }
         }
 
+        public Category NewCategory
+        {
+            get => _newCategory;
+            set
+            {
+                _newCategory = value;
+                OnPropertyChanged("NewCategory");
+            }
+        }
+
         public ProductsViewModel()
         {
             InitCommands();
@@ -196,6 +209,8 @@ namespace MyShop.ViewModels
             EnterCommand = new EnterCommand();
             EscCommand = new EscCommand();
             DeleteCategoryCommand = new DeleteCategoryCommand(this);
+            AddCategoryCommand = new AddCategoryCommand(this);
+            SearchProductsCommand = new SearchProductsCommand(this);
         }
 
         public async void LoadCategories()

@@ -23,11 +23,14 @@ namespace MyShop.Commands
         {
             if (parameter is Category category)
             {
-                ShopService.DeleteCategory(category.CategoryId);
-                Category categoryToRemove = _productsViewModel.CategoriesList.FirstOrDefault(curCategory => curCategory.CategoryId == category.CategoryId);
-                if (categoryToRemove != null)
+                var result = await ShopService.DeleteCategory(category.CategoryId);
+                if (result)
                 {
-                    _productsViewModel.CategoriesList.Remove(categoryToRemove);
+                    Category categoryToRemove = _productsViewModel.CategoriesList.FirstOrDefault(curCategory => curCategory.CategoryId == category.CategoryId);
+                    if (categoryToRemove != null)
+                    {
+                        _productsViewModel.CategoriesList.Remove(categoryToRemove);
+                    }
                 }
             }
         }

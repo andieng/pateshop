@@ -44,5 +44,12 @@ namespace MyShop.Views
                 textBox.SelectAll();
             }
         }
+
+        private void AddCategoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddCategoryView addCategoryWindow = new AddCategoryView(DataContext);
+            addCategoryWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            addCategoryWindow.ShowDialog();
+        }
     }
 }
