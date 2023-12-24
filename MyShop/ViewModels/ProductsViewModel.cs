@@ -15,7 +15,7 @@ namespace MyShop.ViewModels
 {
     public class ProductsViewModel : BaseViewModel
     {
-        private ObservableCollection<Category> _categoriesList;
+        private ObservableCollection<Category> _categoriesList = new ObservableCollection<Category>();
         private ObservableCollection<Product> _productsList;
         private ObservableCollection<Product> _productDetail;
         private Visibility _backBtnVisibility = Visibility.Hidden;
@@ -219,9 +219,13 @@ namespace MyShop.ViewModels
 
             if (result != null)
             {
-                CategoryDetailVisibility = Visibility.Collapsed;
+                _categoryDetailVisibility = Visibility.Collapsed;
+                _categoriesList.Clear();
                 var (categories, _) = result.Value;
-                CategoriesList = new ObservableCollection<Category>(categories);
+                foreach(var category in categories)
+                {
+                    _categoriesList.Add(category);
+                }
             }
         }
 
@@ -231,10 +235,10 @@ namespace MyShop.ViewModels
             if (results != null)
             {
                 var (products, _) = results.Value;
-                ProductsList = new ObservableCollection<Product>(products);
-                CategoryDetailVisibility = Visibility.Visible;
-                BackBtnVisibility = Visibility.Visible;
-                NewProduct.CategoryId = categoryId;
+                _productsList = new ObservableCollection<Product>(products);
+                _categoryDetailVisibility = Visibility.Visible;
+                _backBtnVisibility = Visibility.Visible;
+                _newProduct.CategoryId = categoryId;
                 CurView++;
                 return true; 
             }
@@ -246,13 +250,27 @@ namespace MyShop.ViewModels
             var product = await ShopService.GetProduct(productId, categoryId);
             if (product != null)
             {
-                ProductDetail = new ObservableCollection<Product>();
-                ProductDetail.Add(product);
-                CategoryDetailVisibility = Visibility.Collapsed;
-                ProductDetailVisibility = Visibility.Visible;
-                BackBtnVisibility = Visibility.Visible;
-                SearchBarVisibility = Visibility.Hidden;
+                _productDetail = new ObservableCollection<Product>();
+                _productDetail.Add(product);
+                _categoryDetailVisibility = Visibility.Collapsed;
+                _productDetailVisibility = Visibility.Visible;
+                _backBtnVisibility = Visibility.Visible;
+                _searchBarVisibility = Visibility.Hidden;
                 CurView++;
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> AddCategory(string categoryName)
+        {
+            var result = await ShopService.AddCategory(categoryName);
+            if (result != 0)
+            {
+                DateTime currentDate = DateTime.Now;
+                Category newCategory = new Category(result, categoryName, currentDate.ToString(), currentDate.ToString());
+                _categoriesList.Add(newCategory);
+                _newCategory.CategoryName = "";
                 return true;
             }
             return false;

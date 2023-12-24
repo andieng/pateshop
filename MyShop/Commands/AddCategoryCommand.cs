@@ -22,15 +22,7 @@ namespace MyShop.Commands
         public override async void Execute(object parameter)
         {
             var newCategoryName = _productsViewModel.NewCategory.CategoryName;
-
-            var result = await ShopService.AddCategory(newCategoryName);
-            if (result != 0)
-            {
-                DateTime currentDate = DateTime.Now;
-                Category newCategory = new Category(result, newCategoryName, currentDate.ToString(), currentDate.ToString());
-                _productsViewModel.CategoriesList.Add(newCategory);
-                _productsViewModel.NewCategory.CategoryName = "";
-            }
+            await _productsViewModel.AddCategory(newCategoryName);
         }
     }
 }
