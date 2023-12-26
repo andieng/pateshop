@@ -7,118 +7,14 @@ using System.Configuration;
 using System.Collections.Generic;
 using System.Security.RightsManagement;
 using System.Windows;
+using MyShop.Services;
+using System.Threading.Tasks;
+using MyShop.Models;
 
 namespace MyShop.ViewModels
 {
     public class DashboardViewModel : BaseViewModel
     {
-        public class Order
-        {
-            public int Id { get; set; }
-            public Customer Customer { get; set; }
-            public double OrderDiscountRate { get; set; }
-            public string Status { get; set; }
-            public double TotalAmount { get; set; }
-            public DateTime? DeliveryDate { get; set; }
-            public DateTime OrderDate { get; set; }
-            public DateTime UpdatedDateTime { get; set; }
-        }
-
-        public Order[] Orders = new Order[]
-        {
-            new Order { Status = "Ordered", UpdatedDateTime = new DateTime(2023,12,5) },
-            new Order { Status = "Cancelled", UpdatedDateTime = new DateTime(2023,11,2) },
-            new Order { Status = "Delivered", UpdatedDateTime = new DateTime(2023,4,1) },
-
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,1,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,1,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,1,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,2,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,2,3) },
-                        new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,1,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,1,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,1,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,2,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,2,3) },
-                        new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,1,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,1,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,1,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,2,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,2,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,3,7) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,4,2) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,4,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,5,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,6,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,7,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,7,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,8,3) },
-                        new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,6,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,7,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,7,3) },
-                        new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,6,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,7,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,7,3) },
-                        new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,6,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,7,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,7,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,8,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,8,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,8,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,8,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,9,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,9,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,9,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,9,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,9,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,10,2) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,10,23) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,11,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,11,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,12,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,5,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,6,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,7,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,7,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,8,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,8,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,9,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,9,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,9,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,9,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,9,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,10,2) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,10,23) },
-                        new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,7,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,7,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,8,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,8,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,9,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,9,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,9,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,9,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,9,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,10,2) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,10,23) },
-                        new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,7,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,7,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,8,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,8,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,9,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,9,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,9,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,9,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,9,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,10,2) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,10,23) },
-
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,11,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,11,3) },
-            new Order { Status = "Completed", UpdatedDateTime = new DateTime(2023,12,3) },
-
-
-        };
-
         public class OrderChartValue
         {
             public int TotalOrdersInMonth { get; set; }
@@ -153,191 +49,147 @@ namespace MyShop.ViewModels
             }
         };
 
-        public class Customer
-        {
-            public int CustomerId { get; set; }
-            public string CustomerName { get; set; }
-            public string CustomerAddress { get; set; }
-            public string CustomerPhoneNumber { get; set; }
-            public string CustomerEmail { get; set; }
-        }
+        private int _numCustomers;
+        private int _numOrders;
+        private double _revenue;
+        private double _profit;
+        private int _month;
+        private int _year;
+        private List<CountData> _orderAnalytics;
+        private List<TopSellingProduct> _topSellingProducts;
 
-        private ObservableCollection<Order> _recentOrders = new ObservableCollection<Order>();
-
-        public ObservableCollection<Order> RecentOrders
+        public List<TopSellingProduct> TopSellingProducts
         {
-            get => _recentOrders;
+            get => _topSellingProducts;
             set
             {
-                _recentOrders = value;
-                OnPropertyChanged("RecentOrders");
+                _topSellingProducts = value;
+                OnPropertyChanged("TopSellingProducts");
             }
         }
 
-        public DashboardViewModel()
+        public int NumCustomers
         {
-            for (var i = 0; i < 12; i++)
+            get => _numCustomers;
+            set
             {
-                int month = i + 1;
-                OrderChartValues.Add(new OrderChartValue
+                _numCustomers = value;
+                OnPropertyChanged("NumCustomers");
+            }
+        }
+
+        public int NumOrders
+        {
+            get => _numOrders;
+            set
+            {
+                _numOrders = value;
+                OnPropertyChanged("NumOrders");
+            }
+        }
+
+        public double Revenue
+        {
+            get => _revenue;
+            set
+            {
+                _revenue = value;
+                OnPropertyChanged("Revenue");
+            }
+        }
+
+        public double Profit
+        {
+            get => _profit;
+            set
+            {
+                _profit = value;
+                OnPropertyChanged("Profit");
+            }
+        }
+
+        public int Month
+        {
+            get => _month;
+            set
+            {
+                _month = value;
+                OnPropertyChanged("Month");
+            }
+        }
+
+        public int Year
+        {
+            get => _year;
+            set
+            {
+                _year = value;
+                OnPropertyChanged("Year");
+            }
+        }
+
+        public List<CountData> OrderAnalytics
+        {
+            get => _orderAnalytics;
+            set
+            {
+                _orderAnalytics = value;
+                OnPropertyChanged("OrderAnalytics");
+            }
+        }
+
+        public static async Task<DashboardViewModel> Create()
+        {
+            DashboardViewModel vm = new DashboardViewModel();
+            await vm.LoadData();
+            return vm;
+        }
+
+        private DashboardViewModel() { }
+
+        private async Task LoadData()
+        {
+            DateTime now = DateTime.Now;
+            Month = now.Month;
+            Year = now.Year;
+            var countCustomersData = await ShopService.CountCustomersInMonth(Month, Year);
+            var countOrdersData = await ShopService.CountOrdersInMonth(Month, Year);
+            var reportData = await ShopService.GetReportData(Month, Year);
+            var topSellingData = await ShopService.GetTopSellingProducts(Month, Year);
+            var orderAnalytics = await ShopService.GetOrderAnalytics(Year);
+
+            if (countCustomersData != null)
+            {
+                NumCustomers = countCustomersData.Count;
+            }
+            if (countOrdersData != null)
+            {
+                NumOrders = countOrdersData.Count;
+            }
+            if (reportData != null)
+            {
+                Revenue = reportData.Revenue;
+                Profit = reportData.Profit;
+            }
+            if (topSellingData != null)
+            {
+                TopSellingProducts = topSellingData.Products;
+                for (var i = 0; i < TopSellingProducts.Count; i++)
                 {
-                    MonthIndex = i,
-                    TotalOrdersInMonth = 0
-                });
-                foreach(var order in Orders)
-                {
-                    if (order.UpdatedDateTime.Month == month && order.Status == "Completed")
-                    {
-                        OrderChartValues[i].TotalOrdersInMonth += 1;
-                    }
+                    TopSellingProducts[i].LineNumber = i + 1;
                 }
             }
-
-            RecentOrders.Add(new Order
+            if (orderAnalytics != null)
             {
-                Id = 1,
-                Customer = new Customer
+                OrderAnalytics = orderAnalytics;
+                foreach (var item in orderAnalytics)
                 {
-                    CustomerId = 1,
-                    CustomerName = "Jane Smith",
-                    CustomerAddress = "456 Oak St, Townsville",
-                    CustomerPhoneNumber = "987-654-3210",
-                    CustomerEmail = "jane.smith@email.com"
-                },
-                OrderDiscountRate = 0.2,
-                Status = "Processing",
-                TotalAmount = 1320,
-                DeliveryDate = null,
-                OrderDate = new DateTime(2023, 12, 18),
-            });
-            RecentOrders.Add(new Order
-            {
-                Id = 2,
-                Customer = new Customer
-                {
-                    CustomerId = 2,
-                    CustomerName = "Alice Johnson",
-                    CustomerAddress = "456 Oak St, Townsville",
-                    CustomerPhoneNumber = "987-654-3210",
-                    CustomerEmail = "jane.smith@email.com"
-                },
-                OrderDiscountRate = 0,
-                Status = "Shipped",
-                TotalAmount = 1220,
-                DeliveryDate = null,
-                OrderDate = new DateTime(2023, 12, 19),
-            });
-            RecentOrders.Add(
-            new Order
-            {
-                Id = 3,
-                Customer = new Customer
-                {
-                    CustomerId = 3,
-                    CustomerName = "Bob Wilson",
-                    CustomerAddress = "456 Oak St, Townsville",
-                    CustomerPhoneNumber = "987-654-3210",
-                    CustomerEmail = "jane.smith@email.com"
-                },
-                OrderDiscountRate = 0,
-                Status = "Processing",
-                TotalAmount = 320,
-                DeliveryDate = null,
-                OrderDate = new DateTime(2023, 12, 21),
-            });
-            RecentOrders.Add(
-new Order
-{
-    Id = 3,
-    Customer = new Customer
-    {
-        CustomerId = 3,
-        CustomerName = "Bob Wilson",
-        CustomerAddress = "456 Oak St, Townsville",
-        CustomerPhoneNumber = "987-654-3210",
-        CustomerEmail = "jane.smith@email.com"
-    },
-    OrderDiscountRate = 0,
-    Status = "Processing",
-    TotalAmount = 320,
-    DeliveryDate = null,
-    OrderDate = new DateTime(2023, 12, 21),
-});
-            RecentOrders.Add(
-new Order
-{
-    Id = 3,
-    Customer = new Customer
-    {
-        CustomerId = 3,
-        CustomerName = "Bob Wilson",
-        CustomerAddress = "456 Oak St, Townsville",
-        CustomerPhoneNumber = "987-654-3210",
-        CustomerEmail = "jane.smith@email.com"
-    },
-    OrderDiscountRate = 0,
-    Status = "Processing",
-    TotalAmount = 320,
-    DeliveryDate = null,
-    OrderDate = new DateTime(2023, 12, 21),
-});
-            RecentOrders.Add(
-new Order
-{
-Id = 3,
-Customer = new Customer
-{
-CustomerId = 3,
-CustomerName = "Bob Wilson",
-CustomerAddress = "456 Oak St, Townsville",
-CustomerPhoneNumber = "987-654-3210",
-CustomerEmail = "jane.smith@email.com"
-},
-OrderDiscountRate = 0,
-Status = "Processing",
-TotalAmount = 320,
-DeliveryDate = null,
-OrderDate = new DateTime(2023, 12, 21),
-});
-            //MessageBox.Show(RecentOrders[0].Customer.CustomerName);
-            initCommands();
-        }
-
-        public void initCommands()
-        {
-            
-        }
-
-        private static string GetAbbreviatedMonthName(int monthNumber)
-        {
-            switch(monthNumber)
-            {
-                case 1:
-                    return "Jan";
-                case 2:
-                    return "Feb";
-                case 3:
-                    return "Mar";
-                case 4:
-                    return "Apr";
-                case 5:
-                    return "May";
-                case 6:
-                    return "Jun";
-                case 7:
-                    return "Jul";
-                case 8:
-                    return "Aug";
-                case 9:
-                    return "Sep";
-                case 10:
-                    return "Oct";
-                case 11:
-                    return "Nov";
-                case 12:
-                    return "Dec";
-                default:
-                    return "";
+                    OrderChartValues.Add(new OrderChartValue
+                    {
+                        MonthIndex = item.Month - 1,
+                        TotalOrdersInMonth = item.Count
+                    });
+                }
             }
         }
     }

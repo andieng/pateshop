@@ -185,7 +185,27 @@ namespace MyShop.Services
                 return null;
             }
         }
-      
+
+        public static async Task<(List<Product>, Paging)?> GetProductsAsync(int limit = 100, int offset = 0)
+        {
+            try
+            {
+                var response = await ApiClient.GetAsync($"products?limit={limit}&offset={offset}");
+                response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseData<Product>?>();
+                if (responseData != null)
+                {
+                    return (responseData.Data, responseData.Paging);
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
         public static async Task<(List<Order>, Paging)?> GetOrdersAsync(int limit = 100, int offset = 0)
         {
             try
@@ -423,6 +443,106 @@ namespace MyShop.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+            }
+        }
+
+        public static async Task<CountData?> CountCustomersInMonth(int month, int year)
+        {
+            try
+            {   
+                var response = await ApiClient.GetAsync($"customers/count?month={month}&year={year}");
+                response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseObjectData<CountData>?>();
+                if (responseData != null)
+                {
+                    return responseData.Data;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
+        public static async Task<CountData?> CountOrdersInMonth(int month, int year)
+        {
+            try
+            {
+                var response = await ApiClient.GetAsync($"orders/count?month={month}&year={year}");
+                response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseObjectData<CountData>?>();
+                if (responseData != null)
+                {
+                    return responseData.Data;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
+        public static async Task<Report?> GetReportData(int month, int year)
+        {
+            try
+            {
+                var response = await ApiClient.GetAsync($"reports?month={month}&year={year}");
+                response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseObjectData<Report>?>();
+                if (responseData != null)
+                {
+                    return responseData.Data;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
+        public static async Task<TopSellingData?> GetTopSellingProducts(int month, int year)
+        {
+            try
+            {
+                var response = await ApiClient.GetAsync($"products/top-selling?month={month}&year={year}");
+                response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseObjectData<TopSellingData>?>();
+                if (responseData != null)
+                {
+                    return responseData.Data;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
+        public static async Task<List<CountData>?> GetOrderAnalytics(int year)
+        {
+            try
+            {
+                var response = await ApiClient.GetAsync($"orders/analytics?year={year}");
+                response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseObjectData<List<CountData>>?>();
+                if (responseData != null)
+                {
+                    return responseData.Data;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyShop.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,12 @@ namespace MyShop.Views
         public DashboardView()
         {
             InitializeComponent();
+        }
+
+        public async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            var dashboardViewModel = await DashboardViewModel.Create();
+            DataContext = dashboardViewModel;
         }
     }
 }
