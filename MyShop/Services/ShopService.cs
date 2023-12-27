@@ -312,10 +312,7 @@ namespace MyShop.Services
             {
                 var response = await ApiClient.PutAsync($"orders/{orderId}", new StringContent(JsonConvert.SerializeObject(orderDetail), Encoding.UTF8, "application/json"));
                 response.EnsureSuccessStatusCode();
-                var a = new StringContent(JsonConvert.SerializeObject(orderDetail), Encoding.UTF8, "application/json");
-
                 var responseData = await response.Content.ReadFromJsonAsync<ResponseObjectData<OrderDetail>?>();
-                var b = JsonConvert.SerializeObject(orderDetail);
 
             }
             catch (Exception ex)

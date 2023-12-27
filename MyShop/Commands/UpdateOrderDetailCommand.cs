@@ -20,11 +20,11 @@ namespace MyShop.Commands
 
         public override async void Execute(object parameter)
         {
-            object data = new
+            dynamic data = new
             {
                 orderDiscountRate = _ordersCustomerViewModel.OrderDetail.OrderDiscountRate,
-                deliveryDate = _ordersCustomerViewModel.OrderDetail.DeliveryDate,
                 status = _ordersCustomerViewModel.OrderDetail.Status,
+                deliveryDate = _ordersCustomerViewModel.OrderDetail.DeliveryDate.ToString(),
                 products = _ordersCustomerViewModel.OrderDetail.Products
                 .Select(item => new
                 {
@@ -35,6 +35,7 @@ namespace MyShop.Commands
                 .ToList()
 
         };
+
             if (data != null)
             {
                 await ShopService.UpdateOrder(data, _ordersCustomerViewModel.OrderDetail.OrderId);

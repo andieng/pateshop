@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -27,7 +28,9 @@ namespace MyShop.ViewModels
             Completed
         }
 
-        public Array OrderStatusValues => Enum.GetValues(typeof(OrderStatus));
+        public List<string> OrderStatusValues => Enum.GetNames(typeof(OrderStatus)).ToList();
+
+
         public ObservableCollection<Order> Orders
         {
             get => _orders;
@@ -69,7 +72,6 @@ namespace MyShop.ViewModels
                 OnPropertyChanged("OrderDetailVisibility");
             }
         }
-
         public Visibility OrderVisibility
         {
             get => _orderVisibility;
@@ -139,5 +141,6 @@ namespace MyShop.ViewModels
             Orders = new ObservableCollection<Order>(result.Value.Item1);
             Paging = result.Value.Item2;
         }
+
     }
 }

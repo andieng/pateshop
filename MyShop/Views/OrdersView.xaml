@@ -184,7 +184,7 @@
 			SelectedDate="{Binding OrderDetail.DeliveryDate,StringFormat='{}{0:dd/MM/yyyy}',Mode=TwoWay}"
 			Style="{StaticResource MaterialDesignFloatingHintDatePicker}" Margin="0,20,0,0" />
 					<ComboBox 
-          materialDesign:HintAssist.Hint="Status"
+          materialDesign:HintAssist.Hint="Status" 
           SelectedValue="{Binding OrderDetail.Status, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
           ItemsSource="{Binding OrderStatusValues}"
           Style="{StaticResource MaterialDesignFloatingHintComboBox}" Margin="0,20,0,0"/>
