@@ -7,6 +7,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Configuration;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -17,6 +18,8 @@ namespace MyShop.ViewModels
     {
         private ObservableCollection<Category> _categoriesList = new ObservableCollection<Category>();
         private ObservableCollection<Product> _productsList;
+        private ObservableCollection<Product> _searchResultList = new ObservableCollection<Product>();
+        private ObservableCollection<Product> _originalResultList;
         private ObservableCollection<Product> _productDetail;
         private Visibility _backBtnVisibility = Visibility.Hidden;
         private Visibility _categoryListVisibility = Visibility.Visible;
@@ -25,11 +28,14 @@ namespace MyShop.ViewModels
         private Visibility _searchBarVisibility = Visibility.Visible;
         private Visibility _editProductVisibility = Visibility.Collapsed;
         private Visibility _addProductVisibility = Visibility.Collapsed;
+        private Visibility _searchResultVisibility = Visibility.Collapsed;
         private Category _curCategory;
         private Product _curProduct;
         private Product _editedProduct;
         private Product _newProduct = new Product();
         private Category _newCategory = new Category("");
+        private float _priceFrom = 0;
+        private float _priceTo = 0;
         public int CurView { get; set; }
 
         public BaseCommand SelectCommand { get; set; }
@@ -45,7 +51,9 @@ namespace MyShop.ViewModels
         public BaseCommand DeleteCategoryCommand { get; set; }
         public BaseCommand AddCategoryCommand { get; set; }
         public BaseCommand SearchProductsCommand { get; set; }  
-        public string SearchText {  get; set; } 
+        public BaseCommand FilterProductsByPriceRange { get; set; }
+        public BaseCommand SelectImageCommand { get; set; }
+
 
         public ObservableCollection<Category> CategoriesList
         {
@@ -64,6 +72,26 @@ namespace MyShop.ViewModels
             {
                 _productsList = value;
                 OnPropertyChanged("ProductsList");
+            }
+        }
+
+        public ObservableCollection<Product> SearchResultList
+        {
+            get => _searchResultList;
+            set
+            {
+                _productsList = value;
+                OnPropertyChanged("SearchResultList");
+            }
+        }
+
+        public ObservableCollection<Product> OriginalResultList
+        {
+            get => _originalResultList;
+            set
+            {
+                _originalResultList = value;
+                OnPropertyChanged("OriginalResultList");
             }
         }
 
@@ -140,6 +168,15 @@ namespace MyShop.ViewModels
                 OnPropertyChanged("AddProductVisibility");
             }
         }
+        public Visibility SearchResultVisibility
+        {
+            get => _searchResultVisibility;
+            set
+            {
+                _searchResultVisibility = value;
+                OnPropertyChanged("SearchResultVisibility");
+            }
+        }
 
         public Category CurCategory {
             get => _curCategory;
@@ -190,6 +227,26 @@ namespace MyShop.ViewModels
             }
         }
 
+        public float PriceFrom
+        {
+            get => _priceFrom;
+            set
+            {
+                _priceFrom = value;
+                OnPropertyChanged("PriceFrom");
+            }
+        }
+
+        public float PriceTo
+        {
+            get => _priceTo;
+            set
+            {
+                _priceTo = value;
+                OnPropertyChanged("PriceTo");
+            }
+        }
+
         public ProductsViewModel()
         {
             InitCommands();
@@ -211,6 +268,8 @@ namespace MyShop.ViewModels
             DeleteCategoryCommand = new DeleteCategoryCommand(this);
             AddCategoryCommand = new AddCategoryCommand(this);
             SearchProductsCommand = new SearchProductsCommand(this);
+            FilterProductsByPriceRange = new FilterProductsByPriceRange(this);
+            SelectImageCommand = new SelectImageCommand();
         }
 
         public async void LoadCategories()
@@ -219,7 +278,7 @@ namespace MyShop.ViewModels
 
             if (result != null)
             {
-                _categoryDetailVisibility = Visibility.Collapsed;
+                CategoryDetailVisibility = Visibility.Collapsed;
                 _categoriesList.Clear();
                 var (categories, _) = result.Value;
                 foreach(var category in categories)
@@ -235,10 +294,11 @@ namespace MyShop.ViewModels
             if (results != null)
             {
                 var (products, _) = results.Value;
-                _productsList = new ObservableCollection<Product>(products);
-                _categoryDetailVisibility = Visibility.Visible;
-                _backBtnVisibility = Visibility.Visible;
-                _newProduct.CategoryId = categoryId;
+                ProductsList = new ObservableCollection<Product>(products);
+                CategoryDetailVisibility = Visibility.Visible;
+                CategoryListVisibility = Visibility.Collapsed;
+                BackBtnVisibility = Visibility.Visible;
+                NewProduct.CategoryId = categoryId;
                 CurView++;
                 return true; 
             }
@@ -250,12 +310,13 @@ namespace MyShop.ViewModels
             var product = await ShopService.GetProduct(productId, categoryId);
             if (product != null)
             {
-                _productDetail = new ObservableCollection<Product>();
-                _productDetail.Add(product);
-                _categoryDetailVisibility = Visibility.Collapsed;
-                _productDetailVisibility = Visibility.Visible;
-                _backBtnVisibility = Visibility.Visible;
-                _searchBarVisibility = Visibility.Hidden;
+                ProductDetail = new ObservableCollection<Product>();
+                ProductDetail.Add(product);
+                CategoryDetailVisibility = Visibility.Collapsed;
+                ProductDetailVisibility = Visibility.Visible;
+                SearchResultVisibility = Visibility.Collapsed;
+                BackBtnVisibility = Visibility.Visible;
+                SearchBarVisibility = Visibility.Hidden;
                 CurView++;
                 return true;
             }
@@ -272,6 +333,92 @@ namespace MyShop.ViewModels
                 _categoriesList.Add(newCategory);
                 _newCategory.CategoryName = "";
                 return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> PerformSearch(string searchText)
+        {
+            if (CurCategory == null)
+            {
+                var results = await ShopService.SearchProductsByName(searchText);
+                if (results != null)
+                {
+                    var (products, _) = results.Value;
+                    _searchResultList.Clear();
+
+                    foreach (var product in products)
+                    {
+                        _searchResultList.Add(product);
+                    }
+                    _originalResultList = new ObservableCollection<Product>(_searchResultList);
+                    SearchResultVisibility = Visibility.Visible;
+                    BackBtnVisibility = Visibility.Visible;
+                    CategoryListVisibility = Visibility.Collapsed;
+                    if (CurView == 0) CurView++;
+                    return true;
+                }
+            }
+            else if (CurCategory != null)
+            {
+                var results = await ShopService.SearchProductsOfCategoryByName(_curCategory.CategoryId, searchText);
+                if (results != null)
+                {
+                    var (products, _) = results.Value;
+                    _searchResultList.Clear();
+
+                    foreach (var product in products)
+                    {
+                        _searchResultList.Add(product);
+                    }
+                    _originalResultList = new ObservableCollection<Product>(_searchResultList);
+                    SearchResultVisibility = Visibility.Visible;
+                    CategoryDetailVisibility = Visibility.Collapsed;
+                    BackBtnVisibility = Visibility.Visible;
+                    CategoryListVisibility = Visibility.Collapsed;
+                    if (CurView == 1) CurView++;
+                    return true;
+                }
+
+            }
+            return false;
+        }
+
+        public async Task<bool> PerformFilter()
+        {
+            if (_originalResultList != null && _originalResultList.Any())
+            {
+                var filteredList = new ObservableCollection<Product>(
+                    _originalResultList.Where(product => product.Price >= _priceFrom && product.Price <= _priceTo));
+
+                SearchResultList.Clear();
+
+                foreach (var product in filteredList)
+                {
+                    SearchResultList.Add(product);
+                }
+                return true;
+            }
+            else
+            {
+                var results = await ShopService.FilterProductsOfCategoryByPriceRange(CurCategory.CategoryId, _priceFrom, _priceTo);
+                if (results != null)
+                {
+                    var (products, _) = results.Value;
+                    _searchResultList.Clear();
+
+                    foreach (var product in products)
+                    {
+                        _searchResultList.Add(product);
+                    }
+                    _originalResultList = new ObservableCollection<Product>(_searchResultList);
+                    SearchResultVisibility = Visibility.Visible;
+                    CategoryDetailVisibility = Visibility.Collapsed;
+                    BackBtnVisibility = Visibility.Visible;
+                    CategoryListVisibility = Visibility.Collapsed;
+                    if (CurView == 1) CurView++;
+                    return true;
+                }
             }
             return false;
         }

@@ -26,6 +26,7 @@ namespace MyShop.Commands
                 _productsViewModel.CategoryDetailVisibility = Visibility.Collapsed;
                 _productsViewModel.ProductDetailVisibility = Visibility.Collapsed;
                 _productsViewModel.BackBtnVisibility = Visibility.Hidden;
+                _productsViewModel.OriginalResultList = null;
             }
             else
             {
@@ -36,13 +37,28 @@ namespace MyShop.Commands
                         _productsViewModel.CategoryListVisibility = Visibility.Visible;
                         _productsViewModel.CategoryDetailVisibility = Visibility.Collapsed;
                         _productsViewModel.BackBtnVisibility = Visibility.Hidden;
+                        _productsViewModel.SearchResultVisibility = Visibility.Collapsed;
+                        _productsViewModel.CurCategory = null;
+                        _productsViewModel.CurProduct = null;
+                        _productsViewModel.OriginalResultList = null;
+
                         break;
                     case 1: // trang list các products của category 
-                        _productsViewModel.CategoryListVisibility = Visibility.Collapsed;
-                        _productsViewModel.CategoryDetailVisibility = Visibility.Visible;
-                        _productsViewModel.ProductDetailVisibility = Visibility.Collapsed;
-                        _productsViewModel.SearchBarVisibility = Visibility.Visible;
-                        _productsViewModel.AddProductVisibility = Visibility.Collapsed;
+                        if (_productsViewModel.CurCategory != null)
+                        {
+                            _productsViewModel.CategoryListVisibility = Visibility.Collapsed;
+                            _productsViewModel.CategoryDetailVisibility = Visibility.Visible;
+                            _productsViewModel.ProductDetailVisibility = Visibility.Collapsed;
+                            _productsViewModel.SearchBarVisibility = Visibility.Visible;
+                            _productsViewModel.AddProductVisibility = Visibility.Collapsed;
+                            _productsViewModel.SearchResultVisibility = Visibility.Collapsed;
+                        }
+                        else
+                        {
+                            _productsViewModel.SearchBarVisibility = Visibility.Visible;
+                            _productsViewModel.ProductDetailVisibility = Visibility.Collapsed;
+                            _productsViewModel.SearchResultVisibility = Visibility.Visible;
+                        }
                         break;
                     case 2: // trang product detail
                         _productsViewModel.CategoryDetailVisibility = Visibility.Collapsed;

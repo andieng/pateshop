@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace MyShop.Models
 {
@@ -23,6 +25,7 @@ namespace MyShop.Models
         private string _updatedAt;
         private DateTime _createdDateTime;
         private DateTime _updatedDateTime;
+        private ImageSource _imageSource;
 
         public Product() { }
         
@@ -62,6 +65,10 @@ namespace MyShop.Models
             if (_updatedAt != null)
             {
               _updatedDateTime = DateTime.Parse(updatedAt);
+            }
+            if(_image != null)
+            {
+                _imageSource = new BitmapImage(new Uri($"../Resources/Products/{image}", UriKind.Relative));
             }
         }
 
@@ -151,6 +158,7 @@ namespace MyShop.Models
             set
             {
                 _image = value;
+                _imageSource = new BitmapImage(new Uri($"../Resources/Products/{value}", UriKind.Relative));
                 OnPropertyChanged("Image");
             }
         }

@@ -533,5 +533,85 @@ namespace MyShop.Services
                 Console.WriteLine(ex.ToString());
             }
         }
+
+        public static async Task<(List<Product>, Paging)?> SearchProductsByName(string query)
+        {
+            try
+            {                
+                var response = await ApiClient.GetAsync($"products/search/?q={query}");
+                response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseData<Product>?>();
+                if (responseData != null)
+                {
+                    return (responseData.Data, responseData.Paging);
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
+        public static async Task<(List<Product>, Paging)?> SearchProductsOfCategoryByName(int categoryId, string query)
+        {
+            try
+            {
+                var response = await ApiClient.GetAsync($"categories/{categoryId}/products/search/?q={query}");
+                response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseData<Product>?>();
+                if (responseData != null)
+                {
+                    return (responseData.Data, responseData.Paging);
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
+        public static async Task<(List<Product>, Paging)?> FilterProductsByPriceRange(float from, float to)
+        {
+            try
+            {
+                var response = await ApiClient.GetAsync($"products/filter/?startBy={from}&endBy{to}");
+                response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseData<Product>?>();
+                if (responseData != null)
+                {
+                    return (responseData.Data, responseData.Paging);
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
+        public static async Task<(List<Product>, Paging)?> FilterProductsOfCategoryByPriceRange(int categoryId, float from, float to)
+        {
+            try
+            {
+                var response = await ApiClient.GetAsync($"categories/{categoryId}/products/filter/?startBy={from}&endBy{to}");
+                response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseData<Product>?>();
+                if (responseData != null)
+                {
+                    return (responseData.Data, responseData.Paging);
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
     }
 }
