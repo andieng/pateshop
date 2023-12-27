@@ -112,10 +112,10 @@ xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                             Binding="{Binding Email}"
                             Header="Email" />
 					<DataGridTextColumn
-                            Binding="{Binding CreatedAt, StringFormat='{}{0:dd/MM/yyyy}'}"
+                            Binding="{Binding CreatedAtDatetime, StringFormat='{}{0:dd/MM/yyyy}'}"
                             Header="Created date" />
 					<DataGridTextColumn
-                            Binding="{Binding UpdatedAt, StringFormat='{}{0:dd/MM/yyyy}'}"
+                            Binding="{Binding UpdatedAtDatetime, StringFormat='{}{0:dd/MM/yyyy}'}"
                             Header="Updated date" />
 					<DataGridTemplateColumn Header="Actions">
 						<DataGridTemplateColumn.CellTemplate>

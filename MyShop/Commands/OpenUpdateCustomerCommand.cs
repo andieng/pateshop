@@ -16,7 +16,6 @@ namespace MyShop.Commands
 
         public override void Execute(object parameter)
         {
-            MessageBox.Show("kkk");
             if (parameter is Customer customer)
             {
 

@@ -13,13 +13,15 @@ namespace MyShop.Models
             private string _orderDiscountRate;
             private string _totalAmount;
             private string _status;
-        private string _deliveryDate;
-        private string _orderDate;
-            private string _createdAt;
+            private string _deliveryDate;
+            private string _orderDate;
             private string _updatedAt;
+            private DateTime _deliveryDateDatetime;
+            private DateTime _orderDateDatetime;
+            private DateTime _updatedAtDatetime;
 
-            public Order(int orderId, string customerName, string orderDiscountRate, string totalAmount,
-                string status, string createdAt, string updatedAt, string deliveryDate, string orderDate)
+        public Order(int orderId, string customerName, string orderDiscountRate, string totalAmount,
+                string status, string updatedAt, string deliveryDate, string orderDate)
             {
                 _orderId = orderId;
                 _customerName = customerName;
@@ -28,9 +30,20 @@ namespace MyShop.Models
             _status = status;
             _deliveryDate = deliveryDate;
             _orderDate = orderDate;
-                _createdAt = createdAt;
                 _updatedAt = updatedAt;
+            if(_deliveryDate != null)
+            {
+                _deliveryDateDatetime = DateTime.Parse(deliveryDate);
             }
+            if (_orderDate != null)
+            {
+                _orderDateDatetime = DateTime.Parse(orderDate);
+            }
+            if(_updatedAt != null)
+            {
+                _updatedAtDatetime = DateTime.Parse(updatedAt);
+            }
+        }
 
             public int OrderId
             {
@@ -62,47 +75,69 @@ namespace MyShop.Models
                 }
             }
 
-            public string DeliveryDate
+            public DateTime DeliveryDateDatetime
             {
-                get => _deliveryDate;
+                get => _deliveryDateDatetime;
                 set
                 {
-                    _deliveryDate = value;
-                    OnPropertyChanged("DeliveryDate");
+                    _deliveryDateDatetime = value;
+                    OnPropertyChanged("DeliveryDateDateTime");
                 }
             }
 
-            public string OrderDate
+            public DateTime OrderDateDatetime
             {
-                get => _orderDate;
+                get => _orderDateDatetime;
                 set
                 {
-                    _orderDate = value;
-                    OnPropertyChanged("OrderDate");
+                    _orderDateDatetime = value;
+                    OnPropertyChanged("OrderDateDatetime");
                 }
             }
 
-            public string CreatedAt
+
+
+            public DateTime UpdatedAtDatetime
             {
-                get => _createdAt;
+                get => _updatedAtDatetime;
                 set
                 {
-                    _createdAt = value;
-                    OnPropertyChanged("CreatedAt");
+                    _updatedAtDatetime = value;
+                    OnPropertyChanged("UpdatedAtDatetime");
                 }
             }
-
-            public string UpdatedAt
+        public string DeliveryDate
+        {
+            get => _deliveryDate;
+            set
             {
-                get => _updatedAt;
-                set
-                {
-                    _updatedAt = value;
-                    OnPropertyChanged("UpdatedAt");
-                }
+                _deliveryDate = value;
+                OnPropertyChanged("DeliveryDate");
             }
+        }
 
-            public string TotalAmount
+        public string OrderDate
+        {
+            get => _orderDate;
+            set
+            {
+                _orderDate = value;
+                OnPropertyChanged("OrderDate");
+            }
+        }
+
+
+
+        public string UpdatedAt
+        {
+            get => _updatedAt;
+            set
+            {
+                _updatedAt = value;
+                OnPropertyChanged("UpdatedAt");
+            }
+        }
+        public string TotalAmount
             {
                 get => _totalAmount;
                 set

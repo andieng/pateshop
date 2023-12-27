@@ -26,7 +26,7 @@ namespace MyShop.Commands
             if (parameter is int customerId)
             {
                 await ShopService.DeleteCustomerAsync(customerId);
-                var temp = await ShopService.GetCustomersAsync(5, 0);
+                var temp = await ShopService.GetCustomersAsync(_customersViewModel.Paging.Limit, 0);
                 _customersViewModel.Customers = new ObservableCollection<Customer>(temp.Value.Item1);
                 _customersViewModel.Paging = temp.Value.Item2;
             }

@@ -24,19 +24,16 @@ namespace MyShop.Commands
         {
             if (parameter is Product product)
             {
-                int productId = product.ProductId;// set the productId to the value you're working with
+                int productId = product.ProductId;
 
-                // Check if a product with the same productId already exists
                 OrderProduct existingProduct = _addOrderViewModel.OrderDetail.Products.FirstOrDefault(p => p.Product.ProductId == productId);
 
                 if (existingProduct != null)
                 {
-                    // Product with the same productId already exists, remove it
                     _addOrderViewModel.OrderDetail.Products.Remove(existingProduct);
                 }
                 else
                 {
-                    // Product with the same productId doesn't exist, add a new OrderProduct
                     OrderProduct temp = new OrderProduct(1, 0, (decimal)product.Price, product);
                     _addOrderViewModel.OrderDetail.Products.Add(temp);
                 }

@@ -180,7 +180,7 @@ namespace MyShop.Services
                 }
                 var response = await ApiClient.GetAsync(url);
                 response.EnsureSuccessStatusCode();
-                var responseData = await response.Content.ReadFromJsonAsync<ResponseData<Order>?>();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseData<Order>>();
                 if (responseData != null)
                 {
                     return (responseData.Data, responseData.Paging);

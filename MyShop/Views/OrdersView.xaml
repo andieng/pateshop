@@ -92,16 +92,13 @@
                             Binding="{Binding TotalAmount}"
                             Header="Amount" />
 						<DataGridTextColumn
-                            Binding="{Binding OrderDate,  StringFormat='{}{0:dd/MM/yyyy}'}"
+                            Binding="{Binding OrderDateDatetime,  StringFormat='{}{0:dd/MM/yyyy}'}"
                             Header="Order Date" />
 						<DataGridTextColumn
-                            Binding="{Binding DeliveryDate, StringFormat='{}{0:dd/MM/yyyy}'}"
+                            Binding="{Binding DeliveryDateDatetime, StringFormat='{}{0:dd/MM/yyyy}'}"
                             Header="Delivery Date" />
 						<DataGridTextColumn
-                            Binding="{Binding CreatedAt, StringFormat='{}{0:dd/MM/yyyy}'}"
-                            Header="Created date" />
-						<DataGridTextColumn
-                            Binding="{Binding UpdatedAt, StringFormat='{}{0:dd/MM/yyyy}'}"
+                            Binding="{Binding UpdatedAtDatetime, StringFormat='{}{0:dd/MM/yyyy}'}"
                             Header="Updated date" />
 						<DataGridTemplateColumn Header="Delete" >
 							<DataGridTemplateColumn.CellTemplate >

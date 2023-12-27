@@ -14,7 +14,8 @@ namespace MyShop.Models
         private string _createdAt;
         private string _updatedAt;
         private string? _deletedAt;
-
+        private DateTime _createdDateTime;
+        private DateTime _updatedDateTime;
         public Customer(int customerId, string customerName, string address, string phoneNumber,
             string email, string createdAt, string updatedAt, string? deletedAt)
         {
@@ -26,6 +27,15 @@ namespace MyShop.Models
             _createdAt = createdAt;
             _updatedAt = updatedAt;
             _deletedAt = deletedAt;
+            if(createdAt != null)
+            {
+                _createdDateTime = DateTime.Parse(createdAt);
+            }
+            if (updatedAt != null)
+            {
+                _updatedDateTime = DateTime.Parse(updatedAt);
+            }
+
         }
 
         public int CustomerId
@@ -105,6 +115,25 @@ namespace MyShop.Models
             {
                 _deletedAt = value;
                 OnPropertyChanged("DeletedAt");
+            }
+        }
+        public DateTime CreatedAtDatetime
+        {
+            get => _createdDateTime;
+            set
+            {
+                _createdDateTime = value;
+                OnPropertyChanged("CreatedAtDatetime");
+            }
+        }
+
+        public DateTime UpdatedAtDatetime
+        {
+            get => _updatedDateTime;
+            set
+            {
+                _updatedDateTime = value;
+                OnPropertyChanged("UpdatedAtDatetime");
             }
         }
     }
