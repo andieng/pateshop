@@ -1,15 +1,23 @@
 ﻿using Microsoft.Win32;
+using MyShop.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MyShop.Commands
 {
     public class SelectImageCommand : BaseCommand
     {
+        private readonly ProductsViewModel _productsViewModel;
+
+        public SelectImageCommand(ProductsViewModel productsViewModel)
+        {
+            _productsViewModel = productsViewModel;
+        }
         public override void Execute(object parameter)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -17,15 +25,7 @@ namespace MyShop.Commands
 
             if (openFileDialog.ShowDialog() == true)
             {
-                string resourcesDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources");
-                string productsDirectory = Path.Combine(resourcesDirectory, "Products");
-
-                string selectedImagePath = openFileDialog.FileName;
-                string fileName = Path.GetFileName(selectedImagePath);
-                string destinationFilePath = Path.Combine(productsDirectory, fileName);
-
-                File.Copy(selectedImagePath, destinationFilePath, true);
-
+                _productsViewModel.SelectedImg = openFileDialog.FileName;
             }
         }
     }

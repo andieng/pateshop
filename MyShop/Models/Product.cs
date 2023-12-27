@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +27,7 @@ namespace MyShop.Models
         private string _updatedAt;
         private DateTime _createdDateTime;
         private DateTime _updatedDateTime;
-        private ImageSource _imageSource;
+        private string _imageSource;
 
         public Product() { }
         
@@ -68,7 +70,7 @@ namespace MyShop.Models
             }
             if(_image != null)
             {
-                _imageSource = new BitmapImage(new Uri($"../Resources/Products/{image}", UriKind.Relative));
+                _imageSource = $"../Resources/Products/{_image}";
             }
         }
 
@@ -157,9 +159,24 @@ namespace MyShop.Models
             get => _image;
             set
             {
-                _image = value;
-                _imageSource = new BitmapImage(new Uri($"../Resources/Products/{value}", UriKind.Relative));
-                OnPropertyChanged("Image");
+                if (_image != value)
+                {
+                    _image = value;
+                    OnPropertyChanged("Image");
+
+                    _imageSource = $"../Resources/Products/{_image}";
+                    OnPropertyChanged("ImageSource");
+                }
+            }
+        }
+
+        public string ImageSource
+        {
+            get => _imageSource;
+            set
+            {
+                _imageSource = $"../Resources/Products/{value}";
+                OnPropertyChanged("ImageSource");
             }
         }
 

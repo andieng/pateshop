@@ -7,6 +7,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -36,6 +37,7 @@ namespace MyShop.ViewModels
         private Category _newCategory = new Category("");
         private float _priceFrom = 0;
         private float _priceTo = 0;
+        private string _selectedImg;
         public int CurView { get; set; }
 
         public BaseCommand SelectCommand { get; set; }
@@ -247,6 +249,16 @@ namespace MyShop.ViewModels
             }
         }
 
+        public string SelectedImg
+        {
+            get => _selectedImg;
+            set
+            {
+                _selectedImg = value;
+                OnPropertyChanged("SelectedImg");
+            }
+        }
+
         public ProductsViewModel()
         {
             InitCommands();
@@ -269,7 +281,7 @@ namespace MyShop.ViewModels
             AddCategoryCommand = new AddCategoryCommand(this);
             SearchProductsCommand = new SearchProductsCommand(this);
             FilterProductsByPriceRange = new FilterProductsByPriceRange(this);
-            SelectImageCommand = new SelectImageCommand();
+            SelectImageCommand = new SelectImageCommand(this);
         }
 
         public async void LoadCategories()
