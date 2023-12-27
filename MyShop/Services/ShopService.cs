@@ -8,6 +8,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -148,7 +150,8 @@ namespace MyShop.Services
             {
                 var response = await ApiClient.GetAsync($"products?limit={limit}&offset={offset}");
                 response.EnsureSuccessStatusCode();
-                var responseData = await response.Content.ReadFromJsonAsync<ResponseData<Product>?>();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseData<Product>>();
+                var temp = 0;
                 if (responseData != null)
                 {
                     return (responseData.Data, responseData.Paging);
@@ -162,11 +165,20 @@ namespace MyShop.Services
             }
         }
 
-        public static async Task<(List<Order>, Paging)?> GetOrdersAsync(int limit = 100, int offset = 0)
+        public static async Task<(List<Order>, Paging)?> GetOrdersAsync(int limit = 100, int offset = 0, DateTime startDate = default, DateTime endDate = default)
         {
             try
             {
-                var response = await ApiClient.GetAsync($"orders?limit={limit}&offset={offset}");
+                String url = $"orders?limit={limit}&offset={offset}";
+                if (startDate!=default)
+                {
+                    url += $"&startDate={startDate.ToString().Split(' ')[0]}";
+                }
+                if (endDate!=default)
+                {
+                    url += $"&endDate={endDate.ToString().Split(' ')[0]}";
+                }
+                var response = await ApiClient.GetAsync(url);
                 response.EnsureSuccessStatusCode();
                 var responseData = await response.Content.ReadFromJsonAsync<ResponseData<Order>?>();
                 if (responseData != null)
@@ -186,11 +198,11 @@ namespace MyShop.Services
         {
             try
             {
+
                 var response = await ApiClient.GetAsync($"orders/{orderId}");
                 response.EnsureSuccessStatusCode();
 
                 var responseData = await response.Content.ReadFromJsonAsync<ResponseObjectData<OrderDetail>>();
-
                 if (responseData != null)
                 {
                     return responseData.Data;
@@ -206,6 +218,20 @@ namespace MyShop.Services
             }
         }
 
+        public static async Task AddOrder(Object Order)
+        {
+            try
+            {
+                var x = JsonConvert.SerializeObject(Order);
+                var response = await ApiClient.PostAsync("orders", new StringContent(JsonConvert.SerializeObject(Order), Encoding.UTF8, "application/json"));
+                response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseData<Customer>?>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
         public static async Task AddCustomer(Object customer)
         {
             try
@@ -219,11 +245,25 @@ namespace MyShop.Services
                 Console.WriteLine(ex.ToString());
             }
         }
-        public static async Task<bool> DeleteCustomerAsync(int OrderId)
+        public static async Task<bool> DeleteCustomerAsync(int customerId)
         {
             try
             {
-                var response = await ApiClient.DeleteAsync($"customers/{OrderId}");
+                var response = await ApiClient.DeleteAsync($"customers/{customerId}");
+                response.EnsureSuccessStatusCode();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+        }
+        public static async Task<bool> DeleteOrderAsync(int OrderId)
+        {
+            try
+            {
+                var response = await ApiClient.DeleteAsync($"orders/{OrderId}");
                 response.EnsureSuccessStatusCode();
                 return true;
             }
@@ -241,6 +281,24 @@ namespace MyShop.Services
                 var response = await ApiClient.PutAsync($"customers/{CustomerId}", new StringContent(JsonConvert.SerializeObject(customer), Encoding.UTF8, "application/json"));
                 response.EnsureSuccessStatusCode();
                 var responseData = await response.Content.ReadFromJsonAsync<ResponseData<Customer>?>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        public static async Task UpdateOrder(Object orderDetail,int orderId)
+        {
+            try
+            {
+                var response = await ApiClient.PutAsync($"orders/{orderId}", new StringContent(JsonConvert.SerializeObject(orderDetail), Encoding.UTF8, "application/json"));
+                response.EnsureSuccessStatusCode();
+                var a = new StringContent(JsonConvert.SerializeObject(orderDetail), Encoding.UTF8, "application/json");
+
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseObjectData<OrderDetail>?>();
+                var b = JsonConvert.SerializeObject(orderDetail);
+
             }
             catch (Exception ex)
             {

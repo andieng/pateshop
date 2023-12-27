@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:MyShop.Views"
         mc:Ignorable="d"
 		x:Name="UpdateCustomerWindow"
-        Title="Update Customer" Height="450" Width="800">
+        Title="Update Customer" Height="500" Width="800">
 	<Grid Background="#fff" Width="420" HorizontalAlignment="Center">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="1*" />

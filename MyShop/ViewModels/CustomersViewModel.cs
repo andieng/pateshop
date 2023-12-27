@@ -15,9 +15,10 @@ namespace MyShop.ViewModels
 {
     public class CustomersViewModel : BaseViewModel
     {
-        private List<Customer> _customers;
+        private ObservableCollection<Customer> _customers;
         private Paging _paging;
-        public List<Customer> Customers
+        private string _textSearch;
+        public ObservableCollection<Customer> Customers
         {
             get => _customers;
             set
@@ -35,9 +36,19 @@ namespace MyShop.ViewModels
                 OnPropertyChanged(nameof(Paging));
             }
         }
-        
+        public string TextSearch
+        {
+            get => _textSearch;
+            set
+            {
+                _textSearch = value;
+                OnPropertyChanged(nameof(TextSearch));
+            }
+        }
+
         public BaseCommand OpenAddCustomerModelCommand { get; set; }
         public BaseCommand OpenUpdateCustomerModelCommand { get; set; }
+        public BaseCommand SearchCommand { get; set; }
 
 
 
@@ -46,24 +57,29 @@ namespace MyShop.ViewModels
 
         public CustomersViewModel()
         {
-                        _customers = new List<Customer>();
-            _paging = new Paging(0,5,0,false,false);
+            var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var settings = configFile.AppSettings.Settings;
+            int limit = Int32.Parse(settings["ItemsPerPage_Customers"].Value);
+            _customers = new ObservableCollection<Customer>();
+            _paging = new Paging(0,limit,0,false,false);
             initCommands();
             GetCustomers();
         }
         
         public void initCommands()
         {
-
             GetCustomersCommand = new CustomersCommand(this);
             OpenAddCustomerModelCommand = new OpenAddCustomerCommand();
             DeleteCommand = new DeleteCustomerCommand(this);
             OpenUpdateCustomerModelCommand = new OpenUpdateCustomerCommand();
+            SearchCommand = new SearchCustomerCommand(this);
         }
         public async Task GetCustomers()
         {
             var result = await ShopService.GetCustomersAsync(Paging.Limit, 0);
-            (Customers, Paging) = result.Value;
+            Customers = new ObservableCollection<Customer>(result.Value.Item1);
+            Paging = result.Value.Item2;
+
         }
 
 

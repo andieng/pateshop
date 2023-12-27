@@ -7,8 +7,8 @@
         xmlns:local="clr-namespace:MyShop.Views"
         mc:Ignorable="d"
 		x:Name="AddCustomerWindow"
-        Title="Add Customer" Height="450" Width="800">
-	<Grid Background="#fff" Width="420" HorizontalAlignment="Center">
+        Title="Add Customer" Height="500" Width="800">
+	<Grid Background="#fff" Width="500" HorizontalAlignment="Center">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="1*" />
 			<RowDefinition Height="4.2*" />

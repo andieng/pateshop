@@ -1,30 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text.Json.Serialization;
+using System.Windows;
 
 namespace MyShop.Models
 {
     public class OrderDetail : BaseModel
     {
+        [JsonPropertyName("orderId")]
         private int _orderId;
+        [JsonPropertyName("orderDiscountRate")]
         private double _orderDiscountRate;
+        [JsonPropertyName("totalAmount")]
         private double _totalAmount;
+        [JsonPropertyName("status")]
         private string _status;
-        private DateTime _deliveryDate;
-        private DateTime _orderDate;
+        [JsonPropertyName("deliveryDate")]
+        private DateTime? _deliveryDate;
         [JsonPropertyName("customer")]
-        private object _customer;
+        private Customer _customer;
         [JsonPropertyName("products")]
-        private List<OrderProduct> _products;
+        private ObservableCollection<OrderProduct> _products;
 
-        public OrderDetail(int orderId, double orderDiscountRate, double totalAmount, string status, DateTime deliveryDate, DateTime orderDate, object customer, List<OrderProduct> products)
+        public OrderDetail(int orderId, double orderDiscountRate, double totalAmount, string status, DateTime? deliveryDate,  Customer customer, ObservableCollection<OrderProduct> products)
         {
             _orderId = orderId;
             _orderDiscountRate = orderDiscountRate;
             _totalAmount = totalAmount;
-            _status = status;
+            _status = "Shipped";
+            MessageBox.Show(_status);
             _deliveryDate = deliveryDate;
-            _orderDate = orderDate;
             _customer = customer;
             _products = products;
         }
@@ -69,7 +76,7 @@ namespace MyShop.Models
             }
         }
 
-        public DateTime DeliveryDate
+        public DateTime? DeliveryDate
         {
             get => _deliveryDate;
             set
@@ -79,17 +86,8 @@ namespace MyShop.Models
             }
         }
 
-        public DateTime OrderDate
-        {
-            get => _orderDate;
-            set
-            {
-                _orderDate = value;
-                OnPropertyChanged(nameof(OrderDate));
-            }
-        }
         [JsonPropertyName("customer")]
-        public object Customer
+        public Customer Customer
         {
             get => _customer;
             set
@@ -99,7 +97,7 @@ namespace MyShop.Models
             }
         }
         [JsonPropertyName("products")]
-        public List<OrderProduct> Products
+        public ObservableCollection<OrderProduct> Products
         {
             get => _products;
             set
