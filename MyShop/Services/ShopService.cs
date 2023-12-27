@@ -143,7 +143,25 @@ namespace MyShop.Services
                 return null;
             }
         }
-
+        public static async Task<(List<Customer>, Paging)?> searchCustomersAsync(int limit = 100, int offset = 0, string q = "")
+        {
+            try
+            {
+                var response = await ApiClient.GetAsync($"customers/search/?limit={limit}&offset={offset}&q={q}");
+                response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseData<Customer>?>();
+                if (responseData != null)
+                {
+                    return (responseData.Data, responseData.Paging);
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
         public static async Task<(List<Product>, Paging)?> GetProductsAsync(int limit = 100, int offset = 0)
         {
             try

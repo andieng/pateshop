@@ -1,7 +1,9 @@
-﻿using MyShop.Services;
+﻿using MyShop.Models;
+using MyShop.Services;
 using MyShop.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,11 +22,13 @@ namespace MyShop.Commands
 
         public override async void Execute(object parameter)
         {
-            if (parameter != "")
+            if (parameter is string q)
             {
-               // await ShopService.UpdateOrder(data, _ordersCustomerViewModel.OrderDetail.OrderId);
+               var data = await ShopService.searchCustomersAsync(100,0,q);
+                _customersViewModel.Customers = new ObservableCollection<Customer>(data.Value.Item1);
+                _customersViewModel.Paging = data.Value.Item2;
+
             }
-            //await ShopService.GetOrderDetailAsync(_ordersCustomerViewModel.OrderDetail.OrderId);
 
         }
     }
