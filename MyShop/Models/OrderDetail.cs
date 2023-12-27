@@ -29,8 +29,7 @@ namespace MyShop.Models
             _orderId = orderId;
             _orderDiscountRate = orderDiscountRate;
             _totalAmount = totalAmount;
-            _status = "Shipped";
-            MessageBox.Show(_status);
+            _status = status;
             _deliveryDate = deliveryDate;
             _customer = customer;
             _products = products;
