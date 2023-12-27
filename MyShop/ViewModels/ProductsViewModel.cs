@@ -275,7 +275,7 @@ namespace MyShop.ViewModels
             OpenAddCommand = new OpenAddCommand(this);
             AddProductCommand = new AddProductCommand(this);
             DeleteProductCommand = new DeleteProductCommand(this);
-            EnterCommand = new EnterCommand();
+            EnterCommand = new EnterCommand(this);
             EscCommand = new EscCommand();
             DeleteCategoryCommand = new DeleteCategoryCommand(this);
             AddCategoryCommand = new AddCategoryCommand(this);

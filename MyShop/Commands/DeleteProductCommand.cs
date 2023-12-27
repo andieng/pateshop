@@ -25,6 +25,13 @@ namespace MyShop.Commands
             {
                 _productsViewModel.CurView--;
                 await _productsViewModel.LoadProductsOfCategory(curProduct.CategoryId);
+                for (int i = 0; i < _productsViewModel.CategoriesList.Count; i++)
+                {
+                    if (_productsViewModel.CategoriesList[i].CategoryId == _productsViewModel.CurCategory.CategoryId)
+                    {
+                        _productsViewModel.CategoriesList[i].UpdatedDateTime = DateTime.Now;
+                    }
+                }
                 _productsViewModel.CurProduct = null;
                 _productsViewModel.BackCommand.Execute(null);
             }
