@@ -389,21 +389,6 @@ namespace MyShop.Services
             }
         }
 
-        public static async Task<bool> DeleteCustomerAsync(int customerId)
-        {
-            try
-            {
-                var response = await ApiClient.DeleteAsync($"customers/{customerId}");
-                response.EnsureSuccessStatusCode();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                return false;
-            }
-        }
-
         private static bool ValidateProductTypes(Product product)
         {
             return
