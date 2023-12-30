@@ -1,4 +1,4 @@
-﻿using MyShop.Models;
+using MyShop.Models;
 using MyShop.Services;
 using MyShop.ViewModels;
 using System;

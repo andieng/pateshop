@@ -25,29 +25,34 @@ xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 				<ColumnDefinition Width='*'/>
 
 			</Grid.ColumnDefinitions>
-			<!--Search wrapper-->
-			<Border CornerRadius="20" BorderThickness="1" BorderBrush="#a9a9a9" Height="38">
-				<DockPanel>
-					<!--Search icon-->
-					<Image 
+			<Grid Grid.Column="0">
+				<!--Search wrapper-->
+				<Border CornerRadius="20" BorderThickness="1" BorderBrush="#a9a9a9" Height="38">
+					<DockPanel>
+						<!--Search icon-->
+						<Image 
                  Margin="12,0,0,0" 
                  Source="../Resources/search.png" 
                  Width="20" 
                  Height="20"
                  HorizontalAlignment="Left"/>
 
-					<!--Search textbox-->
-					<TextBox
+						<!--Search textbox-->
+						<TextBox Background="Transparent" 
                  x:Name="searchTextBox" 
                  Style="{x:Null}"
                  BorderThickness="0"
                  Margin="6,5,18,5" 
-                 VerticalAlignment="Center" />
-				</DockPanel>
-			</Border>
+                 VerticalAlignment="Center">
+							<TextBox.InputBindings>
+								<KeyBinding Key="Enter" Command="{Binding SearchCommand}" CommandParameter="{Binding Text, ElementName=searchTextBox}" />
+							</TextBox.InputBindings>
+						</TextBox> 
+					</DockPanel>
+				</Border>
 
-			<!--Search placeholder-->
-			<TextBlock 
+				<!--Search placeholder-->
+				<TextBlock 
          IsHitTestVisible="False" 
          Text="Search anything" 
          VerticalAlignment="Center" 
@@ -55,22 +60,22 @@ xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
          Margin="41,0,0,0" 
          Foreground="DarkGray"
          FontWeight="Light">
-				<TextBlock.Style>
-					<Style TargetType="{x:Type TextBlock}">
-						<Setter Property="Visibility" Value="Collapsed"/>
-						<Style.Triggers>
-							<DataTrigger Binding="{Binding Text, ElementName=searchTextBox}" Value="">
-								<Setter Property="Visibility" Value="Visible"/>
-							</DataTrigger>
-						</Style.Triggers>
-					</Style>
-				</TextBlock.Style>
-			</TextBlock>
+					<TextBlock.Style>
+						<Style TargetType="{x:Type TextBlock}">
+							<Setter Property="Visibility" Value="Collapsed"/>
+							<Style.Triggers>
+								<DataTrigger Binding="{Binding TextSearch, ElementName=searchTextBox}">
+									<Setter Property="Visibility" Value="Visible"/>
+								</DataTrigger>
+							</Style.Triggers>
+						</Style>
+					</TextBlock.Style>
+				</TextBlock>
+			</Grid>
 			<Button Grid.Column="2"
   Width="100"
   Content="Add"
   IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-  Style="{StaticResource MaterialDesignRaisedSecondaryButton}"
   ToolTip="Resource name: MaterialDesignRaisedSecondaryButton" 
 					Command="{Binding OpenAddCustomerModelCommand}"/>
 		</Grid>
@@ -107,10 +112,10 @@ xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                             Binding="{Binding Email}"
                             Header="Email" />
 					<DataGridTextColumn
-                            Binding="{Binding CreatedAt, StringFormat='{}{0:dd/MM/yyyy}'}"
+                            Binding="{Binding CreatedAtDatetime, StringFormat='{}{0:dd/MM/yyyy}'}"
                             Header="Created date" />
 					<DataGridTextColumn
-                            Binding="{Binding UpdatedAt, StringFormat='{}{0:dd/MM/yyyy}'}"
+                            Binding="{Binding UpdatedAtDatetime, StringFormat='{}{0:dd/MM/yyyy}'}"
                             Header="Updated date" />
 					<DataGridTemplateColumn Header="Actions">
 						<DataGridTemplateColumn.CellTemplate>
@@ -126,10 +131,10 @@ xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                                             Width="35"
                                             Height="35"
                                             ToolTip="Update"
-				               Command="{Binding Path=DataContext.OpenUpdateCustomerModelCommand,       
-RelativeSource= {RelativeSource FindAncestor,
-AncestorType={x:Type DataGrid}}}"
-								CommandParameter="{Binding SelectedItem, ElementName=customerDataGrid}">
+											Command="{Binding Path=DataContext.OpenUpdateCustomerModelCommand,       
+											RelativeSource= {RelativeSource FindAncestor,
+											AncestorType={x:Type DataGrid}}}"
+											CommandParameter="{Binding SelectedItem, ElementName=customerDataGrid}">
 										<materialDesign:PackIcon 
                                                 DockPanel.Dock="Left" 
                                                 Kind="SquareEditOutline" 
@@ -149,8 +154,10 @@ AncestorType={x:Type DataGrid}}}"
                                                 Width="35"
                                                 Height="35"
                                                 ToolTip="Delete"
-												Command="{Binding DeleteCommand}"
-											CommandParameter="{Binding CustomerId}">
+												Command="{Binding Path=DataContext.DeleteCommand,       
+												RelativeSource= {RelativeSource FindAncestor,
+												AncestorType={x:Type DataGrid}}}"
+												CommandParameter="{Binding CustomerId}">
 
 										<materialDesign:PackIcon 
                                                 DockPanel.Dock="Left" 
@@ -169,7 +176,7 @@ AncestorType={x:Type DataGrid}}}"
 			</DataGrid>
 		</Grid>
 		<!--Paging-->
-			<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+			<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,22">
 			<Button Content="Pre" Command="{Binding GetCustomersCommand}" CommandParameter="Pre" IsEnabled="{Binding Paging.IsPre}" />
 				<Button Content="{Binding Paging.CurrentPage}" />
 			<Button Content="Next" Command="{Binding GetCustomersCommand}" CommandParameter="Next" IsEnabled="{Binding Paging.IsNext}" />

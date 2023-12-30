@@ -126,6 +126,5 @@ namespace MyShop.Models
                 OnPropertyChanged(nameof(OldCategoryName));
             }
         }
-
     }
 }

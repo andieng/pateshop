@@ -27,14 +27,5 @@ namespace MyShop.Views
             InitializeComponent();
             DataContext = new LoginViewModel();
         }
-
-        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
-        {
-            var passwordBox = (PasswordBox)sender;
-            if (DataContext != null && passwordBox != null)
-            {
-                ((dynamic)DataContext).Password = passwordBox.Password;
-            }
-        }
     }
 }

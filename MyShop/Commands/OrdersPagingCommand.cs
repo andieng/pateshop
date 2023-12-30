@@ -1,7 +1,9 @@
-﻿using MyShop.Services;
+using MyShop.Models;
+using MyShop.Services;
 using MyShop.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,13 +34,14 @@ namespace MyShop.Commands
                 newOffset = offset - limit;
             }
 
+            var result = await ShopService.GetOrdersAsync(limit, newOffset, _ordersViewModel.StartOrderDate, _ordersViewModel.EndOrderDate);
+            if(result != null)
+            {
+                var (orders, paging) = result.Value;
 
-            var result = await ShopService.GetOrdersAsync(limit, newOffset);
-
-            var (orders, paging) = result.Value;
-
-            _ordersViewModel.Orders = orders;
-            _ordersViewModel.Paging = paging;
+                _ordersViewModel.Orders = new ObservableCollection<Order>(orders);
+                _ordersViewModel.Paging = paging;
+            }
         }
     }
 }

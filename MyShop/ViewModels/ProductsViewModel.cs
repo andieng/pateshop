@@ -38,6 +38,7 @@ namespace MyShop.ViewModels
         private float _priceFrom = 0;
         private float _priceTo = 0;
         private string _selectedImg;
+
         public int CurView { get; set; }
 
         public BaseCommand SelectCommand { get; set; }
@@ -55,7 +56,6 @@ namespace MyShop.ViewModels
         public BaseCommand SearchProductsCommand { get; set; }  
         public BaseCommand FilterProductsByPriceRange { get; set; }
         public BaseCommand SelectImageCommand { get; set; }
-
 
         public ObservableCollection<Category> CategoriesList
         {
@@ -170,6 +170,7 @@ namespace MyShop.ViewModels
                 OnPropertyChanged("AddProductVisibility");
             }
         }
+
         public Visibility SearchResultVisibility
         {
             get => _searchResultVisibility;

@@ -14,5 +14,10 @@ namespace MyShop.Views
         {
             InitializeComponent();
         }
+
+        private void Button_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+
+        }
     }
 }
