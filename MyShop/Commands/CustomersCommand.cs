@@ -3,6 +3,7 @@ using MyShop.Services;
 using MyShop.ViewModels;
 using MyShop.Views;
 using System;
+using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Windows;
 using System.Windows.Documents;
@@ -38,7 +39,7 @@ namespace MyShop.Commands
 
             var (customers, paging) = result.Value;
 
-            _customerViewModel.Customers = customers;
+            _customerViewModel.Customers = new ObservableCollection<Customer>(customers);
             _customerViewModel.Paging = paging;
         }
     }

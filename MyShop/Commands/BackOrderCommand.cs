@@ -10,23 +10,22 @@ using System.Windows;
 
 namespace MyShop.Commands
 {
-    public class SelectOrderCommand : BaseCommand
+    public class BackOrderCommand:BaseCommand
     {
         private readonly OrdersViewModel _ordersViewModel;
 
-        public SelectOrderCommand(OrdersViewModel ordersViewModel)
+        public BackOrderCommand(OrdersViewModel ordersViewModel)
         {
             _ordersViewModel = ordersViewModel;
         }
 
         public override async void Execute(object parameter)
         {
-            if (parameter is Order orderSelected)
-            {
-                _ordersViewModel.OrderDetail = await ShopService.GetOrderDetailAsync(orderSelected.OrderId);
-                _ordersViewModel.OrderVisibility = Visibility.Hidden;
-                _ordersViewModel.OrderDetailVisibility = Visibility.Visible;
-            }
+
+                
+                _ordersViewModel.OrderDetailVisibility = Visibility.Hidden;
+            _ordersViewModel.OrderVisibility = Visibility.Visible;
+
         }
     }
 }

@@ -7,88 +7,197 @@
         xmlns:local="clr-namespace:MyShop.Views"
 		xmlns:vm="clr-namespace:MyShop.ViewModels"
         mc:Ignorable="d"
-		x:Name="AddCustomerWindow"
-        Title="AddOrderView" Height="600" Width="800">
+		x:Name="AddOrderWindow"
+        Title="Add Order" Height="800" Width="1000">
 	<Window.Resources>
 		<vm:AddOrderViewModel x:Key="AddOrderViewModel" />
 	</Window.Resources>
 	<Grid  DataContext="{StaticResource AddOrderViewModel}"  Background="#fff" HorizontalAlignment="Center">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="1*" />
-			<RowDefinition Height="8.3*" />
-			<RowDefinition Height="0.7*" />
+			<RowDefinition Height="1*" />
+			<RowDefinition Height="3*" />
+			<RowDefinition Height="3*" />
+			<RowDefinition Height="1*" />
+			<RowDefinition Height="1*" />
 		</Grid.RowDefinitions>
 
-		<TextBlock Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" Text="Order" FontWeight="Medium" Margin="0,20,0,0" />
+		<TextBlock Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" Text="Add Order" FontWeight="Medium" Margin="0,20,0,0" />
+	
+		<Grid Grid.Row="1" VerticalAlignment="Center">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="*"/>
 
-		<StackPanel Grid.Row="1" Margin="40,0,40,20" VerticalAlignment="Center">
-			<StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-				<TextBox
-               VerticalAlignment="Top"
-               materialDesign:HintAssist.Hint="Order Discount Rate"
-               Text="{Binding orderDiscountRate, Mode=TwoWay}"
-               FontSize="14"
-               materialDesign:TextFieldAssist.TextFieldCornerRadius="10"
-               materialDesign:HintAssist.Background="#fff"
-               Margin="0,22,0,0"
-               Padding="16,12,16,12"
-               Style="{StaticResource MaterialDesignOutlinedTextBox}" 
-               BorderBrush="#BC474747" />
-				<TextBox 
-               VerticalAlignment="Top"
-               materialDesign:HintAssist.Hint="Status"
-               Text="{Binding Status, Mode=TwoWay}"
-               FontSize="14"
-               materialDesign:TextFieldAssist.TextFieldCornerRadius="10"
-               materialDesign:HintAssist.Background="#fff"
-               Margin="0,22,0,0"
-               Padding="16,12,16,12"
-               Style="{StaticResource MaterialDesignOutlinedTextBox}"
-               BorderBrush="#BC474747" />
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+			<TextBlock Grid.Column="0" TextAlignment="Right"  FontSize="18" Text="Customer Information" FontWeight="Medium" Margin="0,20,0,20" />
+
+			<ComboBox Grid.Column="1"
+			Width="256"
+			materialDesign:HintAssist.Hint="Customer Name"
+			materialDesign:TextFieldAssist.HasClearButton="True"
+			ItemsSource="{Binding Customers}" 
+			SelectedValue="{Binding OrderDetail.Customer}"
+			DisplayMemberPath="CustomerName"
+			Style="{StaticResource MaterialDesignOutlinedComboBox}">
+				<ComboBox.SelectedItem>
+					<Binding				
+					Mode="TwoWay"
+					Path="SelectedCustomer"
+					UpdateSourceTrigger="PropertyChanged">		
+					</Binding>
+				</ComboBox.SelectedItem>
+			</ComboBox>
+			<StackPanel Grid.Column="2" Orientation="Vertical">
+				<TextBlock FontSize="15" Text="{Binding SelectedCustomer.CustomerName,StringFormat='Name: {0}'}" />
+				<TextBlock FontSize="15" Text="{Binding SelectedCustomer.Email, StringFormat='Email: {0}'}"/>
+				<TextBlock FontSize="15" Text="{Binding SelectedCustomer.Address, StringFormat='Address: {0}'}"/>
+				<TextBlock FontSize="15" Text="{Binding SelectedCustomer.PhoneNumber, StringFormat='Phone Number: {0}'}"/>
+
 			</StackPanel>
+		</Grid>
+		<!--Products-->
+		<Grid Grid.Row="2" Background="#fff" Margin="0 10 0 0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="255*"/>
+				<ColumnDefinition Width="617*"/>
+			</Grid.ColumnDefinitions>
 
-			<TextBlock Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" Text="Customer Infomation" FontWeight="Medium" Margin="0,20,0,0" />
-			<StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-				<ComboBox
-Width="256"
-materialDesign:HintAssist.Hint="Validation test"
-materialDesign:TextFieldAssist.HasClearButton="True"
-ItemsSource="{Binding Customers}" 
-					
-Style="{StaticResource MaterialDesignOutlinedComboBox}">
-					<ComboBox.SelectedItem>
-						<Binding
-							
-    Mode="TwoWay"
-    Path="SelectedCustomer"
-    UpdateSourceTrigger="PropertyChanged">
-						</Binding>
-					</ComboBox.SelectedItem>
-				</ComboBox>
-				<StackPanel>
-					<TextBlock FontSize="15" Text="{Binding SelectedCustomer.CustomerName}"/>
-					<TextBlock FontSize="15" Text="{Binding SelectedCustomer.Email}"/>
-					<TextBlock FontSize="15" Text="{Binding SelectedCustomer.Address}"/>
-				</StackPanel>
-			</StackPanel>
-			
-			<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" Text="Product info" FontWeight="Medium" Margin="0,20,0,0" />
-			<Button Content="Add" Command="{Binding AddOrderProductCommand}"/>
-		</StackPanel>
+			<DataGrid
+					x:Name="productsDataGrid"
+                materialDesign:DataGridAssist.CellPadding="16 10 16 2"
+                materialDesign:DataGridAssist.EnableEditBoxAssist="True"
+                Padding="30 20 30 20"
+                ItemsSource="{Binding Products}"
+                SelectionMode="Extended"
+                CanUserAddRows="False"
+                IsReadOnly="True"
+                AutoGenerateColumns="False"
+                Background="#fff"
+                SelectionUnit="FullRow"
+                VerticalContentAlignment="Center" Grid.ColumnSpan="2">
+				<DataGrid.Columns>
+					<DataGridTemplateColumn Header="Actions">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<CheckBox 					
+								Command="{Binding Path=DataContext.SelectProduct,       
+								RelativeSource= {RelativeSource FindAncestor,
+								AncestorType={x:Type DataGrid}}}"
+								CommandParameter="{Binding SelectedItem, ElementName=productsDataGrid}"
+								/>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+					<DataGridTextColumn
+                            Binding="{Binding ProductSKU}"
+                            Header="SKU" />
+					<DataGridTextColumn
+                            Binding="{Binding ProductName}"
+                            Header="Name" />
+					<DataGridTextColumn
+                            Binding="{Binding Cost}"
+                            Header="Cost" />
+					<DataGridTextColumn
+                            Binding="{Binding Price}"
+                            Header="Price" />
+					<DataGridTextColumn
+                            Binding="{Binding Quantity}"
+                            Header="Quantity" />
+					<DataGridTextColumn
+                            Binding="{Binding Size}"
+                            Header="Size" />
+					<DataGridTextColumn
+                            Binding="{Binding Color}"
+                            Header="Color" />
+					<DataGridTextColumn
+                            Binding="{Binding Description}"
+                            Header="Description" />
+				</DataGrid.Columns>
 
-		<StackPanel Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal" Margin="40,0,40,0">
-			<Button Content="Cancel" Width="90" Height="32" FontSize="14"
-                   Style="{StaticResource MaterialDesignOutlinedLightButton}"
-                   Foreground="{StaticResource PrimaryHueMidBrush}"
-                   materialDesign:ButtonAssist.CornerRadius="16"
-                   Command="{Binding CancelCommand}"/>
+			</DataGrid>
+		</Grid>
+		<!--Order Product-->
+		<Grid Grid.Row="3" Background="#fff" Margin="0 10 0 0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="255*"/>
+				<ColumnDefinition Width="617*"/>
+			</Grid.ColumnDefinitions>
+
+			<DataGrid
+					x:Name="orderDetailDataGrid"
+                materialDesign:DataGridAssist.CellPadding="16 10 16 2"
+                materialDesign:DataGridAssist.EnableEditBoxAssist="True"
+                Padding="30 20 30 20"
+                ItemsSource="{Binding OrderDetail.Products}"
+                SelectionMode="Extended"
+                CanUserAddRows="False"
+                AutoGenerateColumns="False"
+                Background="#fff"
+                SelectionUnit="Cell"
+                VerticalContentAlignment="Center" Grid.ColumnSpan="2">
+				<DataGrid.Columns>
+					<DataGridTextColumn
+						IsReadOnly="True"
+                            Binding="{Binding Product.ProductSKU}"
+                            Header="SKU" />
+					<DataGridTextColumn
+						IsReadOnly="True"
+                            Binding="{Binding Product.ProductName}"
+                            Header="Name" />
+					<DataGridTextColumn
+						IsReadOnly="True"
+                            Binding="{Binding Product.Cost}"
+                            Header="Cost" />
+					<DataGridTextColumn
+						IsReadOnly="True"
+                            Binding="{Binding Product.Price}"
+                            Header="Price" />
+					<DataGridTextColumn
+                            Binding="{Binding Quantity}"
+                            Header="Quantity" />
+					<DataGridTextColumn
+                            Binding="{Binding ProductDiscountRate}"
+                            Header="Product Discount Rate" />
+				</DataGrid.Columns>
+
+			</DataGrid>
+		</Grid>
+
+		<Grid Grid.Row="4" VerticalAlignment="Center">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="*"/>
+
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+			<TextBox Grid.Column="0" Width="100"
+  VerticalAlignment="Center"
+  materialDesign:HintAssist.Hint="Order Discount Rate"
+			Text="{Binding OrderDetail.OrderDiscountRate, Mode=TwoWay}"
+  Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+			<ComboBox Grid.Column="1"
+          Width="100"
+          materialDesign:HintAssist.Hint="Status"
+          SelectedItem="{Binding OrderDetail.Status, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+          ItemsSource="{Binding OrderStatusValues}"
+          Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+
+			<DatePicker Grid.Column="2" Width="100"
+						materialDesign:HintAssist.Hint="Delivery Date" 
+						SelectedDate="{Binding OrderDetail.DeliveryDate,StringFormat='{}{0:dd/MM/yyyy}',Mode=TwoWay}"
+						Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+		</Grid>
+
+		<StackPanel Grid.Row="5" HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal" Margin="40,0,40,0">
 			<Button Content="Add" Width="95" Height="32" FontSize="14"
                    Margin="20,0,0,0" 
                    Style="{StaticResource MaterialDesignFlatMidBgButton}"
                    materialDesign:ButtonAssist.CornerRadius="16"
                    BorderThickness="0"
-					Command="{Binding AddCustomerCommand}"
-				CommandParameter="{Binding ElementName=AddCustomerWindow}"
+					Command="{Binding AddOrder}"
+				CommandParameter="{Binding ElementName=AddOrderWindow}"
 />
 		</StackPanel>
 	</Grid>
