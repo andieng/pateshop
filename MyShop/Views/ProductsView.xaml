@@ -6,11 +6,7 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         MinHeight="564.04" MinWidth="730"
         Background="#f5fcff">
-    <UserControl.Resources>
-        <viewModels:ProductsViewModel x:Key="productsViewModel" />
-    </UserControl.Resources>
-    
-    <Grid DataContext="{StaticResource productsViewModel}" Margin="30 20 30 0">
+    <Grid Margin="30 20 30 0">
         <Grid.RowDefinitions>
             <RowDefinition Height="70" />
             <RowDefinition Height="*" />
@@ -65,12 +61,19 @@
 
                         <!--Search textbox-->
                         <TextBox
-                                x:Name="searchTextBox" 
-                                Style="{x:Null}"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                Margin="6,5,18,5" 
-                                VerticalAlignment="Center" />
+                            x:Name="searchTextBox" 
+                            Style="{x:Null}"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Margin="6,5,18,5" 
+                            VerticalAlignment="Center">
+                            <TextBox.InputBindings>
+                                <KeyBinding 
+                                    Key="Enter" 
+                                    Command="{Binding SearchProductsCommand}"
+                                    CommandParameter="{Binding Text, ElementName=searchTextBox}" />
+                            </TextBox.InputBindings>
+                        </TextBox>
                     </DockPanel>
                 </Border>
 
@@ -138,18 +141,23 @@
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock 
                                         Text="{Binding CategoryName}" 
-                                        Visibility="{Binding DataContext.CategoryNameVisibility, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Mode=TwoWay}" 
+                                        Visibility="{Binding CategoryNameVisibility}"
                                         VerticalAlignment="Top" />
                                     <TextBox 
-                                        Visibility="{Binding DataContext.InputCategoryNameVisibility, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Mode=TwoWay}" 
+                                        Visibility="{Binding InputCategoryNameVisibility}"
                                         Text="{Binding CategoryName, UpdateSourceTrigger=PropertyChanged}" 
                                         Width="150" 
-                                        VerticalAlignment="Top" >
+                                        VerticalAlignment="Top"
+                                        PreviewMouseLeftButtonDown="InputCategoryName_MouseLeftBtnDown">
                                         <TextBox.InputBindings>
                                             <KeyBinding 
                                                 Key="Enter" 
-                                                Command="{Binding DataContext.InlineUpdateCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
-                                                CommandParameter="{Binding}" />
+                                                Command="{Binding DataContext.EnterCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" 
+                                                CommandParameter="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type TextBox}}}" />
+                                            <KeyBinding 
+                                                Key="Esc" 
+                                                Command="{Binding DataContext.EscCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" 
+                                                CommandParameter="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type TextBox}}}" />
                                         </TextBox.InputBindings>
                                     </TextBox>
                                 </StackPanel>
@@ -178,7 +186,7 @@
                                         Width="35"
                                         Height="35"
                                         ToolTip="Update"
-                                        PreviewMouseLeftButtonDown="UpdateCategory_MouseLeftBtnDown"
+                                        PreviewMouseLeftButtonDown="PreviewMouseLeftBtnDown"
                                         Tag="{Binding DataContext.InlineUpdateCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}">
                                         <materialDesign:PackIcon 
                                             DockPanel.Dock="Left" 
@@ -189,22 +197,23 @@
                                     </Button>
 
                                     <!-- Delete button -->
-                                    <Button Style="{StaticResource MaterialDesignIconButton}" 
-                                                BorderThickness="0"
-                                                materialDesign:ButtonAssist.CornerRadius="20" Foreground="#dc3545"
-                                                Padding="0"
-                                                Margin="10 0 0 0"
-                                                Width="35"
-                                                Height="35"
-                                                ToolTip="Delete"
-                                                Command="{Binding }" 
-                                                CommandParameter="{Binding}">
+                                    <Button 
+                                        Style="{StaticResource MaterialDesignIconButton}" 
+                                        BorderThickness="0"
+                                        materialDesign:ButtonAssist.CornerRadius="20" Foreground="#dc3545"
+                                        Padding="0"
+                                        Margin="10 0 0 0"
+                                        Width="35"
+                                        Height="35"
+                                        ToolTip="Delete"
+                                        PreviewMouseLeftButtonDown="PreviewMouseLeftBtnDown"
+                                        Tag="{Binding DataContext.DeleteCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" >
                                         <materialDesign:PackIcon 
-                                                DockPanel.Dock="Left" 
-                                                Kind="Delete" 
-                                                Width="20" 
-                                                Height="20"
-                                                VerticalAlignment="Center" />
+                                            DockPanel.Dock="Left" 
+                                            Kind="Delete" 
+                                            Width="20" 
+                                            Height="20"
+                                            VerticalAlignment="Center" />
                                     </Button>
                                 </StackPanel>
                             </DataTemplate>
@@ -225,12 +234,13 @@
                 Background="#475371"
                 Padding="0"
                 Width="110"
-                Command="{Binding }">Add Category</Button>
+                Click="AddCategoryButton_Click">Add Category</Button>
         </Grid>
 
         <!-- Category Detail -->
         <Grid Grid.Row="1" Background="#fff" Margin="0 -20 0 0" Visibility="{Binding CategoryDetailVisibility}">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
@@ -261,7 +271,7 @@
 
             <DataGrid
                 x:Name="categoryDetailDataGrid"
-                Grid.Row="1"
+                Grid.Row="2"
                 RowHeight="40"
                 materialDesign:DataGridAssist.CellPadding="16 10 16 2"
                 materialDesign:DataGridAssist.EnableEditBoxAssist="False"
@@ -306,6 +316,74 @@
                         Header="Cost" />
                 </DataGrid.Columns>
             </DataGrid>
+            <Grid Grid.Row="1" HorizontalAlignment="Center" Margin="0 25 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock 
+                    Width="100"
+                    Grid.Column="1"
+                    FontSize="15"
+                    Padding="5"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Text="Price From" />
+
+                <TextBox
+                    Grid.Column="2"
+                    Width="100"
+                    Padding="5"
+                    PreviewTextInput="NumberValidationTextBox"
+                    Text="{Binding PriceFrom, UpdateSourceTrigger=PropertyChanged}" 
+                    Margin="0 0 40 0"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Stretch"
+                    AcceptsReturn="True"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Auto" />
+
+                <TextBlock 
+                    Width="30"
+                    Grid.Column="3"
+                    FontSize="15"
+                    Padding="5"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Text="To" />
+
+                <TextBox
+                    Margin="-200 0 0 0"
+                    Grid.Column="4"
+                    Width="100"
+                    Padding="5"
+                    PreviewTextInput="NumberValidationTextBox"
+                    Text="{Binding PriceTo, UpdateSourceTrigger=PropertyChanged}" 
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Stretch"
+                    AcceptsReturn="True"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Auto" />
+
+                <Button
+                    Margin="200 0 30 0"
+                    Grid.Column="5"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource MaterialDesignFlatMidBgButton}" 
+                    BorderThickness="0"
+                    materialDesign:ButtonAssist.CornerRadius="17"
+                    Foreground="#fff"
+                    Background="#475371"
+                    Padding="0"
+                    Width="110"
+                    Command="{Binding FilterProductsByPriceRange}">Apply</Button>
+            </Grid>
         </Grid>
 
         <!-- Product Detail-->
@@ -416,6 +494,8 @@
                         Header="Color" />
                 </DataGrid.Columns>
             </DataGrid>
+
+            <Image Grid.Row="3" Width="300" Height="300" Source="{Binding CurProduct.ImageSource}" />
         </Grid>
 
         <!-- Edit Product -->
@@ -912,27 +992,16 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock 
-            Width="100"
-            Grid.Column="0"
-            FontSize="15"
-            Padding="5"
-            Foreground="#fff"
-            Background="#98a1ac"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Center"
-            Text="Image" />
+                <Button Grid.Column="0" Content="Select Image" Command="{Binding SelectImageCommand}"/>
 
-                <TextBox
-            Grid.Column="1"
-            Padding="5"
-            Text="{Binding NewProduct.Image}"
-            VerticalAlignment="Top"
-            HorizontalAlignment="Stretch"
-            AcceptsReturn="True"
-            Style="{StaticResource MaterialDesignOutlinedTextBox}"
-            TextWrapping="Wrap"
-            VerticalScrollBarVisibility="Auto" />
+                <TextBlock 
+                    Grid.Column="1"
+                    Margin="20 0 0 0"
+                    FontSize="15"
+                    Padding="5"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Text="{Binding SelectedImg}" />
             </Grid>
 
             <Grid Grid.Row="5" Margin="0 0 0 10">
@@ -1094,6 +1163,131 @@
             VerticalScrollBarVisibility="Auto" />
             </Grid>
 
+        </Grid>
+
+        <!-- Search Result -->
+        <Grid Grid.Row="1" Background="#fff" Margin="0 -20 0 0" Visibility="{Binding SearchResultVisibility}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock 
+                    Width="100"
+                    Grid.Column="1"
+                    FontSize="15"
+                    Padding="5"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Text="Price From" />
+
+                <TextBox
+                    Grid.Column="2"
+                    Width="100"
+                    Padding="5"
+                    PreviewTextInput="NumberValidationTextBox"
+                    Text="{Binding PriceFrom, UpdateSourceTrigger=PropertyChanged}" 
+                    Margin="0 0 40 0"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Stretch"
+                    AcceptsReturn="True"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Auto" />
+
+                <TextBlock 
+                    Width="30"
+                    Grid.Column="3"
+                    FontSize="15"
+                    Padding="5"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Text="To" />
+
+                <TextBox
+                    Margin="-200 0 0 0"
+                    Grid.Column="4"
+                    Width="100"
+                    Padding="5"
+                    PreviewTextInput="NumberValidationTextBox"
+                    Text="{Binding PriceTo, UpdateSourceTrigger=PropertyChanged}" 
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Stretch"
+                    AcceptsReturn="True"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Auto" />
+
+                <Button
+                    Margin="200 0 30 0"
+                    Grid.Column="5"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource MaterialDesignFlatMidBgButton}" 
+                    BorderThickness="0"
+                    materialDesign:ButtonAssist.CornerRadius="17"
+                    Foreground="#fff"
+                    Background="#475371"
+                    Padding="0"
+                    Width="110"
+                    Command="{Binding FilterProductsByPriceRange}">Apply</Button>
+            </Grid>
+
+            <DataGrid
+                x:Name="searchResultDataGrid"
+                Grid.Row="1"
+                RowHeight="40"
+                materialDesign:DataGridAssist.CellPadding="16 10 16 2"
+                materialDesign:DataGridAssist.EnableEditBoxAssist="False"
+                Padding="30 20 30 20"
+                ItemsSource="{Binding SearchResultList}"
+                SelectionMode="Extended"
+                CanUserAddRows="False"
+                IsReadOnly="True"
+                AutoGenerateColumns="False"
+                Background="#fff"
+                SelectionUnit="FullRow"
+                VerticalContentAlignment="Center">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction 
+                            Command="{Binding SelectCommand}"
+                            CommandParameter="{Binding SelectedItem, ElementName=searchResultDataGrid}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Binding="{Binding ProductId}"
+                        Header="ID" />
+                    <DataGridTextColumn
+                        Binding="{Binding ProductSKU}"
+                        Header="SKU" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding ProductName}"
+                        Header="Product Name" />
+                    <DataGridTextColumn
+                        Width="85"
+                        Binding="{Binding Quantity}"
+                        Header="Quantity" />
+                    <DataGridTextColumn
+                        Width="90"
+                        Binding="{Binding Price}"
+                        Header="Price" />
+                    <DataGridTextColumn
+                        Width="90"
+                        Binding="{Binding Cost}"
+                        Header="Cost" />
+                </DataGrid.Columns>
+            </DataGrid>
         </Grid>
     </Grid>
 </UserControl>

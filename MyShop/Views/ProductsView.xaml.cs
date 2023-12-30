@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,7 +21,7 @@ namespace MyShop.Views
             DataContext = new ProductsViewModel();
         }
 
-        private void UpdateCategory_MouseLeftBtnDown(object sender, MouseButtonEventArgs e)
+        private void PreviewMouseLeftBtnDown(object sender, MouseButtonEventArgs e)
         {
             e.Handled = true;
             var button = sender as Button;
@@ -33,6 +34,29 @@ namespace MyShop.Views
                     command.Execute(category);
                 }
             }
+        }
+
+        private void InputCategoryName_MouseLeftBtnDown(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled = true;
+            if (sender is TextBox textBox)
+            {
+                textBox.Focus();
+                textBox.SelectAll();
+            }
+        }
+
+        private void AddCategoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddCategoryView addCategoryWindow = new AddCategoryView(DataContext);
+            addCategoryWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            addCategoryWindow.ShowDialog();
+        }
+
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
         }
     }
 }

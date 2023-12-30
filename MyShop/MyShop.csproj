@@ -14,6 +14,12 @@
     <None Remove="Resources\cart-no-fill-64x64.png" />
     <None Remove="Resources\example-user.jpg" />
     <None Remove="Resources\login-img.png" />
+    <None Remove="Resources\Products\apple watch.png" />
+    <None Remove="Resources\Products\apple watch_1.png" />
+    <None Remove="Resources\Products\apple watch_2.png" />
+    <None Remove="Resources\Products\apple watch_3.png" />
+    <None Remove="Resources\Products\apple watch_4.png" />
+    <None Remove="Resources\Products\apple watch_5.png" />
     <None Remove="Resources\Products\charm_bracelet_image.jpg" />
     <None Remove="Resources\Products\classic_ring.jpg" />
     <None Remove="Resources\Products\diamond_ring.jpeg" />
@@ -56,6 +62,12 @@
     <Resource Include="Resources\cart-no-fill-128x128.png" />
     <Resource Include="Resources\cart-no-fill-64x64.png" />
     <Resource Include="Resources\login-img.png" />
+    <Resource Include="Resources\Products\apple watch.png" />
+    <Resource Include="Resources\Products\apple watch_1.png" />
+    <Resource Include="Resources\Products\apple watch_2.png" />
+    <Resource Include="Resources\Products\apple watch_3.png" />
+    <Resource Include="Resources\Products\apple watch_4.png" />
+    <Resource Include="Resources\Products\apple watch_5.png" />
     <Resource Include="Resources\Products\charm_bracelet_image.jpg" />
     <Resource Include="Resources\Products\classic_ring.jpg" />
     <Resource Include="Resources\Products\diamond_ring.jpeg" />

@@ -14,5 +14,8 @@ namespace MyShop.Models
 
         [JsonProperty("error")]
         public string Error { get; set; }
+
+        [JsonProperty("categoryId")]
+        public int CategoryId { get; set; }
     }
 }
