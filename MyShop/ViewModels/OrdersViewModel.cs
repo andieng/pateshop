@@ -1,4 +1,4 @@
-﻿using MyShop.Commands;
+using MyShop.Commands;
 using MyShop.Models;
 using MyShop.Services;
 using System;
@@ -14,7 +14,6 @@ namespace MyShop.ViewModels
 {
     public class OrdersViewModel : BaseViewModel
     {
-
         private ObservableCollection<Order> _orders;
         private Visibility _orderVisibility = Visibility.Visible;
         private Visibility _orderDetailVisibility;

@@ -1,4 +1,4 @@
-﻿using MyShop.Commands;
+using MyShop.Commands;
 using MyShop.Models;
 using MyShop.Services;
 using System;
@@ -27,6 +27,7 @@ namespace MyShop.ViewModels
         }
 
         public Array OrderStatusValues => Enum.GetValues(typeof(OrderStatus));
+
         public List<Customer> Customers
         {
             get => _customers;
@@ -82,7 +83,6 @@ namespace MyShop.ViewModels
 
         public async Task loadData()
         {
-
             var data = await ShopService.GetCustomersAsync();
             var products = await ShopService.GetProductsAsync();
             Products = products.Value.Item1;

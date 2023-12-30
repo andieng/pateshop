@@ -30,7 +30,7 @@ namespace MyShop.Models
             _status = status;
             _deliveryDate = deliveryDate;
             _orderDate = orderDate;
-                _updatedAt = updatedAt;
+            _updatedAt = updatedAt;
             if(_deliveryDate != null)
             {
                 _deliveryDateDatetime = DateTime.Parse(deliveryDate);

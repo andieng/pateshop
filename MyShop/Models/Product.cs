@@ -24,6 +24,8 @@ namespace MyShop.Models
         private DateTime _createdDateTime;
         private DateTime _updatedDateTime;
 
+        public Product() { }
+        
         public Product(
                 int productId,
                 string productName,
@@ -52,14 +54,14 @@ namespace MyShop.Models
             _color = color;
             _createdAt = createdAt;
             _updatedAt = updatedAt;
-            if (_createdAt!=null)
+
+            if (_createdAt != null)
             {
                 _createdDateTime = DateTime.Parse(createdAt);
             }
-            if (_updatedAt!=null)
+            if (_updatedAt != null)
             {
-
-            _updatedDateTime = DateTime.Parse(updatedAt);
+              _updatedDateTime = DateTime.Parse(updatedAt);
             }
         }
 

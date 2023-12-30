@@ -1,0 +1,65 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows10.0.18362.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\cart-128.png" />
+    <None Remove="Resources\cart-64.png" />
+    <None Remove="Resources\cart-no-fill-128x128.png" />
+    <None Remove="Resources\cart-no-fill-64x64.png" />
+    <None Remove="Resources\example-user.jpg" />
+    <None Remove="Resources\login-img.png" />
+    <None Remove="Resources\search.png" />
+    <None Remove="Resources\smile.png" />
+    <None Remove="Resources\wink.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LiveCharts" Version="0.9.7" />
+    <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+    <PackageReference Include="Npgsql" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\cart-128.png" />
+    <Resource Include="Resources\cart-64.png" />
+    <Resource Include="Resources\cart-no-fill-128x128.png" />
+    <Resource Include="Resources\cart-no-fill-64x64.png" />
+    <Resource Include="Resources\login-img.png" />
+    <Resource Include="Resources\search.png" />
+    <Resource Include="Resources\smile.png" />
+    <Resource Include="Resources\wink.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\OrdersView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\CustomersView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\SettingsView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\ReportsView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\ProductsView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\DashboardView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+</Project>

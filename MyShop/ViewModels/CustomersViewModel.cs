@@ -49,9 +49,6 @@ namespace MyShop.ViewModels
         public BaseCommand OpenAddCustomerModelCommand { get; set; }
         public BaseCommand OpenUpdateCustomerModelCommand { get; set; }
         public BaseCommand SearchCommand { get; set; }
-
-
-
         public BaseCommand GetCustomersCommand { get; set; }
         public BaseCommand DeleteCommand { get; set; }
 
@@ -79,9 +76,6 @@ namespace MyShop.ViewModels
             var result = await ShopService.GetCustomersAsync(Paging.Limit, 0);
             Customers = new ObservableCollection<Customer>(result.Value.Item1);
             Paging = result.Value.Item2;
-
         }
-
-
     }
 }

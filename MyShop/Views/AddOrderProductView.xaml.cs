@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,19 +12,18 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Windows.UI.WebUI;
 
 namespace MyShop.Views
 {
     /// <summary>
-    /// Interaction logic for LoginView.xaml
+    /// Interaction logic for AddOrderProductView.xaml
     /// </summary>
-    public partial class LoginView : Window
+    public partial class AddOrderProductView : Window
     {
-        public LoginView()
+        public AddOrderProductView()
         {
             InitializeComponent();
-            DataContext = new LoginViewModel();
+            DataContext = new AddOrderProductViewModel();
         }
     }
 }

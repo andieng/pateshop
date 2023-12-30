@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -96,6 +96,7 @@ namespace MyShop.Models
             }
         }
         [JsonPropertyName("products")]
+
         public ObservableCollection<OrderProduct> Products
         {
             get => _products;

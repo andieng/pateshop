@@ -1,4 +1,4 @@
-﻿using MyShop.Models;
+using MyShop.Models;
 using MyShop.Services;
 using MyShop.ViewModels;
 using System;
@@ -33,7 +33,6 @@ namespace MyShop.Commands
             {
                 newOffset = offset - limit;
             }
-
 
             var result = await ShopService.GetOrdersAsync(limit, newOffset, _ordersViewModel.StartOrderDate, _ordersViewModel.EndOrderDate);
             if(result != null)

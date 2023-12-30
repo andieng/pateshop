@@ -14,12 +14,33 @@
     <None Remove="Resources\cart-no-fill-64x64.png" />
     <None Remove="Resources\example-user.jpg" />
     <None Remove="Resources\login-img.png" />
+    <None Remove="Resources\Products\charm_bracelet_image.jpg" />
+    <None Remove="Resources\Products\classic_ring.jpg" />
+    <None Remove="Resources\Products\diamond_ring.jpeg" />
+    <None Remove="Resources\Products\elegant_diamond_ring.jpg" />
+    <None Remove="Resources\Products\emerald_ring_image.jpg" />
+    <None Remove="Resources\Products\layered_necklace_image.jpg" />
+    <None Remove="Resources\Products\leather_bracelet_image.jpg" />
+    <None Remove="Resources\Products\opal_earrings.jpg" />
+    <None Remove="Resources\Products\pendant_necklace_image.jpg" />
+    <None Remove="Resources\Products\ruby_ring_image.jpg" />
+    <None Remove="Resources\Products\sapphire_ring.jpg" />
+    <None Remove="Resources\Products\smart_hd_television.png" />
+    <None Remove="Resources\Products\sport_watch_image.jpg" />
+    <None Remove="Resources\Products\sunflower_earrings.jpg" />
+    <None Remove="Resources\Products\techmaster_pro_smartphone.jpg" />
     <None Remove="Resources\search.png" />
     <None Remove="Resources\smile.png" />
     <None Remove="Resources\wink.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="LiveCharts" Version="0.9.7" />
+    <PackageReference Include="LiveCharts.Core" Version="0.9.8" />
+    <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
+    <PackageReference Include="LiveCharts.Wpf.Core" Version="0.9.8" />
+    <PackageReference Include="LiveCharts.Wpf.NetCore3" Version="0.9.8" />
+    <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.0-rc2" />
     <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
@@ -35,6 +56,22 @@
     <Resource Include="Resources\cart-no-fill-128x128.png" />
     <Resource Include="Resources\cart-no-fill-64x64.png" />
     <Resource Include="Resources\login-img.png" />
+    <Resource Include="Resources\Products\charm_bracelet_image.jpg" />
+    <Resource Include="Resources\Products\classic_ring.jpg" />
+    <Resource Include="Resources\Products\diamond_ring.jpeg" />
+    <Resource Include="Resources\Products\elegant_diamond_ring.jpg" />
+    <Resource Include="Resources\Products\emerald_ring_image.jpg" />
+    <Resource Include="Resources\Products\layered_necklace_image.jpg" />
+    <Resource Include="Resources\Products\leather_bracelet_image.jpg" />
+    <Resource Include="Resources\Products\opal_earrings.jpg" />
+    <Resource Include="Resources\Products\pendant_necklace_image.jpg" />
+    <Resource Include="Resources\Products\ruby_ring_image.jpg" />
+    <Resource Include="Resources\Products\sapphire_ring.jpg" />
+    <Resource Include="Resources\Products\smart_hd_television.png" />
+    <Resource Include="Resources\Products\sport_watch_image.jpg" />
+    <Resource Include="Resources\Products\sunflower_earrings.jpg" />
+    <Resource Include="Resources\Products\techmaster_pro_smartphone.jpg" />
+    <Resource Include="Resources\Products\watch_image.jpg" />
     <Resource Include="Resources\search.png" />
     <Resource Include="Resources\smile.png" />
     <Resource Include="Resources\wink.png" />
