@@ -20,6 +20,7 @@ namespace MyShop.Views
         {
             var dashboardViewModel = await DashboardViewModel.Create();
             DataContext = dashboardViewModel;
+            orderAnalyticsYear.Text = DateTime.Now.Year.ToString();
         }
     }
 }

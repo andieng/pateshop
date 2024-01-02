@@ -17,6 +17,7 @@
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
         SnapsToDevicePixels="True"
+        Loaded="Window_Loaded"
         FontFamily="{DynamicResource MaterialDesignFont}">
     <Window.Resources>
         <Style x:Key="VerticalSeparatorStyle" 
@@ -124,7 +125,7 @@
             TabStripPlacement="Left" Padding="0" BorderThickness="0">
             
             <!--Dashboard tab-->
-            <TabItem Tag="Dashboard" IsSelected="True">
+            <TabItem Tag="Dashboard">
                 
                 <!--Dashboard header-->
                 <TabItem.Header>

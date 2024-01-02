@@ -1,15 +1,18 @@
 ﻿using MyShop.Services;
 using MyShop.ViewModels;
 using MyShop.Views;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Configuration;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace MyShop.Commands
 {
     public class LoginCommand : BaseCommand
     {
-        LoginViewModel _loginViewModel;
+        LoginViewModel? _loginViewModel;
 
         public LoginCommand(LoginViewModel loginViewModel)
         {
@@ -18,22 +21,25 @@ namespace MyShop.Commands
 
         public override async void Execute(object parameter)
         {
-            if (!ShopService.IsConnected)
+            if (_loginViewModel != null)
             {
-                ShopService.ShowFailedConnection();
-                return;
-            }
-            var user = await _loginViewModel.Login();
-            if (user != null)
-            {
-                Window mainView = new MainView
+                if (!ShopService.IsConnected)
                 {
-                    DataContext = new MainViewModel(user)
-                };
-                ((Window)parameter).Close();
-                mainView.ShowDialog();
-                return;
-            } 
+                    ShopService.ShowFailedConnection();
+                    return;
+                }
+                var user = await _loginViewModel.Login();
+                if (user != null)
+                {
+                    Window mainView = new MainView
+                    {
+                        DataContext = new MainViewModel(user)
+                    };
+                    ((Window)parameter).Close();
+                    mainView.ShowDialog();
+                    return;
+                }
+            }
 
             ShopService.ShowLoginFailed();
         }

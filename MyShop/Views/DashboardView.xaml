@@ -259,8 +259,8 @@
                         Foreground="#FFA0A0A0" 
                         VerticalAlignment="Center"/>
                     <TextBlock
+                        x:Name="orderAnalyticsYear"
                         DockPanel.Dock="Right"
-                        Text="2023"
                         FontSize="18"
                         FontWeight="Medium"
                         Foreground="{StaticResource PrimaryHueMidBrush}" 

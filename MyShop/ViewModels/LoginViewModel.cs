@@ -57,7 +57,39 @@ namespace MyShop.ViewModels
         public async Task<User?> Login()
         {
             var user = await ShopService.LoginAsync(_username, _password);
+
+            if (user != null)
+            {
+                UpsertSettings("LoginUsername", _username);
+                UpsertSettings("LoginPassword", _password);
+            }
+
             return user;
+        }
+
+        public void UpsertSettings(string key, string value)
+        {
+            try
+            {
+                var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                var settings = configFile.AppSettings.Settings;
+                if (settings[key] == null)
+                {
+                    settings.Add(key, value);
+                }
+                else
+                {
+                    settings[key].Value = value;
+                }
+
+                // Save settings
+                configFile.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
+            }
+            catch (ConfigurationErrorsException)
+            {
+                Console.WriteLine("Error while modified app settings");
+            }
         }
     }
 }

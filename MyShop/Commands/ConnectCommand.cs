@@ -8,22 +8,22 @@ namespace MyShop.Commands
 {
     public class ConnectCommand : BaseCommand
     {
-        private SettingsLoginViewModel _settingsViewModel;
+        private SettingsLoginViewModel _settingsLoginViewModel;
 
         public ConnectCommand(SettingsLoginViewModel settingsViewModel)
         {
-            _settingsViewModel = settingsViewModel;
+            _settingsLoginViewModel = settingsViewModel;
         }
 
         public override async void Execute(object parameter)
         {
-            var result = await _settingsViewModel.SaveSettings();
+            var result = await _settingsLoginViewModel.SaveSettings();
             if (!result)
             {
                 ShopService.ShowFailedConnection();
                 return;
             }
-            _settingsViewModel.Close((Window)parameter);
+            _settingsLoginViewModel.Close((Window)parameter);
         }
     }
 }

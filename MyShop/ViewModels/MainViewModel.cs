@@ -13,6 +13,19 @@ namespace MyShop.ViewModels
     {
         public User User { get; private set; }
 
+        public static async Task<MainViewModel> Create()
+        {
+            var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var settings = configFile.AppSettings.Settings;
+
+            var user = await ShopService.LoginAsync(settings["LoginUsername"].Value, settings["LoginPassword"].Value);
+            if (user == null)
+            {
+                throw new Exception("Login failed");
+            }
+            return new MainViewModel(user);
+        }
+
         public MainViewModel(User user)
         {
             User = user;
@@ -29,34 +42,6 @@ namespace MyShop.ViewModels
         public async Task<bool> Logout()
         {
             return await ShopService.LogoutAsync();
-        }
-
-        public void OpenSettings()
-        {
-            //Window settings = new SettingsView();
-            //var settingsVM = new SettingsViewModel();
-            //settingsVM.PropertyChanged += (s, e) =>
-            //{
-            //    string? strItemsPerPage = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None)
-            //                    .AppSettings.Settings["itemsPerPage"].Value;
-            //    if (strItemsPerPage != null)
-            //    {
-            //        int newItemsPerPage = int.Parse(strItemsPerPage);
-            //        if (newItemsPerPage == _itemsPerPage)
-            //        {
-            //            return;
-            //        }
-
-            //        _itemsPerPage = newItemsPerPage;
-            //        _currentPage = 1;
-            //        UpdateBookList();
-
-            //        OnPropertyChanged("ItemsPerPage");
-            //        OnPropertyChanged("CurrentPage");
-            //    }
-            //};
-            //settings.DataContext = settingsVM;
-            //settings.ShowDialog();
         }
     }
 }
