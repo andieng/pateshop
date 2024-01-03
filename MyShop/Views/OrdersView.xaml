@@ -5,11 +5,8 @@
 	    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
 			 MinHeight="564.04" MinWidth="730">
-	
-	<UserControl.Resources>
-		<viewModels:OrdersViewModel x:Key="OrdersViewModel" />
-	</UserControl.Resources>
-	<Grid DataContext="{StaticResource OrdersViewModel}" Background="#f5fcff">
+
+	<Grid  Background="#f5fcff">
 		<Grid Visibility="{Binding OrderVisibility}">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="1*"/>
