@@ -589,7 +589,8 @@ namespace MyShop.Services
                 }
                 else
                 {
-                    return responseData.CategoryId;
+                    return 0;
+                    //return responseData.CategoryId;
                 }
             }
             catch (Exception ex)
@@ -800,6 +801,132 @@ namespace MyShop.Services
                     return responseData.Data;
                 }
                 return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
+        public static async Task<List<object>?> ReportProfitRevenueYearly()
+        {
+            try
+            {
+                var response = await ApiClient.GetAsync($"reports/statistic/?option=yearly");
+                response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseObjectResult<object>?>();
+                if (responseData != null)
+                {
+                    return responseData.Result;
+                }
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
+        public static async Task<List<object>?> ReportProfitRevenueMonthly(int year)
+        {
+            try
+            {
+                var response = await ApiClient.GetAsync($"reports/statistic/?option=monthly&year={year}");
+                response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseObjectResult<object>?>();
+                if (responseData != null)
+                {
+                    return responseData.Result;
+                }
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
+        public static async Task<List<object>?> ReportProfitRevenueDaily(DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                var response = await ApiClient.GetAsync($"reports/statistic/?option=daily&startDate={startDate.ToString("MM/dd/yyyy")}&endDate={endDate.ToString("MM/dd/yyyy")}");
+                response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseObjectResult<object>?>();
+                if (responseData != null)
+                {
+                    return responseData.Result;
+                }
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
+        public static async Task<List<object>?> ReportProductYearly(int categoryId)
+        {
+            try
+            {
+                var response = await ApiClient.GetAsync($"reports/sold/?categoryId={categoryId}&option=yearly");
+                response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseTotalQuantitySold<object>?>();
+                if (responseData != null)
+                {
+                    return responseData.TotalQuantitySold;
+                }
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
+        public static async Task<List<object>?> ReportProductMonthly(int categoryId,int year)
+        {
+            try
+            {
+                var response = await ApiClient.GetAsync($"reports/sold/?categoryId={categoryId}&option=monthly&year={year}");
+                response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseTotalQuantitySold<object>?>();
+                if (responseData != null)
+                {
+                    return responseData.TotalQuantitySold;
+                }
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
+        public static async Task<List<object>?> ReportProductDaily(int categoryId, DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                var response = await ApiClient.GetAsync($"reports/sold/?categoryId={categoryId}&option=daily&startDate={startDate.ToString("MM/dd/yyyy")}&endDate={endDate.ToString("MM/dd/yyyy")}");
+                response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadFromJsonAsync<ResponseTotalQuantitySold<object>?>();
+                if (responseData != null)
+                {
+                    return responseData.TotalQuantitySold;
+                }
+                return null;
+
             }
             catch (Exception ex)
             {

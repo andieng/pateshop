@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyShop.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,11 +14,12 @@ namespace MyShop.Views
         public OrdersView()
         {
             InitializeComponent();
+            DataContext = new OrdersViewModel();
         }
 
         private void Button_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-
+            //
         }
     }
 }
