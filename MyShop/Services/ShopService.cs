@@ -772,7 +772,7 @@ namespace MyShop.Services
         {
             try
             {
-                var response = await ApiClient.GetAsync($"categories/{categoryId}/products/filter/?startBy={from}&endBy{to}");
+                var response = await ApiClient.GetAsync($"categories/{categoryId}/products/filter/?startBy={from}&endBy={to}");
                 response.EnsureSuccessStatusCode();
                 var responseData = await response.Content.ReadFromJsonAsync<ResponseData<Product>?>();
                 if (responseData != null)

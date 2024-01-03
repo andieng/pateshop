@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Text.Json.Serialization;
+
 
 namespace MyShop.Models
 {
@@ -30,7 +32,8 @@ namespace MyShop.Models
         private string _imageSource;
 
         public Product() { }
-        
+
+        [JsonConstructor]
         public Product(
                 int productId,
                 string productName,

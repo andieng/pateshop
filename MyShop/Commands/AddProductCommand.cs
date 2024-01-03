@@ -43,7 +43,7 @@ namespace MyShop.Commands
                 }
 
                 File.Copy(_productsViewModel.SelectedImg, destinationFilePath);
-
+                counter--;
                 _productsViewModel.SelectedImg = null;
                 _productsViewModel.NewProduct.Image = fileNameWithoutExtension + "_" + counter + fileExtension;
             }
