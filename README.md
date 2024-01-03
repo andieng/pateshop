@@ -72,7 +72,7 @@ Cung cấp tổng quan về hệ thống đang quản lí:
 
 Không có
 
-## Điểm tự đánh giá cho từng thành viên:
+## Điểm tự đánh giá cho từng thành viên
 
 - 20120206 - Nguyễn Ngọc Thùy: 10
 - 20120581 - Nguyễn Thị Ngọc Thành: 10
