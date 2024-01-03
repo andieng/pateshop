@@ -38,6 +38,8 @@ namespace MyShop.ViewModels
         private float _priceFrom = 0;
         private float _priceTo = 0;
         private string _selectedImg;
+        private Paging _categoryPaging;
+        private Paging _productPaging;
 
         public int CurView { get; set; }
 
@@ -56,6 +58,8 @@ namespace MyShop.ViewModels
         public BaseCommand SearchProductsCommand { get; set; }  
         public BaseCommand FilterProductsByPriceRange { get; set; }
         public BaseCommand SelectImageCommand { get; set; }
+        public BaseCommand GetCategoriesCommand {  get; set; }
+        public BaseCommand GetProductsCommand { get; set; }
 
         public ObservableCollection<Category> CategoriesList
         {
@@ -260,9 +264,34 @@ namespace MyShop.ViewModels
             }
         }
 
+        public Paging CategoryPaging
+        {
+            get => _categoryPaging;
+            set
+            {
+                _categoryPaging = value;
+                OnPropertyChanged(nameof(CategoryPaging));
+            }
+        }
+
+        public Paging ProductPaging
+        {
+            get => _productPaging;
+            set
+            {
+                _productPaging = value;
+                OnPropertyChanged(nameof(ProductPaging));
+            }
+        }
+
         public ProductsViewModel()
         {
             InitCommands();
+            var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var settings = configFile.AppSettings.Settings;
+            int limit = Int32.Parse(settings["ItemsPerPage_Products"].Value);
+            _productPaging = new Paging(0, limit, 0, false, false);
+            _categoryPaging = new Paging(0, limit, 0, false, false);
             LoadCategories();
         }
 
@@ -283,17 +312,20 @@ namespace MyShop.ViewModels
             SearchProductsCommand = new SearchProductsCommand(this);
             FilterProductsByPriceRange = new FilterProductsByPriceRange(this);
             SelectImageCommand = new SelectImageCommand(this);
+            GetCategoriesCommand = new GetCategoriesCommand(this);
+            GetProductsCommand = new GetProductsCommand(this);
         }
 
         public async void LoadCategories()
         {
-            var result = await ShopService.GetAllCategories();
+            var result = await ShopService.GetAllCategories(CategoryPaging.Limit, 0);
 
             if (result != null)
             {
                 CategoryDetailVisibility = Visibility.Collapsed;
                 _categoriesList.Clear();
-                var (categories, _) = result.Value;
+                var (categories, paging) = result.Value;
+                CategoryPaging = paging;
                 foreach(var category in categories)
                 {
                     _categoriesList.Add(category);
@@ -303,10 +335,11 @@ namespace MyShop.ViewModels
 
         public async Task<bool> LoadProductsOfCategory(int categoryId)
         {
-            var results = await ShopService.GetProductsOfCategory(categoryId);
+            var results = await ShopService.GetProductsOfCategory(categoryId, ProductPaging.Limit, 0);
             if (results != null)
             {
-                var (products, _) = results.Value;
+                var (products, paging) = results.Value;
+                ProductPaging = paging;
                 ProductsList = new ObservableCollection<Product>(products);
                 CategoryDetailVisibility = Visibility.Visible;
                 CategoryListVisibility = Visibility.Collapsed;
@@ -425,11 +458,16 @@ namespace MyShop.ViewModels
                         _searchResultList.Add(product);
                     }
                     _originalResultList = new ObservableCollection<Product>(_searchResultList);
-                    SearchResultVisibility = Visibility.Visible;
-                    CategoryDetailVisibility = Visibility.Collapsed;
-                    BackBtnVisibility = Visibility.Visible;
-                    CategoryListVisibility = Visibility.Collapsed;
-                    if (CurView == 1) CurView++;
+
+                    var filteredList = new ObservableCollection<Product>(
+                    _originalResultList.Where(product => product.Price >= _priceFrom && product.Price <= _priceTo));
+
+                    ProductsList.Clear();
+
+                    foreach (var product in filteredList)
+                    {
+                        ProductsList.Add(product);
+                    }
                     return true;
                 }
             }
