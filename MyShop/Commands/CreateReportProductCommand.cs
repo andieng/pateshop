@@ -48,15 +48,18 @@ namespace MyShop.Commands
                 //call api
                data = await ShopService.ReportProductYearly(categoryId);
             }
-            foreach (var item in data)
+            if (data != null)
             {
-                var jsonElement = (JsonElement)item; // Convert to JsonElement
+                foreach (var item in data)
+                {
+                    var jsonElement = (JsonElement)item; // Convert to JsonElement
 
-                var value = Convert.ToInt32(jsonElement.GetProperty("total_quantity_sold").GetString());
-                var name = jsonElement.GetProperty("product_name").GetString();
+                    var value = Convert.ToInt32(jsonElement.GetProperty("total_quantity_sold").GetString());
+                    var name = jsonElement.GetProperty("product_name").GetString();
 
-                SoldValues.Add(value);
-                xLabels.Add(name);
+                    SoldValues.Add(value);
+                    xLabels.Add(name);
+                }
             }
             //set x
             _reportsViewModel.XAxes = new Axis[]

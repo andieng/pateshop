@@ -54,7 +54,8 @@ namespace MyShop.Views
                 if (index == 0) 
                 { 
                     dashboardTimeStackPanel.Visibility = Visibility.Visible;
-                    dashboardTimeTextBlock.Text = DateTime.Now.ToString(@"MM\/yyyy");
+                    //dashboardTimeTextBlock.Text = DateTime.Now.ToString(@"MM\/yyyy");
+                    dashboardTimeTextBlock.Text = "12/2023";
                 }
                 else    
                 { 

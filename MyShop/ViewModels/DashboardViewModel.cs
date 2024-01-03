@@ -149,9 +149,11 @@ namespace MyShop.ViewModels
 
         private async Task LoadData()
         {
-            DateTime now = DateTime.Now;
-            Month = now.Month;
-            Year = now.Year;
+            //DateTime now = DateTime.Now;
+            //Month = now.Month;
+            //Year = now.Year;
+            Month = 12;
+            Year = 2023;
             var countCustomersData = await ShopService.CountCustomersInMonth(Month, Year);
             var countOrdersData = await ShopService.CountOrdersInMonth(Month, Year);
             var reportData = await ShopService.GetReportData(Month, Year);
